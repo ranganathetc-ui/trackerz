@@ -6,7 +6,7 @@
 <title>Recovery Mode Tracker</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-  :root{--bg:#0d0d0d;--bg2:rgba(255,255,255,0.03);--bg3:rgba(255,255,255,0.06);--bg4:rgba(255,255,255,0.09);--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--text:#f0f0f0;--text2:rgba(255,255,255,0.35);--text3:rgba(255,255,255,0.2);--green:#4ade80;--yellow:#fbbf24;--red:#f87171;--radius:14px;}
+  :root{--bg:#0d0d0d;--bg2:rgba(255,255,255,0.03);--bg3:rgba(255,255,255,0.06);--bg4:rgba(255,255,255,0.09);--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--text:#f0f0f0;--text2:rgba(255,255,255,0.35);--text3:rgba(255,255,255,0.2);--green:#4ade80;--yellow:#fbbf24;--red:#f87171;--radius:14px;--bg-card:#111111;--bg-cell:#141414;--bg-lift:#1a1a1a;}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
   body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;min-height:100vh;overflow-x:hidden;}
   #app{max-width:480px;margin:0 auto;padding-bottom:100px;}
@@ -81,7 +81,7 @@
   .edit-bottom{display:flex;gap:6px;align-items:center;}
   /* BUTTONS */
   .btn-edit{background:none;border:1px solid var(--glass-border);color:var(--text2);padding:4px 10px;font-size:10px;border-radius:8px;cursor:pointer;font-family:inherit;}
-  .btn-edit.active{background:var(--text);color:#0d0d0d;border-color:transparent;}
+  .btn-edit.active{background:var(--text);color:var(--bg);border-color:transparent;}
   .btn-del{background:none;border:1px solid rgba(248,113,113,0.3);color:#f87171;padding:4px 9px;font-size:11px;border-radius:8px;cursor:pointer;font-family:inherit;}
   .btn-move{background:none;border:1px solid var(--glass-border);color:var(--text2);padding:4px 8px;font-size:12px;border-radius:8px;cursor:pointer;font-family:inherit;}
   .btn-ok{background:var(--text);border:none;color:#0d0d0d;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:11px;font-family:inherit;white-space:nowrap;flex-shrink:0;font-weight:600;}
@@ -392,6 +392,44 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
+const THEMES = {
+  obsidian:{name:"Obsidian",desc:"Pure black — default",bgCard:"#111111",bgCell:"#141414",bgLift:"#1a1a1a",bg:"#0d0d0d",nav:"rgba(13,13,13,0.92)",navBorder:"rgba(255,255,255,0.07)",glass:"rgba(255,255,255,0.04)",glassBorder:"rgba(255,255,255,0.08)",bg2:"rgba(255,255,255,0.03)",text:"#f0f0f0",text2:"rgba(255,255,255,0.35)",text3:"rgba(255,255,255,0.2)",accent:"#4ade80",accentGlow:"rgba(74,222,128,0.3)",preview:["#0d0d0d","#1a1a1a","#4ade80"]},
+  midnight:{name:"Midnight",desc:"Deep navy blue",bgCard:"#0a1628",bgCell:"#0c1e38",bgLift:"#0f2040",bg:"#060d1a",nav:"rgba(6,13,26,0.94)",navBorder:"rgba(99,179,237,0.1)",glass:"rgba(99,179,237,0.05)",glassBorder:"rgba(99,179,237,0.12)",bg2:"rgba(99,179,237,0.04)",text:"#e8f4ff",text2:"rgba(200,230,255,0.4)",text3:"rgba(200,230,255,0.22)",accent:"#63b3ed",accentGlow:"rgba(99,179,237,0.35)",preview:["#060d1a","#0d1f38","#63b3ed"]},
+  aurora:{name:"Aurora",desc:"Northern lights green",bgCard:"#091a10",bgCell:"#0c2016",bgLift:"#0f2a1c",bg:"#050f0a",nav:"rgba(5,15,10,0.94)",navBorder:"rgba(52,211,153,0.1)",glass:"rgba(52,211,153,0.05)",glassBorder:"rgba(52,211,153,0.12)",bg2:"rgba(52,211,153,0.04)",text:"#e8fff4",text2:"rgba(200,255,230,0.4)",text3:"rgba(200,255,230,0.22)",accent:"#34d399",accentGlow:"rgba(52,211,153,0.35)",preview:["#050f0a","#0a2018","#34d399"]},
+  crimson:{name:"Crimson",desc:"Deep red focus",bgCard:"#1a080c",bgCell:"#200912",bgLift:"#2a0c16",bg:"#0f0608",nav:"rgba(15,6,8,0.94)",navBorder:"rgba(251,113,133,0.1)",glass:"rgba(251,113,133,0.05)",glassBorder:"rgba(251,113,133,0.12)",bg2:"rgba(251,113,133,0.04)",text:"#fff0f2",text2:"rgba(255,210,216,0.4)",text3:"rgba(255,210,216,0.22)",accent:"#fb7185",accentGlow:"rgba(251,113,133,0.35)",preview:["#0f0608","#2a0810","#fb7185"]},
+  violet:{name:"Violet",desc:"Dark purple energy",bgCard:"#110820",bgCell:"#160a28",bgLift:"#1c0e32",bg:"#09060f",nav:"rgba(9,6,15,0.94)",navBorder:"rgba(167,139,250,0.1)",glass:"rgba(167,139,250,0.05)",glassBorder:"rgba(167,139,250,0.12)",bg2:"rgba(167,139,250,0.04)",text:"#f5f0ff",text2:"rgba(220,210,255,0.4)",text3:"rgba(220,210,255,0.22)",accent:"#a78bfa",accentGlow:"rgba(167,139,250,0.35)",preview:["#09060f","#190d38","#a78bfa"]},
+  ash:{name:"Ash",desc:"Warm grey minimal",bgCard:"#1a1a18",bgCell:"#202020",bgLift:"#252522",bg:"#111110",nav:"rgba(17,17,16,0.94)",navBorder:"rgba(214,211,209,0.08)",glass:"rgba(255,255,255,0.04)",glassBorder:"rgba(255,255,255,0.09)",bg2:"rgba(255,255,255,0.03)",text:"#e8e5e0",text2:"rgba(228,225,220,0.38)",text3:"rgba(228,225,220,0.2)",accent:"#f59e0b",accentGlow:"rgba(245,158,11,0.3)",preview:["#111110","#1e1e1c","#f59e0b"]},
+  light:{name:"Light",desc:"Clean white mode",bgCard:"#ebebeb",bgCell:"#e2e2e2",bgLift:"#d8d8d8",bg:"#f5f5f5",nav:"rgba(245,245,245,0.97)",navBorder:"rgba(0,0,0,0.1)",glass:"rgba(0,0,0,0.05)",glassBorder:"rgba(0,0,0,0.12)",bg2:"rgba(0,0,0,0.06)",text:"#0a0a0a",text2:"rgba(0,0,0,0.6)",text3:"rgba(0,0,0,0.45)",accent:"#0ea5e9",accentGlow:"rgba(14,165,233,0.25)",preview:["#f5f5f5","#e2e2e2","#0ea5e9"]},
+  sunset:{name:"Sunset",desc:"Warm amber dusk",bgCard:"#1a1108",bgCell:"#201508",bgLift:"#2a1c0a",bg:"#100c04",nav:"rgba(16,12,4,0.94)",navBorder:"rgba(251,191,36,0.1)",glass:"rgba(251,191,36,0.05)",glassBorder:"rgba(251,191,36,0.12)",bg2:"rgba(251,191,36,0.04)",text:"#fff8e8",text2:"rgba(255,240,200,0.4)",text3:"rgba(255,240,200,0.22)",accent:"#fbbf24",accentGlow:"rgba(251,191,36,0.35)",preview:["#100c04","#2a1c0a","#fbbf24"]},
+  ocean:{name:"Ocean",desc:"Deep teal depths",bgCard:"#061418",bgCell:"#081c22",bgLift:"#0a2430",bg:"#040e12",nav:"rgba(4,14,18,0.94)",navBorder:"rgba(45,212,191,0.1)",glass:"rgba(45,212,191,0.05)",glassBorder:"rgba(45,212,191,0.12)",bg2:"rgba(45,212,191,0.04)",text:"#e0fffc",text2:"rgba(180,255,248,0.4)",text3:"rgba(180,255,248,0.22)",accent:"#2dd4bf",accentGlow:"rgba(45,212,191,0.35)",preview:["#040e12","#0a2430","#2dd4bf"]}
+};
+
+let currentTheme = (function(){try{return localStorage.getItem('rm_theme')||'obsidian';}catch(e){return'obsidian';}})();
+
+function applyTheme(key){
+  const t=THEMES[key]||THEMES.obsidian;
+  currentTheme=key;
+  try{localStorage.setItem('rm_theme',key);}catch(e){}
+  const r=document.documentElement;
+  r.style.setProperty('--bg',t.bg);
+  r.style.setProperty('--bg2',t.bg2);
+  r.style.setProperty('--bg3',t.bg2);
+  r.style.setProperty('--bg4',t.bg2);
+  r.style.setProperty('--glass',t.glass);
+  r.style.setProperty('--glass-border',t.glassBorder);
+  r.style.setProperty('--text',t.text);
+  r.style.setProperty('--text2',t.text2);
+  r.style.setProperty('--text3',t.text3);
+  r.style.setProperty('--green',t.accent);
+  r.style.setProperty('--bg-card',t.bgCard||t.bg+'ee');
+  r.style.setProperty('--bg-cell',t.bgCell||t.bg+'cc');
+  r.style.setProperty('--bg-lift',t.bgLift||t.bg2);
+  let s=document.getElementById('theme-style');
+  if(!s){s=document.createElement('style');s.id='theme-style';document.head.appendChild(s);}
+  s.textContent=`body,#splash{background:${t.bg}!important;color:${t.text}!important;}#header,#nav,#sub-nav{background:${t.nav}!important;border-color:${t.navBorder}!important;}.splash-btn,.btn-ok,.btn-add{background:${t.accent}!important;color:#fff!important;border-color:transparent!important;}.btn-edit{color:${t.text2}!important;border-color:${t.glassBorder}!important;}.btn-edit.active{background:${t.text}!important;color:${t.bg}!important;}.nav-btn{color:${t.text3}!important;}.nav-btn.active{border-bottom-color:${t.accent}!important;color:${t.text}!important;}.sub-btn{color:${t.text3}!important;}.sub-btn.active{color:${t.text}!important;background:${t.glass}!important;}.check-circle{border-color:${t.glassBorder}!important;}.check-circle.done{background:linear-gradient(135deg,${t.accent},${t.accent}cc)!important;box-shadow:0 0 12px ${t.accentGlow}!important;border-color:transparent!important;}#view-task-detail,.td-header{background:${t.bg}!important;}.lbl,.task-time,.year-month,.week-day-name{color:${t.text3}!important;}.task-name:not(.done){color:${t.text}!important;}.task-name.done{color:${t.text3}!important;}.score-text{color:inherit!important;}.month-cell-num{color:${t.text3}!important;}.month-cell-num.today{color:${t.text}!important;}.week-day-num{color:${t.text3}!important;}.week-day-num.today{color:${t.text}!important;}.card,.stat-card,.chart-wrap{background:${t.glass}!important;border-color:${t.glassBorder}!important;}.inp{color:${t.text}!important;background:${t.bg2}!important;border-color:${t.glassBorder}!important;}.inp::placeholder{color:${t.text3}!important;}.section-header .lbl{color:${t.text3}!important;}#date-title{color:${t.text}!important;}.stat-avg{color:inherit!important;}.rtab{color:${t.text3}!important;background:${t.glass}!important;border-color:${t.glassBorder}!important;}.rtab.active{color:${t.text}!important;background:${t.bg2}!important;border-color:${t.text2}!important;}.chart-title{color:${t.text3}!important;}.nav-arrow{color:${t.text2}!important;background:${t.glass}!important;border-color:${t.glassBorder}!important;}`;
+}
+applyTheme(currentTheme);
+
 const INIT_TASKS = [];
 const DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -410,7 +448,6 @@ let tasks=ld("rm_tasks",INIT_TASKS);
 let logs=ld("rm_logs",{});
 let userName=ld("rm_username","");
 let appName=ld("rm_appname","Recovery Mode");
-let hapticEnabled=ld("rm_haptic",true);
 let macros=ld("rm_macros",[]);
 let editMode = false;
 let editId = null;
@@ -459,53 +496,8 @@ function visibleTasksForDay(log, dayKey){
     return tasks.filter(t=>!hidden.includes(t.id)&&(!t.createdAt||t.createdAt<=key)&&(!t.deletedAt||t.deletedAt>key));
   }
 }
-function persist(){sv("rm_tasks",tasks);sv("rm_logs",logs);sv("rm_username",userName);sv("rm_macros",macros);sv("rm_appname",appName);sv("rm_haptic",hapticEnabled);}
+function persist(){sv("rm_tasks",tasks);sv("rm_logs",logs);sv("rm_username",userName);sv("rm_macros",macros);sv("rm_appname",appName);}
 
-
-// ── HAPTIC FEEDBACK ──────────────────────────────────────────────────────────
-// ── HAPTIC ENGINE ─────────────────────────────────────────────────────────────
-// iOS Safari blocks navigator.vibrate entirely.
-// We use the iOS AudioContext trick: play a near-silent click burst that
-// triggers the Taptic Engine indirectly via audio render pressure.
-// Android uses navigator.vibrate as normal.
-const _isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) ||
-               (navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
-let _hapticAudio = null;
-
-function _iosHaptic(type){
-  try{
-    if(!_hapticAudio) _hapticAudio = new (window.AudioContext||window.webkitAudioContext)();
-    const ctx = _hapticAudio;
-    if(ctx.state==="suspended") ctx.resume();
-    // Number of click bursts varies by type
-    const clicks = type==="heavy"?3:type==="medium"||type==="success"||type==="warning"?2:1;
-    const gap    = type==="success"?0.04:type==="warning"?0.05:0.02;
-    for(let i=0;i<clicks;i++){
-      const osc = ctx.createOscillator();
-      const gain= ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      // Very short, near-silent burst — just enough to trigger taptic
-      const freq = type==="heavy"?80:type==="light"?180:120;
-      osc.type="sine"; osc.frequency.value=freq;
-      gain.gain.setValueAtTime(0.0001,ctx.currentTime+i*gap);
-      gain.gain.linearRampToValueAtTime(0.00001,ctx.currentTime+i*gap+0.012);
-      osc.start(ctx.currentTime+i*gap);
-      osc.stop(ctx.currentTime+i*gap+0.015);
-    }
-  }catch(e){}
-}
-
-function haptic(type){
-  if(!hapticEnabled) return;
-  if(_isIOS){ _iosHaptic(type); return; }
-  if(!navigator.vibrate) return;
-  if(type==="light")   navigator.vibrate(8);
-  else if(type==="medium")  navigator.vibrate(15);
-  else if(type==="heavy")   navigator.vibrate([20,10,20]);
-  else if(type==="success") navigator.vibrate([8,50,12]);
-  else if(type==="warning") navigator.vibrate([12,30,20,30,12]);
-  else navigator.vibrate(10);
-}
 
 // ── COMPLETION CELEBRATION ────────────────────────────────────────────────────
 
@@ -534,7 +526,6 @@ function launchConfetti(){
 }
 
 function showCompletionPopup(dayKey){
-  haptic("success");
   const popup=document.getElementById("completion-popup");
   if(!popup) return;
   popup.classList.add("show");
@@ -594,7 +585,7 @@ function renderToday(){
   const nextKey=(()=>{ const d=new Date(ayr,amo-1,ady); d.setDate(d.getDate()+1); return toKey(d); })();
   const canGoNext = nextKey <= getTodayKey();
   let html=`
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:#111;border-radius:8px;padding:10px 14px;border:1px solid #1c1c1c">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--bg-card);border-radius:8px;padding:10px 14px;border:1px solid var(--glass-border)">
     <button id="day-prev" style="background:none;border:1px solid #2a2a2a;color:#555;padding:4px 12px;font-size:14px;border-radius:4px;cursor:pointer">‹</button>
     <div style="text-align:center">
       <div style="font-size:12px;font-weight:700;color:${isLiveToday?'#4ade80':'#e8e8e8'}">${isLiveToday?"TODAY":activeDate.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"})}</div>
@@ -656,6 +647,7 @@ function renderToday(){
     </div>`;
   }
 
+  html+='<button class="export-btn" id="save-tasks-img-btn" style="margin-top:16px">Save as Image</button>';
   el.innerHTML=html;
 
 }
@@ -720,7 +712,7 @@ function renderMonth(){
     const k=toKey(d); const sc=scoreOf(logs[k],k);
     const isToday=k===getTodayKey(); const future=k>getTodayKey();
     if(!future){total+=sc;cnt++;if(sc>=80)strong++;}
-    const bg=future?"#111":sc===0?"#141414":clr(sc)+"25";
+    const bg=future?"var(--bg-card)":sc===0?"var(--bg-cell)":clr(sc)+"25";
     const monthCellAttr = future ? "" : 'data-daykey="'+k+'"';
     html+=`<div class="month-cell ${isToday?"today":""} ${future?"future":""}" style="background:${bg};cursor:${future?"default":"pointer"}" ${monthCellAttr}>
       <div class="month-cell-num ${isToday?'today':''}">${d.getDate()}</div>
@@ -868,16 +860,24 @@ function renderReports(){
         </div>
         <div style="font-size:9px;color:var(--text3);margin-top:6px;opacity:0.5">Shows in the header above the date</div>
       </div>
+
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05)">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div>
-            <div style="font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase">Haptic Feedback</div>
-            <div style="font-size:9px;color:var(--text3);opacity:0.5;margin-top:2px">Vibration on taps &amp; swipes</div>
-          </div>
-          <button id="haptic-toggle" style="width:44px;height:26px;border-radius:13px;border:none;cursor:pointer;position:relative;transition:background 0.25s;background:${hapticEnabled?'#4ade80':'#2a2a2a'}">
-            <span style="position:absolute;top:3px;left:${hapticEnabled?'21px':'3px'};width:20px;height:20px;border-radius:50%;background:white;transition:left 0.25s;display:block;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></span>
-          </button>
+        <div style="font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">Theme</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+          ${Object.entries(THEMES).map(([key,t])=>`
+            <div data-theme-key="${key}" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid ${currentTheme===key?t.accent:'transparent'};transition:border-color 0.2s;position:relative">
+              <div style="height:44px;background:linear-gradient(135deg,${t.preview[0]},${t.preview[1]});display:flex;align-items:flex-end;padding:5px 6px;gap:3px">
+                <div style="width:10px;height:10px;border-radius:50%;background:${t.preview[2]};opacity:0.9"></div>
+                <div style="width:18px;height:4px;border-radius:2px;background:${t.preview[2]};opacity:0.4"></div>
+              </div>
+              <div style="padding:5px 6px;background:${t.preview[1]}">
+                <div style="font-size:9px;font-weight:600;color:${t.text}">${t.name}</div>
+              </div>
+              ${currentTheme===key?'<div style="position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:'+t.accent+'"></div>':''}
+            </div>
+          `).join('')}
         </div>
+      </div>
       </div>
     </div>
     <div class="report-tabs" style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;">
@@ -887,7 +887,7 @@ function renderReports(){
       <button class="rtab ${reportPeriod==='year'?'active':''}" id="rtab-year">Year</button>
       <button class="rtab ${reportPeriod==='tasks'?'active':''}" id="rtab-tasks">Tasks</button>
     </div>
-    ${(function(){if(reportPeriod==="tasks")return"";var cd=getReportData();return'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><button id="report-prev" class="nav-arrow">&#8249;</button><span style="font-size:12px;color:rgba(255,255,255,0.35);font-weight:500">'+reportTitle()+'</span><button id="report-next" class="nav-arrow" style="opacity:'+(cd&&cd.canNext?1:0.25)+'">&#8250;</button></div>';})()}
+    ${(function(){if(reportPeriod==="tasks")return"";var cd=getReportData();return'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><button id="report-prev" class="nav-arrow">&#8249;</button><span style="font-size:12px;color:var(--text2);font-weight:500">'+reportTitle()+'</span><button id="report-next" class="nav-arrow" style="opacity:'+(cd&&cd.canNext?1:0.25)+'">&#8250;</button></div>';})()}
     <div class="chart-wrap">
       <div class="chart-title">${reportPeriod==="day"?"Task Completion":"Score"}</div>
       <canvas id="bar-chart" height="160"></canvas>
@@ -933,27 +933,27 @@ function renderReports(){
   const strong=valid.filter(s=>s>=80).length;
 
   document.getElementById("summary-text").innerHTML=`
-    <div style="font-size:13px;margin-bottom:6px;color:#e8e8e8">${avg}% average score</div>
-    <div style="font-size:11px;color:#555;margin-bottom:3px">${strong} strong days (80%+)</div>
-    <div style="font-size:11px;color:#555;margin-bottom:3px">${pieData.partial} partial days (50–79%)</div>
-    <div style="font-size:11px;color:#555;margin-bottom:3px">${pieData.weak} weak days (1–49%)</div>
-    <div style="font-size:11px;color:#555">${pieData.zero} missed days</div>
+    <div style="font-size:13px;margin-bottom:6px;color:var(--text)">${avg}% average score</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:3px">${strong} strong days (80%+)</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:3px">${pieData.partial} partial days (50–79%)</div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:3px">${pieData.weak} weak days (1–49%)</div>
+    <div style="font-size:11px;color:var(--text2)">${pieData.zero} missed days</div>
   `;
 
   if(reportPeriod==="tasks"){
     const {label:twLabel, canNext:twCanNext}=getTasksWindowKeys();
     const tw=document.getElementById("tasks-chart-wrap");
     let navHtml='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">';
-    navHtml+='<button id="tasks-prev" style="background:none;border:1px solid #2a2a2a;color:#555;padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>';
+    navHtml+='<button id="tasks-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>';
     navHtml+='<div style="display:flex;gap:6px">';
     ["all","month","year"].forEach(p=>{
       const active=tasksSubPeriod===p;
-      navHtml+='<button class="tasks-period-btn" data-p="'+p+'" style="background:'+(active?"#e8e8e8":"none")+';border:1px solid #2a2a2a;color:'+(active?"#0a0a0a":"#555")+';padding:3px 8px;font-size:9px;letter-spacing:1px;border-radius:4px;cursor:pointer;font-family:monospace;text-transform:uppercase">'+p+'</button>';
+      navHtml+='<button class="tasks-period-btn" data-p="'+p+'" style="background:'+(active?"var(--text)":"none")+';border:1px solid var(--glass-border);color:'+(active?"var(--bg)":"var(--text3)")+';padding:3px 8px;font-size:9px;letter-spacing:1px;border-radius:4px;cursor:pointer;font-family:monospace;text-transform:uppercase">'+p+'</button>';
     });
     navHtml+='</div>';
-    navHtml+='<button id="tasks-next" style="background:none;border:1px solid #2a2a2a;color:'+(twCanNext?"#555":"#2a2a2a")+';padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:'+(twCanNext?"auto":"none")+'">&#8250;</button>';
+    navHtml+='<button id="tasks-next" style="background:none;border:1px solid var(--glass-border);color:'+(twCanNext?"var(--text2)":"var(--text3)")+';padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:'+(twCanNext?"auto":"none")+'">&#8250;</button>';
     navHtml+='</div>';
-    navHtml+='<div style="font-size:10px;color:#555;letter-spacing:2px;margin-bottom:10px">'+twLabel.toUpperCase()+'</div>';
+    navHtml+='<div style="font-size:10px;color:var(--text3);letter-spacing:2px;margin-bottom:10px">'+twLabel.toUpperCase()+'</div>';
     tw.innerHTML='<div class="chart-title">Per-Task Performance</div>'+navHtml+'<canvas id="tasks-bar-chart" height="220"></canvas>';
 
     const tdata=getTasksPerformanceData();
@@ -994,13 +994,13 @@ function renderReports(){
         }
       });
       // Clickable task rows below chart
-      let rowsHtml='<div style="margin-top:14px"><div style="font-size:9px;color:#444;letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">Tap a task to view its full history</div>';
+      let rowsHtml='<div style="margin-top:14px"><div style="font-size:9px;color:var(--text3);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">Tap a task to view its full history</div>';
       tdata.forEach(t=>{
-        rowsHtml+=`<div data-task-detail-id="${t.id}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;margin-bottom:6px;cursor:pointer;transition:background 0.15s;" onmouseenter="this.style.background='rgba(255,255,255,0.07)'" onmouseleave="this.style.background='rgba(255,255,255,0.03)'">
-          <div style="flex:1;min-width:0;font-size:13px;color:${t.deleted?"#555":"#e8e8e8"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.name}</div>
+        rowsHtml+=`<div data-task-detail-id="${t.id}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;margin-bottom:6px;cursor:pointer;transition:background 0.15s;">
+          <div style="flex:1;min-width:0;font-size:13px;color:${t.deleted?"var(--text3)":"var(--text)"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.name}</div>
           <div style="font-size:13px;font-weight:600;color:${clr(t.rate)};flex-shrink:0">${t.rate}%</div>
-          <div style="font-size:11px;color:#444;flex-shrink:0">${t.done}/${t.active}d</div>
-          <div style="font-size:14px;color:#333;flex-shrink:0">›</div>
+          <div style="font-size:11px;color:var(--text3);flex-shrink:0">${t.done}/${t.active}d</div>
+          <div style="font-size:14px;color:var(--text3);flex-shrink:0">›</div>
         </div>`;
       });
       rowsHtml+='</div>';
@@ -1026,8 +1026,8 @@ function renderReports(){
       responsive:true,
       plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+"%"}}},
       scales:{
-        y:{min:0,max:100,ticks:{color:"#555",font:{size:9},callback:v=>v+"%"},grid:{color:"#1c1c1c"}},
-        x:{ticks:{color:"#555",font:{size:9}},grid:{display:false}}
+        y:{min:0,max:100,ticks:{color:getComputedStyle(document.documentElement).getPropertyValue('--text3').trim()||"#555",font:{size:9},callback:v=>v+"%"},grid:{color:getComputedStyle(document.documentElement).getPropertyValue('--glass-border').trim()||"#1c1c1c"}},
+        x:{ticks:{color:getComputedStyle(document.documentElement).getPropertyValue('--text3').trim()||"#555",font:{size:9}},grid:{display:false}}
       }
     }
   });
@@ -1048,7 +1048,7 @@ function renderReports(){
     options:{
       responsive:true,
       plugins:{
-        legend:{display:true,position:"bottom",labels:{color:"#555",font:{size:10},padding:10,boxWidth:12}},
+        legend:{display:true,position:"bottom",labels:{color:getComputedStyle(document.documentElement).getPropertyValue('--text2').trim()||"#555",font:{size:10},padding:10,boxWidth:12}},
         tooltip:{callbacks:{label:ctx=>ctx.label+": "+ctx.raw+" days"}}
       }
     }
@@ -1149,8 +1149,8 @@ function renderMacros(){
       const sc=macroScoreOf(k);
       const isT=k===getTodayKey(); const future=k>getTodayKey();
       if(!future){mDone+=sc; mCnt++; if(sc>=80)mStrong++;}
-      const bg=future?"#111":sc===0?"#141414":clr(sc)+"25";
-      const clickAttr=(!future&&!isT)?`data-macro-jump="${k}" style="background:${bg};cursor:pointer"`:`style="background:${bg}"`;
+      const bg=future?"var(--bg-card)":sc===0?"var(--bg-cell)":clr(sc)+"25";
+      const clickAttr=(!future)?`data-macro-jump="${k}" style="background:${bg};cursor:pointer"`:`style="background:${bg}"`;
       html+=`<div class="month-cell ${isT?"today":""} ${future?"future":""}" ${clickAttr}>
         <div class="month-cell-num ${isT?"today":""}">${d.getDate()}</div>
         ${!future&&sc>0?'<div class="month-cell-pct" style="color:'+clr(sc)+'">'+sc+'%</div>':''}
@@ -1366,7 +1366,7 @@ function renderTaskDetail(){
         active=log.__taskIds.includes(t.id)&&!hidden.includes(t.id)&&(!t.deletedAt||k<t.deletedAt);
         if(active){ mActive++; done=!!log[t.id]; if(done) mDone++; }
       }
-      const bg=future?"#111":!active?"#0d0d0d":done?"#4ade8025":"#f8717115";
+      const bg=future?"var(--bg-card)":!active?"var(--bg)":done?"#4ade8025":"#f8717115";
       const dotColor=done?"#4ade80":active?"#f87171":"transparent";
       html+=`<div class="month-cell ${isT?"today":""} ${future?"future":""}" style="background:${bg};border-color:${isT?"rgba(255,255,255,0.25)":"transparent"}">
         <div class="month-cell-num ${isT?"today":""}" style="color:${active?(done?"#4ade80":"#f87171"):"#2a2a2a"}">${i}</div>
@@ -1381,7 +1381,7 @@ function renderTaskDetail(){
     html+=`<div style="display:flex;gap:16px;margin-top:12px;padding:10px 14px;background:var(--glass);border-radius:10px;border:1px solid var(--glass-border)">
       <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:#4ade8025;border:1px solid #4ade80"></div><div style="font-size:10px;color:var(--text3)">Done</div></div>
       <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:#f8717115;border:1px solid #f87171"></div><div style="font-size:10px;color:var(--text3)">Missed</div></div>
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:#0d0d0d;border:1px solid #222"></div><div style="font-size:10px;color:var(--text3)">Not active</div></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:var(--bg);border:1px solid var(--glass-border)"></div><div style="font-size:10px;color:var(--text3)">Not active</div></div>
     </div>`;
 
   } else {
@@ -1545,7 +1545,7 @@ function renderStreak(){
       const sc=scoreOf(logs[k],k);
       const isToday=k===getTodayKey();
       const future=k>getTodayKey();
-      const bg=future?"#111":sc===0?"#141414":clr(sc)+"25";
+      const bg=future?"var(--bg-card)":sc===0?"var(--bg-cell)":clr(sc)+"25";
       const dataKey=future?'':'data-daykey="'+k+'"';
       const slog=logs[k]||{};
       const svt=visibleTasksForDay(slog,k);
@@ -1662,7 +1662,7 @@ function exportReportImage(){
   const reportEl = document.getElementById("view-reports");
   if(typeof html2canvas !== "undefined"){
     html2canvas(reportEl, {
-      backgroundColor: "#0a0a0a",
+      backgroundColor: "var(--bg)",
       scale: 3,
       useCORS: true,
       logging: false,
@@ -1685,7 +1685,7 @@ function exportReportImage(){
     const out = document.createElement("canvas");
     out.width = w; out.height = totalH;
     const ctx = out.getContext("2d");
-    const bg = "#0a0a0a";
+    const bg = document.documentElement.style.getPropertyValue("--bg")||"#0a0a0a";
     const fg = "#e8e8e8";
     const muted = "#555555";
     ctx.fillStyle = bg; ctx.fillRect(0,0,w,totalH);
@@ -1723,6 +1723,54 @@ function exportReportImage(){
   }
 })();
 
+
+function saveTasksImage(){
+  if(typeof html2canvas==="undefined"){showImportStatus("html2canvas not loaded.","#f87171");return;}
+  var bgColor=document.documentElement.style.getPropertyValue("--bg")||"#0d0d0d";
+  var scale=3;
+
+  // Build a single off-screen container so header + tasks are one continuous block
+  var header=document.getElementById("header");
+  var body=document.getElementById("view-today");
+  if(!header||!body) return;
+
+  var wrap=document.createElement("div");
+  wrap.style.cssText="position:fixed;left:-9999px;top:0;width:"+header.offsetWidth+"px;background:"+bgColor+";font-family:'Inter',-apple-system,sans-serif;";
+
+  // Clone header — strip position:fixed so it flows normally
+  var hClone=header.cloneNode(true);
+  hClone.style.cssText="position:relative;top:auto;left:auto;right:auto;background:"+bgColor+";padding:20px 20px 14px;border-bottom:1px solid rgba(255,255,255,0.08);";
+  wrap.appendChild(hClone);
+
+  // Clone body — strip padding-top offset and ensure full content shows
+  var bClone=body.cloneNode(true);
+  bClone.style.cssText="position:relative;padding:16px;background:"+bgColor+";overflow:visible;height:auto;max-height:none;";
+  wrap.appendChild(bClone);
+
+  document.body.appendChild(wrap);
+
+  html2canvas(wrap,{
+    backgroundColor:bgColor,
+    scale:scale,
+    useCORS:true,
+    logging:false,
+    scrollX:0,
+    scrollY:0,
+    windowWidth:wrap.offsetWidth,
+    width:wrap.offsetWidth,
+    height:wrap.scrollHeight
+  }).then(function(canvas){
+    document.body.removeChild(wrap);
+    var a=document.createElement("a");
+    a.download="tasks-"+(viewingKey||getTodayKey())+".png";
+    a.href=canvas.toDataURL("image/png");
+    a.click();
+  }).catch(function(){
+    document.body.removeChild(wrap);
+    showImportStatus("Image save failed.","#f87171");
+  });
+}
+
 function exportAllToExcel(){
   if(typeof XLSX==="undefined"){ showImportStatus("SheetJS not loaded. Try again.","#f87171"); return; }
   const wb = XLSX.utils.book_new();
@@ -1730,21 +1778,20 @@ function exportAllToExcel(){
   const allKeys = Object.keys(logs).filter(k=>k<=todayK).sort();
   const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-  // 1. DEDICATED MANUAL INPUT-EXPORT WORKLOG SHEET (The single target driving re-imports safely)
+  // 1. CLEAN IMPORT-EXPORT SHEET — 3 cols only, no decoration, imports back perfectly
   const manualSheet = [
-    ["[MANUAL EDITING WORKLOG - EDIT LOG STATUS BELOW AND RE-IMPORT SAFELY]"],
-    ["--------------------------------------------------------------------------------------"],
-    ["date", "task_id", "task_name", "status (Done / Undone)"],
-    ["--------------------------------------------------------------------------------------"]
+    ["date", "task_name", "status"]
   ];
   allKeys.forEach(k => {
     const log = logs[k] || {};
     const vt = visibleTasksForDay(log, k);
     vt.forEach(t => {
-      manualSheet.push([k, t.id, t.name, log[t.id] ? "Done" : "Undone"]);
+      manualSheet.push([k, t.name, log[t.id] ? "Done" : "Undone"]);
     });
   });
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(manualSheet), "Manual Import-Export Tracker");
+  const manualWs = XLSX.utils.aoa_to_sheet(manualSheet);
+  manualWs["!cols"] = [{wch:14},{wch:36},{wch:10}];
+  XLSX.utils.book_append_sheet(wb, manualWs, "Manual Import-Export Tracker");
 
   // 2. STREAKS ANALYSIS SUMMARY SHEET
   const {cur, best} = calcStreak();
@@ -1898,13 +1945,8 @@ function exportAllToExcel(){
   });
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(perfSheet), "Tasks Analytics");
 
-  // 8. MACROS LOG SHEET — per-day tasks, date by date
-  const macrosSheet = [
-    ["[MACROS LOG — DAILY MINI-TASKS]"],
-    ["Each day has its own independent macro tasks"],
-    [],
-    ["date", "macro_name", "status", "day_score_%"]
-  ];
+  // 8. MACROS LOG SHEET — clean 3-col format, imports back seamlessly
+  const macrosSheet = [["date", "macro_name", "status"]];
   let anyMacros = false;
   allKeys.forEach(k => {
     const log = logs[k] || {};
@@ -1912,15 +1954,14 @@ function exportAllToExcel(){
     const md = log.__macros || {};
     if(dayTasks.length === 0) return;
     anyMacros = true;
-    const done = dayTasks.filter(m => md[m.id]).length;
-    const score = Math.round((done / dayTasks.length) * 100);
     dayTasks.forEach(m => {
-      macrosSheet.push([k, m.name, md[m.id] ? "Done" : "Undone", score + "%"]);
+      macrosSheet.push([k, m.name, md[m.id] ? "Done" : "Undone"]);
     });
-    macrosSheet.push([]); // blank row between days
   });
   if(anyMacros){
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(macrosSheet), "Macros Log");
+    const macrosWs = XLSX.utils.aoa_to_sheet(macrosSheet);
+    macrosWs["!cols"] = [{wch:14},{wch:36},{wch:10}];
+    XLSX.utils.book_append_sheet(wb, macrosWs, "Macros Log");
   }
 
   XLSX.writeFile(wb, "tracker-" + todayK + ".xlsx");
@@ -2020,14 +2061,19 @@ function importFromExcel(file){
         // Skip decoration/header rows
         if(rawDate.startsWith("---")||rawName.startsWith("---")) return;
 
-        // Resolve task id — use explicit task_id col if present, else map by name
+        // Resolve task id — use existing task by name first, then generate stable hash
         let tid="";
         if(colTaskId>=0 && row[colTaskId]) tid=String(row[colTaskId]).trim();
-        if(!tid||tid.startsWith("t")<1){
-          // Try to find existing task by name (case-insensitive)
+        if(!tid){
+          // Match by name (case-insensitive) against existing tasks
           const existing=nameToId[rawName.toLowerCase()];
           if(existing) tid=existing;
-          else { tid="t"+Math.abs(rawName.split("").reduce((a,c)=>((a<<5)-a)+c.charCodeAt(0),0)); }
+          else {
+            // Generate stable deterministic ID from task name
+            let hash=0;
+            for(let ci=0;ci<rawName.length;ci++) hash=((hash<<5)-hash)+rawName.charCodeAt(ci);
+            tid="t"+Math.abs(hash);
+          }
         }
 
         const isDone=rawStatus==="done"||rawStatus==="yes"||rawStatus==="true"||rawStatus==="1"||rawStatus==="complete"||rawStatus==="completed";
@@ -2350,10 +2396,10 @@ function navigateTo(view, targetOffset){
 
 function setupListeners(){
   document.querySelectorAll(".nav-btn").forEach(btn=>{
-    btn.addEventListener("click",()=>{haptic("light");navigateTo(btn.dataset.view);});
+    btn.addEventListener("click",()=>{navigateTo(btn.dataset.view);});
   });
   document.querySelectorAll(".sub-btn").forEach(btn=>{
-    btn.addEventListener("click",()=>{haptic("light");navigateTo(btn.dataset.sub);});
+    btn.addEventListener("click",()=>{navigateTo(btn.dataset.sub);});
   });
 
   const reportsContainer = document.getElementById("view-reports");
@@ -2368,7 +2414,8 @@ function setupListeners(){
     if(pb){ tasksSubPeriod=pb.dataset.p; tasksOffset=0; renderReports(); return; }
     if(e.target.id==="tasks-prev"){ if(tasksSubPeriod!=="all")tasksOffset--; renderReports(); return; }
     if(e.target.id==="tasks-next"){ const {canNext}=getTasksWindowKeys(); if(canNext)tasksOffset++; renderReports(); return; }
-    // haptic-toggle handled via direct listener below
+    const themeCell=e.target.closest("[data-theme-key]");
+    if(themeCell){ const k=themeCell.dataset.themeKey; applyTheme(k); renderReports(); return; }
     if(e.target.id==="settings-name-save"){
       var n=document.getElementById("settings-name-inp").value.trim();
       if(n){userName=n;persist();document.getElementById("header-username").textContent=n;showImportStatus("Name updated!","#4ade80");}return;
@@ -2377,11 +2424,11 @@ function setupListeners(){
       var m=document.getElementById("settings-mode-inp").value.trim();
       if(m){appName=m;persist();var ml=document.getElementById("app-mode-label");if(ml)ml.textContent=m;showImportStatus("App label updated!","#4ade80");}return;
     }
-    if(e.target.id==="export-img-btn"){ haptic("medium"); exportReportImage(); return; }
+    if(e.target.id==="export-img-btn"){ exportReportImage(); return; }
     if(e.target.id==="report-prev"){reportOffset--;renderReports();return;}
     if(e.target.id==="report-next"){if(reportOffset<0){reportOffset++;renderReports();}return;}
     if(e.target.id==="download-template-btn"){downloadTemplate();return;}
-    if(e.target.id==="export-excel-btn"){haptic("medium");exportAllToExcel();return;}
+    if(e.target.id==="export-excel-btn"){exportAllToExcel();return;}
 
     if(e.target.id==="export-csv-btn"){
       const data=getReportData();
@@ -2405,7 +2452,7 @@ function setupListeners(){
   });
 
   document.getElementById("view-week").addEventListener("click",e=>{
-    if(e.target.id==="week-prev"){ haptic("light"); weekOffset--; renderWeek(); return; }
+    if(e.target.id==="week-prev"){ weekOffset--; renderWeek(); return; }
     if(e.target.id==="week-next"){ if(weekOffset<0){weekOffset++;renderWeek();} return; }
     const row=e.target.closest("[data-daykey]");
     if(row){
@@ -2418,13 +2465,12 @@ function setupListeners(){
   });
 
   document.getElementById("view-month").addEventListener("click",e=>{
-    if(e.target.id==="month-prev"){ haptic("light"); monthOffset--; renderMonth(); return; }
+    if(e.target.id==="month-prev"){ monthOffset--; renderMonth(); return; }
     if(e.target.id==="month-next"){ if(monthOffset<0){monthOffset++;renderMonth();} return; }
     const cell=e.target.closest("[data-daykey]");
     if(cell){
       const k=cell.dataset.daykey;
       if(!k||k>getTodayKey()) return;
-      haptic("light");
       viewingKey=k===getTodayKey()?null:k;
       editMode=false; editId=null;
       navigateTo("today");
@@ -2432,11 +2478,10 @@ function setupListeners(){
   });
 
   document.getElementById("view-year").addEventListener("click",e=>{
-    if(e.target.id==="year-prev"){ haptic("light"); yearOffset--; renderYear(); return; }
+    if(e.target.id==="year-prev"){ yearOffset--; renderYear(); return; }
     if(e.target.id==="year-next"){ if(yearOffset<0){yearOffset++;renderYear();} return; }
     const row=e.target.closest("[data-monthkey]");
-    if(row){haptic("light");
-      const mk=row.dataset.monthkey;
+    if(row){const mk=row.dataset.monthkey;
       const yr=parseInt(mk.split("-")[0]);
       const mo=parseInt(mk.split("-")[1])-1;
       const today=getToday();
@@ -2447,8 +2492,8 @@ function setupListeners(){
 
   document.getElementById("view-streak").addEventListener("click",e=>{
     // Tab switching
-    if(e.target.id==="streak-tab-month"){ haptic("light"); streakView="month"; renderStreak(); return; }
-    if(e.target.id==="streak-tab-year"){ haptic("light"); streakView="year"; renderStreak(); return; }
+    if(e.target.id==="streak-tab-month"){ streakView="month"; renderStreak(); return; }
+    if(e.target.id==="streak-tab-year"){ streakView="year"; renderStreak(); return; }
 
     // Prev/Next navigation
     if(e.target.id==="streak-prev"){
@@ -2471,7 +2516,6 @@ function setupListeners(){
     if(cell){
       const k=cell.dataset.daykey;
       if(!k||k>getTodayKey()) return;
-      haptic("light");
       viewingKey=k===getTodayKey()?null:k;
       editMode=false; editId=null;
       navigateTo("today"); return;
@@ -2479,8 +2523,7 @@ function setupListeners(){
 
     // Year view: tap a month → go to that month in Month view
     const mrow=e.target.closest("[data-streak-monthkey]");
-    if(mrow){haptic("light");
-      const mk=mrow.dataset.streakMonthkey;
+    if(mrow){const mk=mrow.dataset.streakMonthkey;
       const yr=parseInt(mk.split("-")[0]);
       const mo=parseInt(mk.split("-")[1])-1;
       const today=getToday();
@@ -2490,8 +2533,7 @@ function setupListeners(){
   });
 
   document.getElementById("view-today").addEventListener("click",e=>{
-    if(e.target.id==="day-prev"){haptic("light");
-      const ak=viewingKey||getTodayKey();
+    if(e.target.id==="day-prev"){const ak=viewingKey||getTodayKey();
       const [y,m,d]=ak.split("-").map(Number);
       const prev=new Date(y,m-1,d); prev.setDate(prev.getDate()-1);
       viewingKey=toKey(prev); editMode=false; editId=null; render(); return;
@@ -2502,17 +2544,16 @@ function setupListeners(){
       const next=new Date(y,m-1,d); next.setDate(next.getDate()+1);
       const nk=toKey(next);
       if(nk>getTodayKey()) return;
-      haptic("light");
       viewingKey=nk>=getTodayKey()?null:nk; editMode=false; editId=null; render(); return;
     }
-    if(e.target.id==="edit-toggle"){ haptic("light"); editMode=!editMode; editId=null; render(); return; }
+    if(e.target.id==="edit-toggle"){ editMode=!editMode; editId=null; render(); return; }
+    if(e.target.id==="save-tasks-img-btn"){ saveTasksImage(); return; }
     const circ=e.target.closest("[data-toggle]");
     if(circ&&!editMode){
       const ak=viewingKey||getTodayKey();
       const id=circ.dataset.toggle;
       const day=logs[ak]||{};
       const nowDone=!day[id];
-      haptic(nowDone?"success":"light");
       const updated=Object.assign({},day,{[id]:nowDone});
       if(!updated.__taskIds) updated.__taskIds=tasks.filter(t=>(!t.createdAt||t.createdAt<=ak)&&(!t.deletedAt||t.deletedAt>ak)).map(t=>t.id);
       logs[ak]=updated; persist(); render();
@@ -2525,18 +2566,16 @@ function setupListeners(){
       return;
     }
     const editBtn=e.target.closest("[data-edit]");
-    if(editBtn&&editMode){ haptic("light"); editId=editBtn.dataset.edit; render(); return; }
+    if(editBtn&&editMode){ editId=editBtn.dataset.edit; render(); return; }
     if(e.target.id==="save-edit-btn"){
       const name=document.getElementById("edit-name-inp").value.trim();
       const time=document.getElementById("edit-time-inp").value.trim();
       if(!name) return;
-      haptic("medium");
       tasks=tasks.map(t=>t.id===editId?Object.assign({},t,{name,time}):t);
       editId=null; persist(); render(); return;
     }
     const delBtn=e.target.closest("[data-del]");
     if(delBtn&&editMode){
-      haptic("heavy");
       const ak=viewingKey||getTodayKey();
       const isLive=ak===getTodayKey();
       const delId=delBtn.dataset.del;
@@ -2558,15 +2597,14 @@ function setupListeners(){
     const upBtn=e.target.closest("[data-up]");
     if(upBtn&&editMode){
       const i=tasks.findIndex(t=>t.id===upBtn.dataset.up);
-      if(i>0){haptic("light");[tasks[i],tasks[i-1]]=[tasks[i-1],tasks[i]]; tasks=[...tasks]; persist(); render();} return;
+      if(i>0){[tasks[i],tasks[i-1]]=[tasks[i-1],tasks[i]]; tasks=[...tasks]; persist(); render();} return;
     }
     const dnBtn=e.target.closest("[data-dn]");
     if(dnBtn&&editMode){
       const i=tasks.findIndex(t=>t.id===dnBtn.dataset.dn);
-      if(i<tasks.length-1){haptic("light");[tasks[i],tasks[i+1]]=[tasks[i+1],tasks[i]]; tasks=[...tasks]; persist(); render();} return;
+      if(i<tasks.length-1){[tasks[i],tasks[i+1]]=[tasks[i+1],tasks[i]]; tasks=[...tasks]; persist(); render();} return;
     }
-    if(e.target.id==="add-task-btn"){haptic("medium");
-      const ak=viewingKey||getTodayKey();
+    if(e.target.id==="add-task-btn"){const ak=viewingKey||getTodayKey();
       const name=document.getElementById("new-name").value.trim();
       const time=document.getElementById("new-time").value.trim();
       if(!name) return;
@@ -2594,13 +2632,12 @@ setupListeners();
 
 document.getElementById("view-macros").addEventListener("click",function(e){
   const todayKey=getTodayKey();
-  if(e.target.id==="macro-day-prev"){haptic("light");const ak=macroViewKey||getTodayKey();const[y,m,d]=ak.split("-").map(Number);const p=new Date(y,m-1,d);p.setDate(p.getDate()-1);macroViewKey=toKey(p);macroEditMode=false;macroEditId=null;renderMacros();return;}
-  if(e.target.id==="macro-day-next"){haptic("light");const ak=macroViewKey||getTodayKey();const[y,m,d]=ak.split("-").map(Number);const n=new Date(y,m-1,d);n.setDate(n.getDate()+1);const nk=toKey(n);if(nk>getTodayKey())return;macroViewKey=nk>=getTodayKey()?null:nk;macroEditMode=false;macroEditId=null;renderMacros();return;}
+  if(e.target.id==="macro-day-prev"){const ak=macroViewKey||getTodayKey();const[y,m,d]=ak.split("-").map(Number);const p=new Date(y,m-1,d);p.setDate(p.getDate()-1);macroViewKey=toKey(p);macroEditMode=false;macroEditId=null;renderMacros();return;}
+  if(e.target.id==="macro-day-next"){const ak=macroViewKey||getTodayKey();const[y,m,d]=ak.split("-").map(Number);const n=new Date(y,m-1,d);n.setDate(n.getDate()+1);const nk=toKey(n);if(nk>getTodayKey())return;macroViewKey=nk>=getTodayKey()?null:nk;macroEditMode=false;macroEditId=null;renderMacros();return;}
   const jumpCell=e.target.closest("[data-macro-jump]");
-  if(jumpCell){haptic("light");macroViewKey=jumpCell.dataset.macroJump;macroEditMode=false;macroEditId=null;window.scrollTo({top:0,behavior:"smooth"});renderMacros();return;}
+  if(jumpCell){macroViewKey=jumpCell.dataset.macroJump;macroEditMode=false;macroEditId=null;window.scrollTo({top:0,behavior:"smooth"});renderMacros();return;}
   const macroMonthCell=e.target.closest("[data-macro-monthkey]");
-  if(macroMonthCell){haptic("light");
-    const mk=macroMonthCell.dataset.macroMonthkey; // "YYYY-MM"
+  if(macroMonthCell){const mk=macroMonthCell.dataset.macroMonthkey; // "YYYY-MM"
     const yr=parseInt(mk.split("-")[0]);
     const mo=parseInt(mk.split("-")[1])-1;
     const today=getToday();
@@ -2612,13 +2649,12 @@ document.getElementById("view-macros").addEventListener("click",function(e){
     window.scrollTo({top:0,behavior:"smooth"});
     renderMacros(); return;
   }
-  if(e.target.id==="macro-edit-toggle"){haptic("light");macroEditMode=!macroEditMode;macroEditId=null;renderMacros();return;}
+  if(e.target.id==="macro-edit-toggle"){macroEditMode=!macroEditMode;macroEditId=null;renderMacros();return;}
   const tog=e.target.closest("[data-macro-toggle]");
   if(tog&&!macroEditMode){
     const id=tog.dataset.macroToggle;const ak=macroViewKey||getTodayKey();
     const log=logs[ak]||{};const md=Object.assign({},log.__macros||{});
     const nowDone=!md[id];md[id]=nowDone;
-    haptic(nowDone?"success":"light");
     logs[ak]=Object.assign({},log,{__macros:md});persist();renderMacros();
     if(nowDone){
       const el=document.querySelector("[data-macro-toggle='"+id+"']");
@@ -2628,8 +2664,7 @@ document.getElementById("view-macros").addEventListener("click",function(e){
   }
   const eb=e.target.closest("[data-macro-edit]");
   if(eb){macroEditId=eb.dataset.macroEdit;renderMacros();return;}
-  if(e.target.id==="macro-save-btn"){haptic("medium");
-    const ak=macroViewKey||getTodayKey();const name=document.getElementById("macro-edit-inp").value.trim();
+  if(e.target.id==="macro-save-btn"){const ak=macroViewKey||getTodayKey();const name=document.getElementById("macro-edit-inp").value.trim();
     if(name){
       const log=logs[ak]||{};
       const dayTasks=(log.__macroTasks||[]).map(function(m){return m.id===macroEditId?Object.assign({},m,{name:name}):m;});
@@ -2639,14 +2674,12 @@ document.getElementById("view-macros").addEventListener("click",function(e){
   }
   const db=e.target.closest("[data-macro-del]");
   if(db){
-    haptic("heavy");
     const ak=macroViewKey||getTodayKey();const log=logs[ak]||{};
     const dayTasks=(log.__macroTasks||[]).filter(function(m){return m.id!==db.dataset.macroDel;});
     const md=Object.assign({},log.__macros||{});delete md[db.dataset.macroDel];
     logs[ak]=Object.assign({},log,{__macroTasks:dayTasks,__macros:md});persist();renderMacros();return;
   }
-  if(e.target.id==="macro-add-btn"){haptic("medium");
-    const ak=macroViewKey||getTodayKey();const name=document.getElementById("macro-new-inp").value.trim();
+  if(e.target.id==="macro-add-btn"){const ak=macroViewKey||getTodayKey();const name=document.getElementById("macro-new-inp").value.trim();
     if(!name)return;
     const log=logs[ak]||{};
     const dayTasks=[...(log.__macroTasks||[]),{id:"m"+Date.now(),name:name}];
@@ -2699,18 +2732,6 @@ function applyHeaderOffset(){
   });
 }
 // Run on load and on any nav change
-// Unlock AudioContext on first touch anywhere — critical for iOS PWA haptics
-document.addEventListener('touchstart', function unlockAudio(){
-  if(_isIOS && !_hapticAudio){
-    try{
-      _hapticAudio=new(window.AudioContext||window.webkitAudioContext)();
-      const buf=_hapticAudio.createBuffer(1,1,22050);
-      const src=_hapticAudio.createBufferSource();
-      src.buffer=buf;src.connect(_hapticAudio.destination);src.start(0);
-    }catch(e){}
-  }
-  document.removeEventListener('touchstart',unlockAudio);
-},{once:true,passive:true});
 
 // ── HEADER TOGGLE ────────────────────────────────────────────────────────────
 let headerCollapsed = false;
@@ -2722,7 +2743,6 @@ function setHeaderCollapsed(val){
   const header = document.getElementById("header");
   header.classList.toggle("collapsed", headerCollapsed);
   applyHeaderOffset();
-  haptic("light");
   // Show indicator pill briefly
   const ind = document.getElementById("header-indicator");
   if(ind){
@@ -2777,42 +2797,16 @@ const _origNav=window.navigateTo;
 window.navigateTo=function(v,o){_origNav(v,o);setTimeout(applyHeaderOffset,50);};
 
 document.getElementById("splash-btn").addEventListener("click",function(){
-  // Unlock AudioContext on very first tap (iOS requirement)
-  if(_isIOS && !_hapticAudio){
-    try{
-      _hapticAudio = new (window.AudioContext||window.webkitAudioContext)();
-      const buf=_hapticAudio.createBuffer(1,1,22050);
-      const src=_hapticAudio.createBufferSource();
-      src.buffer=buf; src.connect(_hapticAudio.destination); src.start(0);
-    }catch(e){}
-  }
-  haptic("medium"); dismiss();
+  dismiss();
 });
 })();
 
-document.getElementById("jump-today-btn").addEventListener("click",function(){haptic("light");viewingKey=null;editMode=false;editId=null;navigateTo("today");});
-// ── HAPTIC TOGGLE — direct listener, no re-render, instant ──────────────────
-document.addEventListener("click", function(e){
-  if(e.target.id!=="haptic-toggle" && !e.target.closest("#haptic-toggle")) return;
-  // Update state immediately
-  hapticEnabled=!hapticEnabled;
-  // Update UI instantly — direct DOM, no re-render
-  const btn=document.getElementById("haptic-toggle");
-  if(btn){
-    btn.style.background=hapticEnabled?"#4ade80":"#2a2a2a";
-    const knob=btn.querySelector("span");
-    if(knob) knob.style.left=hapticEnabled?"21px":"3px";
-  }
-  // Persist async so it doesn't block the UI
-  setTimeout(()=>sv("rm_haptic",hapticEnabled),0);
-  // Fire haptic after state update
-  if(hapticEnabled) haptic("medium");
-},{capture:true});
+document.getElementById("jump-today-btn").addEventListener("click",function(){viewingKey=null;editMode=false;editId=null;navigateTo("today");});
 
-document.getElementById("cp-close-btn").addEventListener("click",function(){haptic("light");hideCompletionPopup();});
-document.getElementById("cp-dismiss").addEventListener("click",function(){haptic("medium");hideCompletionPopup();});
+document.getElementById("cp-close-btn").addEventListener("click",function(){hideCompletionPopup();});
+document.getElementById("cp-dismiss").addEventListener("click",function(){hideCompletionPopup();});
 // Tap backdrop to close
-document.getElementById("completion-popup").addEventListener("click",function(e){if(e.target===this){haptic("light");hideCompletionPopup();}});
+document.getElementById("completion-popup").addEventListener("click",function(e){if(e.target===this){hideCompletionPopup();}});
 
 // ── TASK DETAIL: back button ──────────────────────────────────────────────────
 document.getElementById("td-back-btn").addEventListener("click",function(){
@@ -2962,9 +2956,9 @@ document.getElementById("view-reports").addEventListener("click",function(e){
 
       const dx=lastDx;
       const dy=e.changedTouches[0].clientY-sy;
-      if(!moved||Math.abs(dx)<50)return;
+      if(!moved||Math.abs(dx)<30)return;
       const t=getTarget(dx<0?'left':'right');
-      if(t){ haptic('light'); setTimeout(()=>window.navigateTo(t),10); }
+      if(t){ setTimeout(()=>window.navigateTo(t),10); }
     },{passive:true});
 
     el.addEventListener('touchcancel',()=>{
@@ -3035,7 +3029,6 @@ document.getElementById("view-reports").addEventListener("click",function(e){
       if(!dragging)return; dragging=false;
       const dx=lastDx;
       if(dx>70){
-        haptic('light');
         const W=window.innerWidth||390;
         el.style.transition=`transform ${DUR}ms ${EASE}, filter ${DUR}ms ease`;
         el.style.transform='translateX('+W+'px)';
@@ -3062,8 +3055,8 @@ document.addEventListener("change",function(e){
 
 document.addEventListener("click",function(e){
 
-  if(e.target && e.target.id==="export-macros-btn"){haptic("medium");exportMacrosToExcel();return;}
-  if(e.target && e.target.id==="master-erase-btn"){haptic("warning");masterEraseAllData();return;}
+  if(e.target && e.target.id==="export-macros-btn"){exportMacrosToExcel();return;}
+  if(e.target && e.target.id==="master-erase-btn"){masterEraseAllData();return;}
   if(e.target && e.target.id==="download-template-btn"){
     try{
       if(typeof XLSX==="undefined") return;
