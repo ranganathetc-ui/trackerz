@@ -89,7 +89,7 @@
   /* INPUTS */
   .card{margin-top:16px;padding:16px;background:var(--glass);border-radius:var(--radius);border:1px solid var(--glass-border);}
   .inp{width:100%;background:var(--bg2);border:1px solid var(--glass-border);color:var(--text);padding:10px 13px;font-size:13px;border-radius:10px;font-family:inherit;margin-bottom:8px;display:block;}
-  .inp:focus{outline:none;border-color:rgba(255,255,255,0.3);}
+  .inp:focus{outline:none;border-color:var(--glass-border);}
   .inp-time{width:90px;flex-shrink:0;margin-bottom:0;}
   /* WEEK */
   .week-row{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--glass-border);border-radius:6px;transition:background 0.15s;}
@@ -218,15 +218,15 @@
   /* Close pill — top centre, iOS style */
   .cp-close{
     position:fixed;top:52px;left:50%;transform:translateX(-50%);
-    background:rgba(255,255,255,0.1);
-    border:none;color:rgba(255,255,255,0.5);
+    background:rgba(255,255,255,0.15);
+    border:none;color:rgba(255,255,255,0.8);
     padding:8px 20px;border-radius:20px;
     font-size:11px;letter-spacing:2px;text-transform:uppercase;
     cursor:pointer;font-family:inherit;
     backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
     transition:background 0.2s;
   }
-  .cp-close:active{background:rgba(255,255,255,0.18);}
+  .cp-close:active{background:rgba(255,255,255,0.25);}
 
   #cp-icon{
     width:100px;height:100px;margin:0 auto 40px;
@@ -239,26 +239,26 @@
   }
 
   #cp-title{
-    font-size:36px;font-weight:200;color:#fff;
+    font-size:36px;font-weight:200;color:#ffffff;
     letter-spacing:6px;text-transform:uppercase;
     margin-bottom:16px;line-height:1;
   }
   #cp-sub{
-    font-size:12px;color:rgba(255,255,255,0.3);
+    font-size:12px;color:rgba(255,255,255,0.7);
     line-height:2;letter-spacing:2px;
     text-transform:uppercase;margin-bottom:60px;
   }
   #cp-dismiss{
-    background:rgba(255,255,255,0.07);
-    border:1px solid rgba(255,255,255,0.12);
-    color:rgba(255,255,255,0.7);
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.25);
+    color:rgba(255,255,255,0.9);
     padding:16px 48px;font-size:11px;letter-spacing:3px;
     border-radius:40px;cursor:pointer;
     font-family:inherit;text-transform:uppercase;
     backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
     transition:background 0.2s,border-color 0.2s;
   }
-  #cp-dismiss:active{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.25);}
+  #cp-dismiss:active{background:rgba(255,255,255,0.22);border-color:rgba(255,255,255,0.4);}
   .cp-particle{position:fixed;pointer-events:none;z-index:998;border-radius:50%;}
   @keyframes particle-rise{0%{transform:translate(0,0) scale(1);opacity:1;}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0;}}
 </style>
@@ -269,8 +269,8 @@
     <div class="splash-logo" style="margin-bottom:28px;position:relative;width:80px;height:80px;margin-left:auto;margin-right:auto;">
       <!-- Orbit ring -->
       <svg style="position:absolute;inset:0;width:80px;height:80px;animation:orbit-spin 6s linear infinite;" viewBox="0 0 80 80">
-        <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
-        <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"
+        <circle cx="40" cy="40" r="34" fill="none" stroke="var(--splash-ring,rgba(255,255,255,0.06))" stroke-width="1.5"/>
+        <circle cx="40" cy="40" r="34" fill="none" stroke="var(--splash-stroke,rgba(255,255,255,0.35))" stroke-width="1.5"
           stroke-dasharray="30 184" stroke-linecap="round"/>
       </svg>
       <!-- Core diamond -->
@@ -283,20 +283,20 @@
         </defs>
         <!-- Diamond shape -->
         <polygon points="40,14 58,40 40,62 22,40" fill="url(#dGrad)" opacity="0.15"/>
-        <polygon points="40,14 58,40 40,62 22,40" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.2" stroke-linejoin="round"/>
+        <polygon points="40,14 58,40 40,62 22,40" fill="none" stroke="var(--splash-stroke,rgba(255,255,255,0.7))" stroke-width="1.2" stroke-linejoin="round"/>
         <!-- Inner diamond -->
-        <polygon points="40,24 52,40 40,54 28,40" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/>
+        <polygon points="40,24 52,40 40,54 28,40" fill="var(--splash-ring,rgba(255,255,255,0.08))" stroke="var(--splash-mid,rgba(255,255,255,0.3))" stroke-width="0.8"/>
         <!-- Centre dot -->
-        <circle cx="40" cy="40" r="3" fill="white" opacity="0.9"/>
+        <circle cx="40" cy="40" r="3" fill="var(--splash-stroke,white)" opacity="0.9"/>
       </svg>
       <!-- Sparkles -->
       <svg style="position:absolute;inset:0;width:80px;height:80px;" viewBox="0 0 80 80">
-        <circle cx="40" cy="6"  r="2" fill="white" style="animation:sp-twinkle 2s ease-in-out infinite 0s;opacity:0"/>
-        <circle cx="74" cy="40" r="1.5" fill="white" style="animation:sp-twinkle 2s ease-in-out infinite 0.5s;opacity:0"/>
-        <circle cx="40" cy="74" r="2" fill="white" style="animation:sp-twinkle 2s ease-in-out infinite 1s;opacity:0"/>
-        <circle cx="6"  cy="40" r="1.5" fill="white" style="animation:sp-twinkle 2s ease-in-out infinite 1.5s;opacity:0"/>
-        <circle cx="66" cy="14" r="1.5" fill="white" style="animation:sp-twinkle 1.6s ease-in-out infinite 0.3s;opacity:0"/>
-        <circle cx="14" cy="66" r="1.5" fill="white" style="animation:sp-twinkle 1.6s ease-in-out infinite 0.9s;opacity:0"/>
+        <circle cx="40" cy="6"  r="2" fill="var(--splash-stroke,white)" style="animation:sp-twinkle 2s ease-in-out infinite 0s;opacity:0"/>
+        <circle cx="74" cy="40" r="1.5" fill="var(--splash-stroke,white)" style="animation:sp-twinkle 2s ease-in-out infinite 0.5s;opacity:0"/>
+        <circle cx="40" cy="74" r="2" fill="var(--splash-stroke,white)" style="animation:sp-twinkle 2s ease-in-out infinite 1s;opacity:0"/>
+        <circle cx="6"  cy="40" r="1.5" fill="var(--splash-stroke,white)" style="animation:sp-twinkle 2s ease-in-out infinite 1.5s;opacity:0"/>
+        <circle cx="66" cy="14" r="1.5" fill="var(--splash-stroke,white)" style="animation:sp-twinkle 1.6s ease-in-out infinite 0.3s;opacity:0"/>
+        <circle cx="14" cy="66" r="1.5" fill="var(--splash-stroke,white)" style="animation:sp-twinkle 1.6s ease-in-out infinite 0.9s;opacity:0"/>
       </svg>
       <!-- Glow -->
       <div style="position:absolute;inset:0;border-radius:50%;animation:logo-glow 2.4s ease-in-out infinite;pointer-events:none;"></div>
@@ -385,7 +385,7 @@
     </div>
   </div>
 
-  <div id="import-toast"   style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1c1c1c;border:1px solid #2a2a2a;color:#e8e8e8;padding:12px 20px;border-radius:8px;font-size:12px;font-family:monospace;z-index:999;max-width:320px;text-align:center;line-height:1.5"></div>
+  <div id="import-toast"   style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--bg-lift,#1c1c1c);border:1px solid var(--glass-border);color:var(--text);padding:12px 20px;border-radius:8px;font-size:12px;font-family:monospace;z-index:999;max-width:320px;text-align:center;line-height:1.5"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -401,8 +401,51 @@ const THEMES = {
   ash:{name:"Ash",desc:"Warm grey minimal",bgCard:"#1a1a18",bgCell:"#202020",bgLift:"#252522",bg:"#111110",nav:"rgba(17,17,16,0.94)",navBorder:"rgba(214,211,209,0.08)",glass:"rgba(255,255,255,0.04)",glassBorder:"rgba(255,255,255,0.09)",bg2:"rgba(255,255,255,0.03)",text:"#e8e5e0",text2:"rgba(228,225,220,0.38)",text3:"rgba(228,225,220,0.2)",accent:"#f59e0b",accentGlow:"rgba(245,158,11,0.3)",preview:["#111110","#1e1e1c","#f59e0b"]},
   light:{name:"Light",desc:"Clean white mode",bgCard:"#ebebeb",bgCell:"#e2e2e2",bgLift:"#d8d8d8",bg:"#f5f5f5",nav:"rgba(245,245,245,0.97)",navBorder:"rgba(0,0,0,0.1)",glass:"rgba(0,0,0,0.05)",glassBorder:"rgba(0,0,0,0.12)",bg2:"rgba(0,0,0,0.06)",text:"#0a0a0a",text2:"rgba(0,0,0,0.6)",text3:"rgba(0,0,0,0.45)",accent:"#0ea5e9",accentGlow:"rgba(14,165,233,0.25)",preview:["#f5f5f5","#e2e2e2","#0ea5e9"]},
   sunset:{name:"Sunset",desc:"Warm amber dusk",bgCard:"#1a1108",bgCell:"#201508",bgLift:"#2a1c0a",bg:"#100c04",nav:"rgba(16,12,4,0.94)",navBorder:"rgba(251,191,36,0.1)",glass:"rgba(251,191,36,0.05)",glassBorder:"rgba(251,191,36,0.12)",bg2:"rgba(251,191,36,0.04)",text:"#fff8e8",text2:"rgba(255,240,200,0.4)",text3:"rgba(255,240,200,0.22)",accent:"#fbbf24",accentGlow:"rgba(251,191,36,0.35)",preview:["#100c04","#2a1c0a","#fbbf24"]},
-  ocean:{name:"Ocean",desc:"Deep teal depths",bgCard:"#061418",bgCell:"#081c22",bgLift:"#0a2430",bg:"#040e12",nav:"rgba(4,14,18,0.94)",navBorder:"rgba(45,212,191,0.1)",glass:"rgba(45,212,191,0.05)",glassBorder:"rgba(45,212,191,0.12)",bg2:"rgba(45,212,191,0.04)",text:"#e0fffc",text2:"rgba(180,255,248,0.4)",text3:"rgba(180,255,248,0.22)",accent:"#2dd4bf",accentGlow:"rgba(45,212,191,0.35)",preview:["#040e12","#0a2430","#2dd4bf"]}
+  ocean:{name:"Ocean",desc:"Deep teal depths",bgCard:"#061418",bgCell:"#081c22",bgLift:"#0a2430",bg:"#040e12",nav:"rgba(4,14,18,0.94)",navBorder:"rgba(45,212,191,0.1)",glass:"rgba(45,212,191,0.05)",glassBorder:"rgba(45,212,191,0.12)",bg2:"rgba(45,212,191,0.04)",text:"#e0fffc",text2:"rgba(180,255,248,0.4)",text3:"rgba(180,255,248,0.22)",accent:"#2dd4bf",accentGlow:"rgba(45,212,191,0.35)",preview:["#040e12","#0a2430","#2dd4bf"]},
+  neon:{name:"Neon",desc:"Cyberpunk pink glow",bgCard:"#120818",bgCell:"#170a1e",bgLift:"#1e0d28",bg:"#0a0510",nav:"rgba(10,5,16,0.95)",navBorder:"rgba(236,72,153,0.12)",glass:"rgba(236,72,153,0.06)",glassBorder:"rgba(236,72,153,0.14)",bg2:"rgba(236,72,153,0.04)",text:"#fff0fc",text2:"rgba(255,210,245,0.45)",text3:"rgba(255,210,245,0.24)",accent:"#ec4899",accentGlow:"rgba(236,72,153,0.4)",preview:["#0a0510","#1e0d28","#ec4899"]},
+  slate:{name:"Slate",desc:"Modern cool grey",bgCard:"#141820",bgCell:"#181d28",bgLift:"#1e2434",bg:"#0e1118",nav:"rgba(14,17,24,0.95)",navBorder:"rgba(148,163,184,0.1)",glass:"rgba(148,163,184,0.05)",glassBorder:"rgba(148,163,184,0.12)",bg2:"rgba(148,163,184,0.04)",text:"#e2e8f4",text2:"rgba(200,212,230,0.42)",text3:"rgba(200,212,230,0.23)",accent:"#94a3b8",accentGlow:"rgba(148,163,184,0.3)",preview:["#0e1118","#1e2434","#94a3b8"]},
+  copper:{name:"Copper",desc:"Warm metallic rust",bgCard:"#1a1008",bgCell:"#201508",bgLift:"#2c1c0c",bg:"#100a04",nav:"rgba(16,10,4,0.95)",navBorder:"rgba(234,88,12,0.12)",glass:"rgba(234,88,12,0.05)",glassBorder:"rgba(234,88,12,0.13)",bg2:"rgba(234,88,12,0.04)",text:"#fff4ec",text2:"rgba(255,225,200,0.42)",text3:"rgba(255,225,200,0.23)",accent:"#f97316",accentGlow:"rgba(249,115,22,0.38)",preview:["#100a04","#2c1c0c","#f97316"]},
+  tokyonight:{name:"Tokyo Night",desc:"VS Code cult favourite",bgCard:"#1a1b2e",bgCell:"#1f2040",bgLift:"#252645",bg:"#13141f",nav:"rgba(19,20,31,0.96)",navBorder:"rgba(122,162,247,0.12)",glass:"rgba(122,162,247,0.05)",glassBorder:"rgba(122,162,247,0.13)",bg2:"rgba(122,162,247,0.04)",text:"#c0caf5",text2:"rgba(169,177,214,0.55)",text3:"rgba(169,177,214,0.3)",accent:"#7aa2f7",accentGlow:"rgba(122,162,247,0.38)",preview:["#13141f","#1f2040","#7aa2f7"]},
+  rosepine:{name:"Rosé Pine",desc:"Neovim & Notion darling",bgCard:"#1f1d2e",bgCell:"#26233a",bgLift:"#2d2a3e",bg:"#191724",nav:"rgba(25,23,36,0.96)",navBorder:"rgba(235,188,186,0.1)",glass:"rgba(235,188,186,0.05)",glassBorder:"rgba(235,188,186,0.12)",bg2:"rgba(235,188,186,0.04)",text:"#e0def4",text2:"rgba(224,222,244,0.45)",text3:"rgba(224,222,244,0.25)",accent:"#eb6f92",accentGlow:"rgba(235,111,146,0.38)",preview:["#191724","#26233a","#eb6f92"]},
+  githubdark:{name:"GitHub Dark",desc:"The developer's default",bgCard:"#161b22",bgCell:"#1c2128",bgLift:"#21262d",bg:"#0d1117",nav:"rgba(13,17,23,0.96)",navBorder:"rgba(48,54,61,0.8)",glass:"rgba(240,246,252,0.04)",glassBorder:"rgba(48,54,61,0.6)",bg2:"rgba(240,246,252,0.03)",text:"#e6edf3",text2:"rgba(230,237,243,0.45)",text3:"rgba(230,237,243,0.25)",accent:"#58a6ff",accentGlow:"rgba(88,166,255,0.35)",preview:["#0d1117","#21262d","#58a6ff"]},
+  abyss:{name:"Abyss",desc:"Pitch black, white accent",bgCard:"#080808",bgCell:"#0a0a0a",bgLift:"#111111",bg:"#000000",nav:"rgba(0,0,0,0.97)",navBorder:"rgba(255,255,255,0.06)",glass:"rgba(255,255,255,0.03)",glassBorder:"rgba(255,255,255,0.07)",bg2:"rgba(255,255,255,0.025)",text:"#ffffff",text2:"rgba(255,255,255,0.45)",text3:"rgba(255,255,255,0.22)",accent:"#ffffff",accentGlow:"rgba(255,255,255,0.2)",preview:["#000000","#111111","#ffffff"]},
+  bluemoon:{name:"Blue Moon",desc:"Midnight black, electric blue",bgCard:"#06090f",bgCell:"#080c14",bgLift:"#0b1020",bg:"#020408",nav:"rgba(2,4,8,0.97)",navBorder:"rgba(56,139,253,0.15)",glass:"rgba(56,139,253,0.06)",glassBorder:"rgba(56,139,253,0.16)",bg2:"rgba(56,139,253,0.04)",text:"#e8f0ff",text2:"rgba(200,220,255,0.48)",text3:"rgba(200,220,255,0.26)",accent:"#388bfd",accentGlow:"rgba(56,139,253,0.45)",preview:["#020408","#0b1020","#388bfd"]},
+  gridpaper:{name:"Grid Paper",desc:"Notebook texture, black ink",bgCard:"#f5f5f0",bgCell:"#eeeeea",bgLift:"#e8e8e4",bg:"#fafaf7",bgImage:"linear-gradient(rgba(0,0,0,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.07) 1px,transparent 1px)",bgSize:"24px 24px",nav:"rgba(250,250,247,0.96)",navBorder:"rgba(0,0,0,0.1)",glass:"rgba(0,0,0,0.04)",glassBorder:"rgba(0,0,0,0.11)",bg2:"rgba(0,0,0,0.05)",text:"#0a0a0a",text2:"rgba(0,0,0,0.55)",text3:"rgba(0,0,0,0.38)",accent:"#111111",accentGlow:"rgba(0,0,0,0.15)",preview:["#fafaf7","#e8e8e4","#111111"]},
+  darkgrid:{name:"Dark Grid",desc:"Graphite paper texture",bgCard:"#1e1e1e",bgCell:"#242424",bgLift:"#2a2a2a",bg:"#181818",bgImage:"linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px)",bgSize:"24px 24px",nav:"rgba(24,24,24,0.95)",navBorder:"rgba(255,255,255,0.07)",glass:"rgba(255,255,255,0.03)",glassBorder:"rgba(255,255,255,0.08)",bg2:"rgba(255,255,255,0.03)",text:"#e8e8e8",text2:"rgba(232,232,232,0.42)",text3:"rgba(232,232,232,0.24)",accent:"#d4d4d4",accentGlow:"rgba(212,212,212,0.18)",preview:["#181818","#2a2a2a","#d4d4d4"]},
+  etpaper:{name:"Newsprint",desc:"Vintage newspaper warmth",bgCard:"#ede0c4",bgCell:"#e6d8b8",bgLift:"#ddd0ac",bg:"#f2e8d0",bgImage:"linear-gradient(rgba(139,90,43,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(139,90,43,0.09) 1px,transparent 1px)",bgSize:"24px 24px",nav:"rgba(242,232,208,0.97)",navBorder:"rgba(139,90,43,0.15)",glass:"rgba(139,90,43,0.05)",glassBorder:"rgba(139,90,43,0.13)",bg2:"rgba(139,90,43,0.06)",text:"#1a1008",text2:"rgba(26,16,8,0.58)",text3:"rgba(26,16,8,0.38)",accent:"#8b2500",accentGlow:"rgba(139,37,0,0.2)",preview:["#f2e8d0","#ddd0ac","#8b2500"]},
+  custom:(function(){
+    try{
+      const c=JSON.parse(localStorage.getItem('rm_custom_theme')||'null');
+      if(c&&c.bg&&c.accent&&c.text) return c;
+    }catch(e){}
+    // default custom = dark slate + indigo accent
+    return buildCustomTheme('#0f1117','#6366f1','#f0f0f4','#e0e0f0','#c0c0d0');
+  })()
 };
+
+// Derive a full theme object from 5 user colours
+function buildCustomTheme(bg, accent, text, text2hex, text3hex){
+  // Convert hex to rgba helper
+  function h2r(h,a){const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return 'rgba('+r+','+g+','+b+','+a+')';}
+  // Lighten bg slightly for card/cell
+  function lighten(h,amt){let r=parseInt(h.slice(1,3),16)+amt,g=parseInt(h.slice(3,5),16)+amt,b=parseInt(h.slice(5,7),16)+amt;r=Math.min(255,r);g=Math.min(255,g);b=Math.min(255,b);return '#'+r.toString(16).padStart(2,'0')+g.toString(16).padStart(2,'0')+b.toString(16).padStart(2,'0');}
+  const isDark=parseInt(bg.slice(1,3),16)<128;
+  const mixAlpha=isDark?1:0;
+  const bgCard=lighten(bg,isDark?8:-6);
+  const bgCell=lighten(bg,isDark?14:-10);
+  const bgLift=lighten(bg,isDark?22:-14);
+  const navBg='rgba('+parseInt(bg.slice(1,3),16)+','+parseInt(bg.slice(3,5),16)+','+parseInt(bg.slice(5,7),16)+',0.96)';
+  return {
+    name:'Custom',desc:'Your custom palette',
+    bg,bgCard,bgCell,bgLift,
+    nav:navBg,navBorder:h2r(accent,0.15),
+    glass:h2r(accent,0.05),glassBorder:h2r(accent,0.14),bg2:h2r(accent,0.04),
+    text,text2:h2r(text2hex.startsWith('#')?text2hex:text,0.5),text3:h2r(text3hex.startsWith('#')?text3hex:text,0.28),
+    accent,accentGlow:h2r(accent,0.38),
+    preview:[bg,bgCard,accent],
+    _custom:true,_bg:bg,_accent:accent,_text:text,_text2:text2hex,_text3:text3hex
+  };
+}
 
 let currentTheme = (function(){try{return localStorage.getItem('rm_theme')||'obsidian';}catch(e){return'obsidian';}})();
 
@@ -424,11 +467,151 @@ function applyTheme(key){
   r.style.setProperty('--bg-card',t.bgCard||t.bg+'ee');
   r.style.setProperty('--bg-cell',t.bgCell||t.bg+'cc');
   r.style.setProperty('--bg-lift',t.bgLift||t.bg2);
+  // Background image/texture support
+  if(t.bgImage){
+    document.body.style.backgroundImage=t.bgImage;
+    document.body.style.backgroundSize=t.bgSize||'24px 24px';
+  } else {
+    document.body.style.backgroundImage='';
+    document.body.style.backgroundSize='';
+  }
+  // Splash logo vars — invert for light theme
+  const isLight=t.bg.startsWith('#f')||t.bg.startsWith('#e');
+  if(isLight){
+    r.style.setProperty('--text','#0a0a0a');
+    r.style.setProperty('--text2','#222222');
+    r.style.setProperty('--text3','#444444');
+    r.style.setProperty('--glass','rgba(0,0,0,0.06)');
+    r.style.setProperty('--glass-border','rgba(0,0,0,0.15)');
+    r.style.setProperty('--bg2','rgba(0,0,0,0.07)');
+  }
+  r.style.setProperty('--splash-stroke', isLight?'rgba(0,0,0,0.7)':'rgba(255,255,255,0.7)');
+  r.style.setProperty('--splash-mid',    isLight?'rgba(0,0,0,0.3)':'rgba(255,255,255,0.3)');
+  r.style.setProperty('--splash-ring',   isLight?'rgba(0,0,0,0.06)':'rgba(255,255,255,0.06)');
   let s=document.getElementById('theme-style');
   if(!s){s=document.createElement('style');s.id='theme-style';document.head.appendChild(s);}
-  s.textContent=`body,#splash{background:${t.bg}!important;color:${t.text}!important;}#header,#nav,#sub-nav{background:${t.nav}!important;border-color:${t.navBorder}!important;}.splash-btn,.btn-ok,.btn-add{background:${t.accent}!important;color:#fff!important;border-color:transparent!important;}.btn-edit{color:${t.text2}!important;border-color:${t.glassBorder}!important;}.btn-edit.active{background:${t.text}!important;color:${t.bg}!important;}.nav-btn{color:${t.text3}!important;}.nav-btn.active{border-bottom-color:${t.accent}!important;color:${t.text}!important;}.sub-btn{color:${t.text3}!important;}.sub-btn.active{color:${t.text}!important;background:${t.glass}!important;}.check-circle{border-color:${t.glassBorder}!important;}.check-circle.done{background:linear-gradient(135deg,${t.accent},${t.accent}cc)!important;box-shadow:0 0 12px ${t.accentGlow}!important;border-color:transparent!important;}#view-task-detail,.td-header{background:${t.bg}!important;}.lbl,.task-time,.year-month,.week-day-name{color:${t.text3}!important;}.task-name:not(.done){color:${t.text}!important;}.task-name.done{color:${t.text3}!important;}.score-text{color:inherit!important;}.month-cell-num{color:${t.text3}!important;}.month-cell-num.today{color:${t.text}!important;}.week-day-num{color:${t.text3}!important;}.week-day-num.today{color:${t.text}!important;}.card,.stat-card,.chart-wrap{background:${t.glass}!important;border-color:${t.glassBorder}!important;}.inp{color:${t.text}!important;background:${t.bg2}!important;border-color:${t.glassBorder}!important;}.inp::placeholder{color:${t.text3}!important;}.section-header .lbl{color:${t.text3}!important;}#date-title{color:${t.text}!important;}.stat-avg{color:inherit!important;}.rtab{color:${t.text3}!important;background:${t.glass}!important;border-color:${t.glassBorder}!important;}.rtab.active{color:${t.text}!important;background:${t.bg2}!important;border-color:${t.text2}!important;}.chart-title{color:${t.text3}!important;}.nav-arrow{color:${t.text2}!important;background:${t.glass}!important;border-color:${t.glassBorder}!important;}`;
+  s.textContent=[
+    'body,#splash{background:'+t.bg+'!important;color:'+t.text+'!important;}',
+    '#header,#nav,#sub-nav{background:'+t.nav+'!important;border-color:'+t.navBorder+'!important;}',
+    '.splash-btn,.btn-ok,.btn-add{background:'+t.accent+'!important;color:'+(t.accent==='#ffffff'?'#000000':'#fff')+'!important;border-color:transparent!important;}',
+    '.btn-edit{color:'+t.text2+'!important;border-color:'+t.glassBorder+'!important;}',
+    '.btn-edit.active{background:'+t.text+'!important;color:'+t.bg+'!important;}',
+    '.btn-del{color:'+t.text3+'!important;border-color:'+t.glassBorder+'!important;}',
+    '.nav-btn{color:'+t.text3+'!important;}',
+    '.nav-btn.active{border-bottom-color:'+t.accent+'!important;color:'+t.text+'!important;}',
+    '.sub-btn{color:'+t.text3+'!important;}',
+    '.sub-btn.active{color:'+t.text+'!important;background:'+t.glass+'!important;}',
+    '.check-circle{border-color:'+t.glassBorder+'!important;}',
+    '.check-circle.done{background:linear-gradient(135deg,'+t.accent+','+(t.accent==='#ffffff'?'#cccccc':t.accent+'cc')+')!important;box-shadow:0 0 12px '+t.accentGlow+'!important;border-color:transparent!important;}',
+    '#view-task-detail,.td-header{background:'+t.bg+'!important;}',
+    '.td-back{color:'+t.text2+'!important;border-color:'+t.glassBorder+'!important;}',
+    '.td-title{color:'+t.text+'!important;}',
+    '.lbl{color:'+t.text3+'!important;}',
+    '.section-header .lbl{color:'+t.text3+'!important;}',
+    '.task-name:not(.done){color:'+t.text+'!important;}',
+    '.task-name.done{color:'+t.text3+'!important;}',
+    '.task-time,.task-row-sub{color:'+t.text3+'!important;}',
+    '.stat-sub{color:'+t.text3+'!important;}',
+    '.stat-card .lbl,.chart-title{color:'+t.text3+'!important;}',
+    '#date-title{color:'+t.text+'!important;}',
+    '.year-month{color:'+t.text2+'!important;}',
+    '.score-text{color:'+t.text2+'!important;}',
+    '.month-cell-num{color:'+t.text3+'!important;}',
+    '.month-cell-num.today{color:'+t.text+'!important;}',
+    '.month-day-header{color:'+t.text3+'!important;}',
+    '.month-cell{border-color:transparent!important;}',
+    '.month-cell.today{border-color:'+t.text+'!important;}',
+    '.week-day-name{color:'+t.text3+'!important;}',
+    '.week-day-num{color:'+t.text3+'!important;}',
+    '.week-day-num.today{color:'+t.text+'!important;}',
+    '.bar-wrap{background:'+t.glassBorder+'!important;}',
+    '.card,.stat-card,.chart-wrap,.streak-card{background:'+t.glass+'!important;border-color:'+t.glassBorder+'!important;}',
+    '.task-row{border-color:'+t.glassBorder+'!important;}',
+    '.year-row{border-color:'+t.glassBorder+'!important;}',
+    '.inp{color:'+t.text+'!important;background:'+t.bg2+'!important;border-color:'+t.glassBorder+'!important;}',
+    '.inp::placeholder{color:'+t.text3+'!important;}',
+    '.export-btn{color:'+t.text2+'!important;border-color:'+t.glassBorder+'!important;background:'+t.glass+'!important;}',
+    '.rtab{color:'+t.text3+'!important;border-color:'+t.glassBorder+'!important;}',
+    '.rtab.active{background:'+t.text+'!important;color:'+t.bg+'!important;}',
+    '.report-tab{color:'+t.text3+'!important;}',
+    '.report-tab.active{color:'+t.text+'!important;border-bottom-color:'+t.accent+'!important;}',
+    '.nav-arrow{color:'+t.text3+'!important;border-color:'+t.glassBorder+'!important;}',
+    '.streak-card .streak-label{color:'+t.text3+'!important;}',
+    '.streak-card .streak-val{color:'+t.text+'!important;}',
+    t.bgImage ? 'body,#splash{background-image:'+t.bgImage+'!important;background-size:'+( t.bgSize||'24px 24px')+'!important;}' : '',
+    isLight ? '.bar-wrap{background:rgba(0,0,0,0.1)!important;}@keyframes logo-glow{0%,100%{box-shadow:0 0 18px 4px rgba(0,0,0,0.08);}50%{box-shadow:0 0 32px 10px rgba(0,0,0,0.15);}}.splash-greeting,.splash-sub,.splash-quote{color:'+t.text2+'!important;}.splash-name{color:'+t.text+'!important;}' : ''
+  ].join('');
+
+  const lo=document.getElementById('light-override');
+  if(lo){
+    if(isLight){
+      lo.textContent=`
+        body, #app { background: ${t.bg} !important; ${t.bgImage?'background-image:'+t.bgImage+'!important;background-size:'+(t.bgSize||'24px 24px')+'!important;':''} }
+        #header, #nav, #sub-nav { background: ${t.nav} !important; border-color: ${t.navBorder} !important; }
+        #splash { background: ${t.bg} !important; ${t.bgImage?'background-image:'+t.bgImage+'!important;background-size:'+(t.bgSize||'24px 24px')+'!important;':''} }
+        #view-task-detail, .td-header { background: ${t.bg} !important; ${t.bgImage?'background-image:'+t.bgImage+'!important;background-size:'+(t.bgSize||'24px 24px')+'!important;':''} }
+
+        /* Force ALL text dark */
+        body *, #app * { color: #111111; }
+
+        /* Accent-colored text keeps its color */
+        .stat-avg, .score-text, .month-cell-pct { color: inherit !important; }
+
+        /* Specific weights */
+        .nav-btn { color: #555555 !important; }
+        .nav-btn.active { color: #000000 !important; border-bottom-color: ${t.accent} !important; }
+        .sub-btn { color: #555555 !important; }
+        .sub-btn.active { color: #000000 !important; }
+        .lbl, .stat-sub, .chart-title, .month-day-header,
+        .week-day-name, .task-time { color: #666666 !important; }
+
+        /* Buttons */
+        .btn-edit { color: #333333 !important; border-color: rgba(0,0,0,0.2) !important; background: transparent !important; }
+        .btn-edit.active { background: #111111 !important; color: #ffffff !important; }
+        .btn-add, .btn-ok, .splash-btn { background: ${t.accent} !important; color: #ffffff !important; }
+        .export-btn { color: #222222 !important; background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.12) !important; }
+        .rtab { color: #444444 !important; border-color: rgba(0,0,0,0.15) !important; background: transparent !important; }
+        .rtab.active { background: #111111 !important; color: #ffffff !important; }
+        .nav-arrow { color: #333333 !important; border-color: rgba(0,0,0,0.18) !important; }
+        .td-back { color: #333333 !important; border-color: rgba(0,0,0,0.18) !important; }
+
+        /* Inputs */
+        .inp { color: #111111 !important; background: rgba(0,0,0,0.06) !important; border-color: rgba(0,0,0,0.18) !important; }
+        .inp::placeholder { color: #999999 !important; }
+
+        /* Cards & containers */
+        .card, .stat-card, .chart-wrap, .streak-card { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.09) !important; }
+        .task-row, .year-row { border-color: rgba(0,0,0,0.12) !important; }
+        .task-row + .task-row { border-top: 1px solid rgba(0,0,0,0.12) !important; }
+        .month-cell { background: rgba(0,0,0,0.05) !important; border-color: transparent !important; }
+        .month-cell.today { border-color: #111111 !important; }
+        .bar-wrap { background: rgba(0,0,0,0.1) !important; }
+        .check-circle { border-color: rgba(0,0,0,0.2) !important; }
+        .check-circle.done { background: linear-gradient(135deg,${t.accent},${t.accent}cc) !important; border-color: transparent !important; }
+        .check-circle.done * { color: #ffffff !important; }
+
+        /* Report/task tabs */
+        .report-tab { color: #555555 !important; }
+        .report-tab.active { color: #000000 !important; border-bottom-color: ${t.accent} !important; }
+
+        /* Splash */
+        /* Completion popup always stays dark — it's a full-screen overlay */
+        #completion-popup, #completion-popup * { color: #ffffff !important; }
+        #completion-popup { background: rgba(0,0,0,0.75) !important; }
+        #cp-dismiss { background: rgba(255,255,255,0.12) !important; border-color: rgba(255,255,255,0.25) !important; color: #ffffff !important; }
+        .cp-close { color: rgba(255,255,255,0.8) !important; }
+        .splash-greeting, .splash-name, .splash-sub, .splash-quote { color: #111111 !important; }
+        @keyframes logo-glow { 0%,100%{box-shadow:0 0 18px 4px rgba(0,0,0,0.08);}50%{box-shadow:0 0 32px 10px rgba(0,0,0,0.15);} }
+      `;
+    } else {
+      lo.textContent='';
+    }
+  }
 }
 applyTheme(currentTheme);
+
+// Resolves a CSS variable to its computed value — needed because Chart.js canvas cannot use CSS vars
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || (name==='--text3'?'rgba(255,255,255,0.2)':name==='--glass-border'?'rgba(255,255,255,0.08)':'#888'); }
 
 const INIT_TASKS = [];
 const DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -469,7 +652,7 @@ let taskDetailView = "month"; // "month" or "year"
 let taskDetailMonthOffset = 0;
 let taskDetailYearOffset = 0;
 
-function clr(s){ return s>=80?"#4ade80":s>=50?"#facc15":s>0?"#f87171":"#2a2a2a"; }
+function clr(s){ return s>=80?"#4ade80":s>=50?"#facc15":s>0?"#f87171":"rgba(255,255,255,0.08)"; }
 function scoreOf(log, dayKey){
   if(!log) return 0;
   const key = dayKey || getTodayKey();
@@ -496,7 +679,43 @@ function visibleTasksForDay(log, dayKey){
     return tasks.filter(t=>!hidden.includes(t.id)&&(!t.createdAt||t.createdAt<=key)&&(!t.deletedAt||t.deletedAt>key));
   }
 }
-function persist(){sv("rm_tasks",tasks);sv("rm_logs",logs);sv("rm_username",userName);sv("rm_macros",macros);sv("rm_appname",appName);}
+function persist(){sv("rm_tasks",tasks);sv("rm_logs",logs);sv("rm_username",userName);sv("rm_macros",macros);sv("rm_appname",appName);sv("rm_haptic",hapticEnabled);}
+
+// ── HAPTIC ENGINE ─────────────────────────────────────────────────────────────
+var hapticEnabled=ld("rm_haptic",true);
+var _isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+var _hapticAudio=null;
+function _iosHaptic(type){
+  try{
+    if(!_hapticAudio)_hapticAudio=new(window.AudioContext||window.webkitAudioContext)();
+    var ctx2=_hapticAudio;
+    if(ctx2.state==="suspended")ctx2.resume();
+    var clicks=type==="heavy"?3:type==="medium"||type==="success"||type==="warning"?2:1;
+    var gap=type==="success"?0.04:type==="warning"?0.05:0.02;
+    for(var i=0;i<clicks;i++){
+      var osc=ctx2.createOscillator();
+      var gain=ctx2.createGain();
+      osc.connect(gain);gain.connect(ctx2.destination);
+      var freq=type==="heavy"?80:type==="light"?180:120;
+      osc.type="sine";osc.frequency.value=freq;
+      gain.gain.setValueAtTime(0.0001,ctx2.currentTime+i*gap);
+      gain.gain.linearRampToValueAtTime(0.00001,ctx2.currentTime+i*gap+0.012);
+      osc.start(ctx2.currentTime+i*gap);
+      osc.stop(ctx2.currentTime+i*gap+0.015);
+    }
+  }catch(e){}
+}
+function haptic(type){
+  if(!hapticEnabled)return;
+  if(_isIOS){_iosHaptic(type);return;}
+  if(!navigator.vibrate)return;
+  if(type==="light")navigator.vibrate(8);
+  else if(type==="medium")navigator.vibrate(15);
+  else if(type==="heavy")navigator.vibrate([20,10,20]);
+  else if(type==="success")navigator.vibrate([8,50,12]);
+  else if(type==="warning")navigator.vibrate([12,30,20,30,12]);
+  else navigator.vibrate(10);
+}
 
 
 // ── COMPLETION CELEBRATION ────────────────────────────────────────────────────
@@ -586,12 +805,12 @@ function renderToday(){
   const canGoNext = nextKey <= getTodayKey();
   let html=`
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--bg-card);border-radius:8px;padding:10px 14px;border:1px solid var(--glass-border)">
-    <button id="day-prev" style="background:none;border:1px solid #2a2a2a;color:#555;padding:4px 12px;font-size:14px;border-radius:4px;cursor:pointer">‹</button>
+    <button id="day-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:4px 12px;font-size:14px;border-radius:4px;cursor:pointer">‹</button>
     <div style="text-align:center">
-      <div style="font-size:12px;font-weight:700;color:${isLiveToday?'#4ade80':'#e8e8e8'}">${isLiveToday?"TODAY":activeDate.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"})}</div>
-      ${!isLiveToday?'<div style="font-size:9px;color:#555;letter-spacing:2px;margin-top:2px">EDITING PAST</div>':''}
+      <div style="font-size:12px;font-weight:700;color:${isLiveToday?'#4ade80':'var(--text)'}">${isLiveToday?"TODAY":activeDate.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"})}</div>
+      ${!isLiveToday?'<div style="font-size:9px;color:var(--text2);letter-spacing:2px;margin-top:2px">EDITING PAST</div>':''}
     </div>
-    <button id="day-next" style="background:none;border:1px solid #2a2a2a;color:${canGoNext?'#555':'#2a2a2a'};padding:4px 12px;font-size:14px;border-radius:4px;cursor:pointer;pointer-events:${canGoNext?'auto':'none'}">›</button>
+    <button id="day-next" style="background:none;border:1px solid var(--glass-border);color:${canGoNext?'var(--text2)':'var(--glass-border)'};padding:4px 12px;font-size:14px;border-radius:4px;cursor:pointer;pointer-events:${canGoNext?'auto':'none'}">›</button>
   </div>
   <div class="section-header">
     <div class="lbl">${isLiveToday?"Today's Tasks":"Tasks — "+activeKey}</div>
@@ -662,12 +881,12 @@ function renderWeek(){
   const label=weekStart.toLocaleDateString("en-IN",{day:"numeric",month:"short"})+" – "+weekEnd.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
   let total=0,cnt=0;
   let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-    <button id="week-prev" style="background:none;border:1px solid #2a2a2a;color:#555;padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
+    <button id="week-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
     <div style="text-align:center">
-      <div style="font-size:11px;color:#e8e8e8;font-weight:700">${weekOffset===0?"This Week":label}</div>
-      ${weekOffset!==0?"<div style=\"font-size:9px;color:#555;margin-top:2px\">"+label+"</div>":""}
+      <div style="font-size:11px;color:var(--text);font-weight:700">${weekOffset===0?"This Week":label}</div>
+      ${weekOffset!==0?"<div style=\"font-size:9px;color:var(--text2);margin-top:2px\">"+label+"</div>":""}
     </div>
-    <button id="week-next" style="background:none;border:1px solid #2a2a2a;color:${weekOffset<0?'#555':'#2a2a2a'};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${weekOffset<0?'auto':'none'}">›</button>
+    <button id="week-next" style="background:none;border:1px solid var(--glass-border);color:${weekOffset<0?'var(--text2)':'var(--glass-border)'};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${weekOffset<0?'auto':'none'}">›</button>
   </div>`;
   weekDates.forEach(d=>{
     const k=toKey(d); const sc=scoreOf(logs[k],k);
@@ -700,9 +919,9 @@ function renderMonth(){
   const monthDates=Array.from({length:daysInMonth},(_,i)=>new Date(yr,mo,i+1));
   const canNext=monthOffset<0;
   let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-    <button id="month-prev" style="background:none;border:1px solid #2a2a2a;color:#555;padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
-    <div style="font-size:13px;color:#e8e8e8;font-weight:700">${MONTHS[mo]} ${yr}</div>
-    <button id="month-next" style="background:none;border:1px solid #2a2a2a;color:${canNext?'#555':'#2a2a2a'};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNext?'auto':'none'}">›</button>
+    <button id="month-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
+    <div style="font-size:13px;color:var(--text);font-weight:700">${MONTHS[mo]} ${yr}</div>
+    <button id="month-next" style="background:none;border:1px solid var(--glass-border);color:${canNext?'var(--text2)':'var(--glass-border)'};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNext?'auto':'none'}">›</button>
   </div><div class="month-grid">`;
   DAYS.forEach(d=>{html+=`<div class="month-day-header">${d}</div>`;});
   html+='</div><div class="month-grid">';
@@ -732,9 +951,9 @@ function renderYear(){
   const yr=getToday().getFullYear()+yearOffset;
   const canNext=yearOffset<0;
   let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-    <button id="year-prev" style="background:none;border:1px solid #2a2a2a;color:#555;padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
-    <div style="font-size:13px;color:#e8e8e8;font-weight:700">${yr}</div>
-    <button id="year-next" style="background:none;border:1px solid #2a2a2a;color:${canNext?'#555':'#2a2a2a'};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNext?'auto':'none'}">›</button>
+    <button id="year-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
+    <div style="font-size:13px;color:var(--text);font-weight:700">${yr}</div>
+    <button id="year-next" style="background:none;border:1px solid var(--glass-border);color:${canNext?'var(--text2)':'var(--glass-border)'};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNext?'auto':'none'}">›</button>
   </div>`;
   let strongTotal=0,trackedTotal=0;
   MONTHS.forEach((m,mi)=>{
@@ -862,9 +1081,21 @@ function renderReports(){
       </div>
 
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div>
+            <div style="font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase">Haptic Feedback</div>
+            <div style="font-size:9px;color:var(--text3);opacity:0.5;margin-top:2px">Vibration on taps &amp; swipes</div>
+          </div>
+          <button id="haptic-toggle" style="width:44px;height:26px;border-radius:13px;border:none;cursor:pointer;position:relative;transition:background 0.25s;background:${hapticEnabled?'#4ade80':'rgba(255,255,255,0.1)'}">
+            <span style="position:absolute;top:3px;left:${hapticEnabled?'21px':'3px'};width:20px;height:20px;border-radius:50%;background:white;transition:left 0.25s;display:block;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></span>
+          </button>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05)">
         <div style="font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">Theme</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-          ${Object.entries(THEMES).map(([key,t])=>`
+          ${Object.entries(THEMES).filter(([k])=>k!=='custom').map(([key,t])=>`
             <div data-theme-key="${key}" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid ${currentTheme===key?t.accent:'transparent'};transition:border-color 0.2s;position:relative">
               <div style="height:44px;background:linear-gradient(135deg,${t.preview[0]},${t.preview[1]});display:flex;align-items:flex-end;padding:5px 6px;gap:3px">
                 <div style="width:10px;height:10px;border-radius:50%;background:${t.preview[2]};opacity:0.9"></div>
@@ -876,6 +1107,55 @@ function renderReports(){
               ${currentTheme===key?'<div style="position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:'+t.accent+'"></div>':''}
             </div>
           `).join('')}
+          ${(function(){const ct=THEMES.custom;return`
+            <div data-theme-key="custom" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid ${currentTheme==='custom'?ct.accent:'rgba(255,255,255,0.1)'};transition:border-color 0.2s;position:relative">
+              <div style="height:44px;background:linear-gradient(135deg,${ct.preview[0]},${ct.preview[1]});display:flex;align-items:center;justify-content:center">
+                <div style="font-size:18px;opacity:0.7">🎨</div>
+              </div>
+              <div style="padding:5px 6px;background:${ct.preview[1]}">
+                <div style="font-size:9px;font-weight:600;color:${ct.text}">Custom</div>
+              </div>
+              ${currentTheme==='custom'?'<div style="position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:'+ct.accent+'"></div>':''}
+            </div>
+          `})()}
+        </div>
+
+        <!-- Custom theme editor — shown when custom tile clicked -->
+        <div id="custom-theme-editor" style="display:${currentTheme==='custom'?'block':'none'};margin-top:14px;padding:14px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px">
+          <div style="font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px">Customise Theme</div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+            ${[
+              ['ct-bg','Background','#0f1117'],
+              ['ct-card','Card / Surface','#161b26'],
+              ['ct-accent','Accent Color','#6366f1'],
+              ['ct-text','Primary Text','#f0f0f4'],
+              ['ct-text2','Secondary Text','#a0a0c0'],
+              ['ct-text3','Muted Text','#707090']
+            ].map(([id,label,def])=>{
+              const ct=THEMES.custom;
+              const val=id==='ct-bg'?(ct._bg||def):id==='ct-accent'?(ct._accent||def):id==='ct-text'?(ct._text||def):id==='ct-text2'?(ct._text2||def):id==='ct-text3'?(ct._text3||def):(ct.bgCard||def);
+              return `<div>
+                <div style="font-size:9px;color:var(--text3);letter-spacing:1px;margin-bottom:5px;text-transform:uppercase">${label}</div>
+                <div style="display:flex;align-items:center;gap:7px">
+                  <input type="color" id="${id}" value="${val.startsWith('#')?val:'#888888'}" style="width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;padding:2px;background:var(--bg2);flex-shrink:0">
+                  <input type="text" id="${id}-hex" value="${val.startsWith('#')?val:'#888888'}" maxlength="7" style="width:100%;background:var(--bg2);border:1px solid var(--glass-border);color:var(--text);padding:6px 8px;font-size:11px;border-radius:8px;font-family:monospace">
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+
+          <!-- Live preview strip -->
+          <div id="ct-preview-strip" style="height:36px;border-radius:8px;margin-bottom:10px;display:flex;align-items:center;padding:0 12px;gap:10px;transition:background 0.2s">
+            <div id="ct-prev-dot" style="width:12px;height:12px;border-radius:50%;flex-shrink:0"></div>
+            <div id="ct-prev-bar" style="flex:1;height:4px;border-radius:2px;opacity:0.4"></div>
+            <div id="ct-prev-text" style="font-size:11px;font-weight:600">Preview</div>
+          </div>
+
+          <div style="display:flex;gap:8px">
+            <button id="ct-apply-btn" style="flex:1;padding:10px;border:none;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:0.5px">Apply Theme</button>
+            <button id="ct-reset-btn" style="padding:10px 14px;border-radius:10px;font-size:11px;cursor:pointer;font-family:inherit;background:var(--glass);border:1px solid var(--glass-border);color:var(--text2)">Reset</button>
+          </div>
         </div>
       </div>
       </div>
@@ -887,7 +1167,7 @@ function renderReports(){
       <button class="rtab ${reportPeriod==='year'?'active':''}" id="rtab-year">Year</button>
       <button class="rtab ${reportPeriod==='tasks'?'active':''}" id="rtab-tasks">Tasks</button>
     </div>
-    ${(function(){if(reportPeriod==="tasks")return"";var cd=getReportData();return'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><button id="report-prev" class="nav-arrow">&#8249;</button><span style="font-size:12px;color:var(--text2);font-weight:500">'+reportTitle()+'</span><button id="report-next" class="nav-arrow" style="opacity:'+(cd&&cd.canNext?1:0.25)+'">&#8250;</button></div>';})()}
+    ${(function(){if(reportPeriod==="tasks")return"";var cd=getReportData();return'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><button id="report-prev" class="nav-arrow">&#8249;</button><span style="font-size:12px;color:rgba(255,255,255,0.35);font-weight:500">'+reportTitle()+'</span><button id="report-next" class="nav-arrow" style="opacity:'+(cd&&cd.canNext?1:0.25)+'">&#8250;</button></div>';})()}
     <div class="chart-wrap">
       <div class="chart-title">${reportPeriod==="day"?"Task Completion":"Score"}</div>
       <canvas id="bar-chart" height="160"></canvas>
@@ -911,17 +1191,17 @@ function renderReports(){
     
     <label for="import-excel-input" style="display:block;margin-top:6px;width:100%;background:#1a1a2a;border:1px solid #818cf8;color:#818cf8;padding:11px;font-size:11px;letter-spacing:2px;border-radius:6px;cursor:pointer;font-family:monospace;text-transform:uppercase;text-align:center;box-sizing:border-box">&#8593; Import Tasks from Excel</label>
     <input type="file" id="import-excel-input" accept=".xlsx,.xls" style="position:absolute;opacity:0;width:0;height:0">
-    <div style="font-size:10px;color:#444;margin-top:8px;text-align:center;line-height:1.6">Edit the clean row log in "Manual Import-Export Tracker" sheet and import back safely. All analytical metrics and charts will auto-recalculate.</div>
+    <div style="font-size:10px;color:var(--text2);margin-top:8px;text-align:center;line-height:1.6">Edit the clean row log in "Manual Import-Export Tracker" sheet and import back safely. All analytical metrics and charts will auto-recalculate.</div>
 
     <button class="export-btn" id="export-macros-btn" style="margin-top:6px;background:#1a1124;border-color:#a78bfa;color:#a78bfa">&#8595; Export Macro Tasks to Excel</button>
     <label for="import-macros-input" style="display:block;margin-top:6px;width:100%;background:#1a1a1a;border:1px solid #a78bfa;color:#a78bfa;padding:11px;font-size:11px;letter-spacing:2px;border-radius:6px;cursor:pointer;font-family:monospace;text-transform:uppercase;text-align:center;box-sizing:border-box">&#8593; Import Macro Tasks from Excel</label>
     <input type="file" id="import-macros-input" accept=".xlsx,.xls" style="position:absolute;opacity:0;width:0;height:0">
-    <div style="font-size:10px;color:#444;margin-top:4px;text-align:center;line-height:1.6">Columns: <b style="color:#666">date</b> &nbsp;|&nbsp; <b style="color:#666">macro_name</b> &nbsp;|&nbsp; <b style="color:#666">status</b> (Done / Undone). Any date format accepted.</div>
+    <div style="font-size:10px;color:var(--text2);margin-top:4px;text-align:center;line-height:1.6">Columns: <b style="color:var(--text);">date</b> &nbsp;|&nbsp; <b style="color:var(--text);">macro_name</b> &nbsp;|&nbsp; <b style="color:var(--text);">status</b> (Done / Undone). Any date format accepted.</div>
 
     <div style="margin-top:20px;border-top:1px solid #1a1a1a;padding-top:16px;">
-      <div style="font-size:9px;color:#333;letter-spacing:2px;text-align:center;margin-bottom:8px;text-transform:uppercase">Danger Zone</div>
+      <div style="font-size:9px;color:var(--text2);letter-spacing:2px;text-align:center;margin-bottom:8px;text-transform:uppercase">Danger Zone</div>
       <button id="master-erase-btn" style="display:block;width:100%;background:#1a0a0a;border:1px solid #7f1d1d;color:#f87171;padding:11px;font-size:11px;letter-spacing:2px;border-radius:6px;cursor:pointer;font-family:monospace;text-transform:uppercase;text-align:center">&#9888; Erase All Data</button>
-      <div style="font-size:10px;color:#333;margin-top:6px;text-align:center;line-height:1.6">Wipes all logs, tasks, and macros. Cannot be undone. You can re-import tasks after.</div>
+      <div style="font-size:10px;color:var(--text2);margin-top:6px;text-align:center;line-height:1.6">Wipes all logs, tasks, and macros. Cannot be undone. You can re-import tasks after.</div>
     </div>
   `;
   document.getElementById("tasks-chart-wrap").style.display = reportPeriod==="tasks" ? "block" : "none";
@@ -948,19 +1228,19 @@ function renderReports(){
     navHtml+='<div style="display:flex;gap:6px">';
     ["all","month","year"].forEach(p=>{
       const active=tasksSubPeriod===p;
-      navHtml+='<button class="tasks-period-btn" data-p="'+p+'" style="background:'+(active?"var(--text)":"none")+';border:1px solid var(--glass-border);color:'+(active?"var(--bg)":"var(--text3)")+';padding:3px 8px;font-size:9px;letter-spacing:1px;border-radius:4px;cursor:pointer;font-family:monospace;text-transform:uppercase">'+p+'</button>';
+      navHtml+='<button class="tasks-period-btn" data-p="'+p+'" style="background:'+(active?"var(--text)":"none")+';border:1px solid var(--glass-border);color:'+(active?"var(--bg)":"var(--text2)")+';padding:3px 8px;font-size:9px;letter-spacing:1px;border-radius:4px;cursor:pointer;font-family:monospace;text-transform:uppercase">'+p+'</button>';
     });
     navHtml+='</div>';
-    navHtml+='<button id="tasks-next" style="background:none;border:1px solid var(--glass-border);color:'+(twCanNext?"var(--text2)":"var(--text3)")+';padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:'+(twCanNext?"auto":"none")+'">&#8250;</button>';
+    navHtml+='<button id="tasks-next" style="background:none;border:1px solid #2a2a2a;color:'+(twCanNext?"#555":"#2a2a2a")+';padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:'+(twCanNext?"auto":"none")+'">&#8250;</button>';
     navHtml+='</div>';
-    navHtml+='<div style="font-size:10px;color:var(--text3);letter-spacing:2px;margin-bottom:10px">'+twLabel.toUpperCase()+'</div>';
+    navHtml+='<div style="font-size:10px;color:var(--text2);letter-spacing:2px;margin-bottom:10px">'+twLabel.toUpperCase()+'</div>';
     tw.innerHTML='<div class="chart-title">Per-Task Performance</div>'+navHtml+'<canvas id="tasks-bar-chart" height="220"></canvas>';
 
     const tdata=getTasksPerformanceData();
     const tCtx=document.getElementById("tasks-bar-chart").getContext("2d");
     destroyChart("tasks");
     if(tdata.length===0){
-      tw.innerHTML+='<div style="font-size:12px;color:#555;margin-top:8px">No task data for this period.</div>';
+      tw.innerHTML+='<div style="font-size:12px;color:var(--text2);margin-top:8px">No task data for this period.</div>';
     } else {
       const cheight=Math.max(180, tdata.length*28);
       document.getElementById("tasks-bar-chart").height=cheight;
@@ -988,19 +1268,19 @@ function renderReports(){
             }}}
           },
           scales:{
-            x:{min:0,max:100,ticks:{color:"#555",font:{size:9},callback:v=>v+"%"},grid:{color:"#1c1c1c"}},
-            y:{ticks:{color:"#e8e8e8",font:{size:9}},grid:{display:false}}
+            x:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},
+            y:{ticks:{color:cssVar("--text2"),font:{size:9}},grid:{display:false}}
           }
         }
       });
       // Clickable task rows below chart
-      let rowsHtml='<div style="margin-top:14px"><div style="font-size:9px;color:var(--text3);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">Tap a task to view its full history</div>';
+      let rowsHtml='<div style="margin-top:14px"><div style="font-size:9px;color:var(--text2);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">Tap a task to view its full history</div>';
       tdata.forEach(t=>{
-        rowsHtml+=`<div data-task-detail-id="${t.id}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;margin-bottom:6px;cursor:pointer;transition:background 0.15s;">
+        rowsHtml+=`<div data-task-detail-id="${t.id}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;margin-bottom:6px;cursor:pointer;transition:background 0.15s;" onmouseenter="this.style.background='rgba(255,255,255,0.07)'" onmouseleave="this.style.background='rgba(255,255,255,0.03)'">
           <div style="flex:1;min-width:0;font-size:13px;color:${t.deleted?"var(--text3)":"var(--text)"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.name}</div>
           <div style="font-size:13px;font-weight:600;color:${clr(t.rate)};flex-shrink:0">${t.rate}%</div>
-          <div style="font-size:11px;color:var(--text3);flex-shrink:0">${t.done}/${t.active}d</div>
-          <div style="font-size:14px;color:var(--text3);flex-shrink:0">›</div>
+          <div style="font-size:11px;color:var(--text2);flex-shrink:0">${t.done}/${t.active}d</div>
+          <div style="font-size:14px;color:var(--text2);flex-shrink:0">›</div>
         </div>`;
       });
       rowsHtml+='</div>';
@@ -1016,8 +1296,8 @@ function renderReports(){
       labels:data.labels,
       datasets:[{
         data:data.scores.map(s=>s===null?0:s),
-        backgroundColor:data.scores.map(s=>s===null?"#1c1c1c":clr(s)+"bb"),
-        borderColor:data.scores.map(s=>s===null?"#1c1c1c":clr(s)),
+        backgroundColor:data.scores.map(s=>s===null?cssVar("--glass-border"):clr(s)+"bb"),
+        borderColor:data.scores.map(s=>s===null?cssVar("--glass-border"):clr(s)),
         borderWidth:1,
         borderRadius:3,
       }]
@@ -1026,8 +1306,8 @@ function renderReports(){
       responsive:true,
       plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+"%"}}},
       scales:{
-        y:{min:0,max:100,ticks:{color:getComputedStyle(document.documentElement).getPropertyValue('--text3').trim()||"#555",font:{size:9},callback:v=>v+"%"},grid:{color:getComputedStyle(document.documentElement).getPropertyValue('--glass-border').trim()||"#1c1c1c"}},
-        x:{ticks:{color:getComputedStyle(document.documentElement).getPropertyValue('--text3').trim()||"#555",font:{size:9}},grid:{display:false}}
+        y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},
+        x:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{display:false}}
       }
     }
   });
@@ -1040,15 +1320,15 @@ function renderReports(){
       labels:["Strong (80%+)","Partial (50-79%)","Weak (1-49%)","Missed"],
       datasets:[{
         data:[pieData.strong,pieData.partial,pieData.weak,pieData.zero],
-        backgroundColor:["#4ade80bb","#facc15bb","#f87171bb","#2a2a2a"],
-        borderColor:["#4ade80","#facc15","#f87171","#333"],
+        backgroundColor:["#4ade80bb","#facc15bb","#f87171bb",cssVar("--glass-border")],
+        borderColor:["#4ade80","#facc15","#f87171",cssVar("--glass-border")],
         borderWidth:1,
       }]
     },
     options:{
       responsive:true,
       plugins:{
-        legend:{display:true,position:"bottom",labels:{color:getComputedStyle(document.documentElement).getPropertyValue('--text2').trim()||"#555",font:{size:10},padding:10,boxWidth:12}},
+        legend:{display:true,position:"bottom",labels:{color:cssVar("--text2"),font:{size:10},padding:10,boxWidth:12}},
         tooltip:{callbacks:{label:ctx=>ctx.label+": "+ctx.raw+" days"}}
       }
     }
@@ -1127,15 +1407,15 @@ function renderMacros(){
 
     // Nav bar
     html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;margin-bottom:14px">
-      <button id="macro-preview-prev" style="background:none;border:1px solid #2a2a2a;color:#555;padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
+      <button id="macro-preview-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
         <div style="display:flex;gap:6px">
           <button id="macro-preview-month" class="rtab active" style="padding:4px 12px;font-size:9px">Month</button>
           <button id="macro-preview-year" class="rtab" style="padding:4px 12px;font-size:9px">Year</button>
         </div>
-        <div style="font-size:13px;color:#e8e8e8;font-weight:600;letter-spacing:0.5px;margin-top:0">${MONTHS[pmo]} ${pyr}</div>
+        <div style="font-size:13px;color:var(--text);font-weight:600;letter-spacing:0.5px;margin-top:0">${MONTHS[pmo]} ${pyr}</div>
       </div>
-      <button id="macro-preview-next" style="background:none;border:1px solid #2a2a2a;color:${canNext?"#555":"#2a2a2a"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNext?"auto":"none"}">&#8250;</button>
+      <button id="macro-preview-next" style="background:none;border:1px solid var(--glass-border);color:${canNext?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNext?"auto":"none"}">&#8250;</button>
     </div>`;
 
     // Month grid (calendar)
@@ -1171,15 +1451,15 @@ function renderMacros(){
     const canNextY=Math.floor(pOffset/12)<0;
 
     html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;margin-bottom:14px">
-      <button id="macro-preview-prev" style="background:none;border:1px solid #2a2a2a;color:#555;padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
+      <button id="macro-preview-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
         <div style="display:flex;gap:6px">
           <button id="macro-preview-month" class="rtab" style="padding:4px 12px;font-size:9px">Month</button>
           <button id="macro-preview-year" class="rtab active" style="padding:4px 12px;font-size:9px">Year</button>
         </div>
-        <div style="font-size:13px;color:#e8e8e8;font-weight:600;letter-spacing:0.5px;margin-top:0">${pyr}</div>
+        <div style="font-size:13px;color:var(--text);font-weight:600;letter-spacing:0.5px;margin-top:0">${pyr}</div>
       </div>
-      <button id="macro-preview-next" style="background:none;border:1px solid #2a2a2a;color:${canNextY?"#555":"#2a2a2a"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNextY?"auto":"none"}">&#8250;</button>
+      <button id="macro-preview-next" style="background:none;border:1px solid var(--glass-border);color:${canNextY?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNextY?"auto":"none"}">&#8250;</button>
     </div>`;
 
     // Year rows (like renderYear)
@@ -1249,7 +1529,7 @@ function renderMacros(){
         window.macroMonthChart=new Chart(ctx,{
           type:"line",
           data:{labels,datasets:[{data:scores,borderColor:"#4ade80",backgroundColor:"rgba(74,222,128,0.08)",tension:0.25,fill:true,pointRadius:2}]},
-          options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{color:"#555",font:{size:9}},grid:{color:"#1c1c1c"}},x:{ticks:{color:"#555",font:{size:8}},grid:{display:false}}}}
+          options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9}},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:8}},grid:{display:false}}}}
         });
       } else {
         const pyr3=getToday().getFullYear()+window.macroPreviewOffset;
@@ -1337,15 +1617,15 @@ function renderTaskDetail(){
     const firstDay=new Date(pyr,pmo,1).getDay();
 
     html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <button id="td-prev" style="background:none;border:1px solid #2a2a2a;color:#555;padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
+      <button id="td-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
         <div style="display:flex;gap:6px">
           <button id="td-tab-month" class="rtab ${isMonth?"active":""}" style="padding:4px 12px;font-size:9px">Month</button>
           <button id="td-tab-year" class="rtab" style="padding:4px 12px;font-size:9px">Year</button>
         </div>
-        <div style="font-size:12px;font-weight:700;color:#e8e8e8">${MONTHS[pmo]} ${pyr}</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text)">${MONTHS[pmo]} ${pyr}</div>
       </div>
-      <button id="td-next" style="background:none;border:1px solid #2a2a2a;color:${canNextM?"#555":"#2a2a2a"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNextM?"auto":"none"}">&#8250;</button>
+      <button id="td-next" style="background:none;border:1px solid var(--glass-border);color:${canNextM?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNextM?"auto":"none"}">&#8250;</button>
     </div>`;
 
     // Calendar grid
@@ -1369,7 +1649,7 @@ function renderTaskDetail(){
       const bg=future?"var(--bg-card)":!active?"var(--bg)":done?"#4ade8025":"#f8717115";
       const dotColor=done?"#4ade80":active?"#f87171":"transparent";
       html+=`<div class="month-cell ${isT?"today":""} ${future?"future":""}" style="background:${bg};border-color:${isT?"rgba(255,255,255,0.25)":"transparent"}">
-        <div class="month-cell-num ${isT?"today":""}" style="color:${active?(done?"#4ade80":"#f87171"):"#2a2a2a"}">${i}</div>
+        <div class="month-cell-num ${isT?"today":""}" style="color:${active?(done?"#4ade80":"#f87171"):"var(--text3)"}">${i}</div>
         ${active?`<div style="width:5px;height:5px;border-radius:50%;background:${dotColor};margin-top:2px"></div>`:""}
       </div>`;
     }
@@ -1388,15 +1668,15 @@ function renderTaskDetail(){
     // YEAR VIEW
     const pyr=getToday().getFullYear()+taskDetailYearOffset;
     html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <button id="td-prev" style="background:none;border:1px solid #2a2a2a;color:#555;padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
+      <button id="td-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
         <div style="display:flex;gap:6px">
           <button id="td-tab-month" class="rtab" style="padding:4px 12px;font-size:9px">Month</button>
           <button id="td-tab-year" class="rtab active" style="padding:4px 12px;font-size:9px">Year</button>
         </div>
-        <div style="font-size:12px;font-weight:700;color:#e8e8e8">${pyr}</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text)">${pyr}</div>
       </div>
-      <button id="td-next" style="background:none;border:1px solid #2a2a2a;color:${canNextY?"#555":"#2a2a2a"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNextY?"auto":"none"}">&#8250;</button>
+      <button id="td-next" style="background:none;border:1px solid var(--glass-border);color:${canNextY?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNextY?"auto":"none"}">&#8250;</button>
     </div>`;
 
     let yDone=0, yActive=0;
@@ -1469,7 +1749,7 @@ function renderTaskDetail(){
       window._tdYearChart=new Chart(canvas.getContext("2d"),{
         type:"bar",
         data:{labels:MONTHS,datasets:[{data:yearScores,backgroundColor:yearScores.map(v=>clr(v)+"aa"),borderColor:yearScores.map(v=>clr(v)),borderWidth:1,borderRadius:4}]},
-        options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{color:"#555",font:{size:9}},grid:{color:"#1c1c1c"}},x:{ticks:{color:"#555",font:{size:8}},grid:{display:false}}}}
+        options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9}},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:8}},grid:{display:false}}}}
       });
     },50);
   }
@@ -1526,15 +1806,15 @@ function renderStreak(){
   // Tab row + nav
   if(streakView==="month"){
     calHtml += `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <button id="streak-prev" style="background:none;border:1px solid #2a2a2a;color:#555;padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
+      <button id="streak-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
         <div style="display:flex;gap:6px">
           <button id="streak-tab-month" class="rtab active" style="padding:4px 12px;font-size:9px">Month</button>
           <button id="streak-tab-year" class="rtab" style="padding:4px 12px;font-size:9px">Year</button>
         </div>
-        <div style="font-size:13px;color:#e8e8e8;font-weight:600;margin-top:0">${MONTHS[mo]} ${yr}</div>
+        <div style="font-size:13px;color:var(--text);font-weight:600;margin-top:0">${MONTHS[mo]} ${yr}</div>
       </div>
-      <button id="streak-next" style="background:none;border:1px solid #2a2a2a;color:${canGoNext?"#555":"#2a2a2a"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canGoNext?"auto":"none"}">›</button>
+      <button id="streak-next" style="background:none;border:1px solid var(--glass-border);color:${canGoNext?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canGoNext?"auto":"none"}">›</button>
     </div>`;
     calHtml += `<div class="month-grid">`;
     DAYS.forEach(d=>{ calHtml+=`<div class="month-day-header">${d}</div>`; });
@@ -1562,15 +1842,15 @@ function renderStreak(){
   } else {
     // ── Year view ──
     calHtml += `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <button id="streak-prev" style="background:none;border:1px solid #2a2a2a;color:#555;padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
+      <button id="streak-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
         <div style="display:flex;gap:6px">
           <button id="streak-tab-month" class="rtab" style="padding:4px 12px;font-size:9px">Month</button>
           <button id="streak-tab-year" class="rtab active" style="padding:4px 12px;font-size:9px">Year</button>
         </div>
-        <div style="font-size:13px;color:#e8e8e8;font-weight:600;margin-top:0">${streakYr}</div>
+        <div style="font-size:13px;color:var(--text);font-weight:600;margin-top:0">${streakYr}</div>
       </div>
-      <button id="streak-next" style="background:none;border:1px solid #2a2a2a;color:${canGoNextY?"#555":"#2a2a2a"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canGoNextY?"auto":"none"}">›</button>
+      <button id="streak-next" style="background:none;border:1px solid var(--glass-border);color:${canGoNextY?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canGoNextY?"auto":"none"}">›</button>
     </div>`;
     MONTHS.forEach((m,mi)=>{
       const mdays=new Date(streakYr,mi+1,0).getDate();
@@ -1607,7 +1887,7 @@ function renderStreak(){
             <div class="s-spark s-spark3"></div>
           </div>`:`<svg viewBox="0 0 32 36" width="32" height="36"><text y="26" x="16" text-anchor="middle" font-size="22" fill="rgba(255,255,255,0.12)">—</text></svg>`}
         </div>
-        <div class="streak-num" style="color:${cur>=7?"#4ade80":cur>=3?"#facc15":"#e8e8e8"}">${cur}</div>
+        <div class="streak-num" style="color:${cur>=7?"#4ade80":cur>=3?"#facc15":"var(--text)"}">${cur}</div>
         <div class="streak-lbl">Current<br>Streak</div>
       </div>
       <div class="streak-box">
@@ -1651,7 +1931,7 @@ function renderStreak(){
 
     <div class="stat-card" style="margin-top:16px">
       <div class="lbl">Motivation</div>
-      <div style="font-size:13px;color:#e8e8e8;line-height:1.6;margin-top:8px">
+      <div style="font-size:13px;color:var(--text);line-height:1.6;margin-top:8px">
         ${cur===0?"Start today. One day builds the chain.":cur<3?"Good start. Keep it going.":cur<7?"Solid — "+cur+" days straight. Don't break it.":cur<14?"One week+ streak. You're rebuilding.":cur<30?""+cur+" days strong. This is becoming identity.":""+cur+" days. This is who you are now."}
       </div>
     </div>
@@ -1686,7 +1966,7 @@ function exportReportImage(){
     out.width = w; out.height = totalH;
     const ctx = out.getContext("2d");
     const bg = document.documentElement.style.getPropertyValue("--bg")||"#0a0a0a";
-    const fg = "#e8e8e8";
+    const fg = document.documentElement.style.getPropertyValue("--text")||"#e8e8e8";
     const muted = "#555555";
     ctx.fillStyle = bg; ctx.fillRect(0,0,w,totalH);
     ctx.fillStyle = fg; ctx.font = `bold ${16*scale}px monospace`;
@@ -1725,50 +2005,105 @@ function exportReportImage(){
 
 
 function saveTasksImage(){
-  if(typeof html2canvas==="undefined"){showImportStatus("html2canvas not loaded.","#f87171");return;}
-  var bgColor=document.documentElement.style.getPropertyValue("--bg")||"#0d0d0d";
-  var scale=3;
+  haptic("medium");
+  var ak=viewingKey||getTodayKey();
 
-  // Build a single off-screen container so header + tasks are one continuous block
+  // Temporarily ensure header is visible for screenshot
   var header=document.getElementById("header");
-  var body=document.getElementById("view-today");
-  if(!header||!body) return;
+  var wasCollapsed=(typeof headerCollapsed!=="undefined")?headerCollapsed:false;
+  if(wasCollapsed){
+    header.classList.remove("collapsed");
+    header.style.transform="";
+    header.style.opacity="1";
+  }
 
-  var wrap=document.createElement("div");
-  wrap.style.cssText="position:fixed;left:-9999px;top:0;width:"+header.offsetWidth+"px;background:"+bgColor+";font-family:'Inter',-apple-system,sans-serif;";
+  // Scroll to top so full view is captured
+  window.scrollTo(0,0);
 
-  // Clone header — strip position:fixed so it flows normally
-  var hClone=header.cloneNode(true);
-  hClone.style.cssText="position:relative;top:auto;left:auto;right:auto;background:"+bgColor+";padding:20px 20px 14px;border-bottom:1px solid rgba(255,255,255,0.08);";
-  wrap.appendChild(hClone);
+  var el=document.getElementById("app")||document.body;
 
-  // Clone body — strip padding-top offset and ensure full content shows
-  var bClone=body.cloneNode(true);
-  bClone.style.cssText="position:relative;padding:16px;background:"+bgColor+";overflow:visible;height:auto;max-height:none;";
-  wrap.appendChild(bClone);
+  // Small delay to let any layout settle
+  setTimeout(function(){
+    if(typeof html2canvas==="undefined"){
+      // Fallback if html2canvas not loaded
+      showImportStatus("Screenshot library not ready","#f87171");
+      return;
+    }
+    var bgColor=getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()||"#0d0d0d";
 
-  document.body.appendChild(wrap);
+    // Capture header + full scrollable today view — not just viewport
+    var headerEl=document.getElementById("header");
+    var navEl=document.getElementById("nav");
+    var subNavEl=document.getElementById("sub-nav");
+    var bodyEl=document.getElementById("view-today");
 
-  html2canvas(wrap,{
-    backgroundColor:bgColor,
-    scale:scale,
-    useCORS:true,
-    logging:false,
-    scrollX:0,
-    scrollY:0,
-    windowWidth:wrap.offsetWidth,
-    width:wrap.offsetWidth,
-    height:wrap.scrollHeight
-  }).then(function(canvas){
-    document.body.removeChild(wrap);
-    var a=document.createElement("a");
-    a.download="tasks-"+(viewingKey||getTodayKey())+".png";
-    a.href=canvas.toDataURL("image/png");
-    a.click();
-  }).catch(function(){
-    document.body.removeChild(wrap);
-    showImportStatus("Image save failed.","#f87171");
-  });
+    // Build off-screen container with real layout — no fixed positioning
+    var snap=document.createElement("div");
+    snap.style.cssText="position:absolute;left:-9999px;top:0;width:"+window.innerWidth+"px;background:"+bgColor+";";
+    document.body.appendChild(snap);
+
+    function snapClone(src, extra){
+      if(!src) return;
+      var cl=src.cloneNode(true);
+      cl.style.position="relative";
+      cl.style.top=cl.style.left=cl.style.right=cl.style.bottom="auto";
+      cl.style.width="100%"; cl.style.boxSizing="border-box";
+      cl.style.backdropFilter=cl.style.webkitBackdropFilter="none";
+      cl.style.zIndex="auto"; cl.style.maxHeight="none"; cl.style.overflow="visible";
+      if(extra) Object.assign(cl.style,extra);
+      // Remove hidden class from any nested collapsed elements
+      cl.classList.remove("hidden","collapsed");
+      snap.appendChild(cl);
+    }
+
+    // Always include header (even if collapsed)
+    snapClone(headerEl,{opacity:"1",transform:"none"});
+    snapClone(navEl);
+    if(subNavEl&&subNavEl.classList.contains("visible")) snapClone(subNavEl,{display:"flex"});
+    // Full body — no height/overflow restriction so ALL tasks show
+    snapClone(bodyEl,{paddingTop:"16px",overflow:"visible",maxHeight:"none",height:"auto"});
+
+    html2canvas(snap,{
+      scale:3,
+      useCORS:true,
+      allowTaint:true,
+      logging:false,
+      backgroundColor:bgColor,
+      width:window.innerWidth,
+      height:snap.scrollHeight,
+      windowWidth:window.innerWidth,
+      windowHeight:snap.scrollHeight
+    }).then(function(canvas){
+      // Clean up snap
+      if(document.body.contains(snap)) document.body.removeChild(snap);
+      // Restore header state
+      if(wasCollapsed){
+        header.classList.add("collapsed");
+      }
+      var ak2=viewingKey||getTodayKey();
+      var dataUrl=canvas.toDataURL("image/png",1.0);
+      if(navigator.share){
+        canvas.toBlob(function(blob){
+          var file=new File([blob],"tasks-"+ak2+".png",{type:"image/png"});
+          var sd={files:[file],title:"Tasks — "+ak2};
+          if(navigator.canShare&&navigator.canShare(sd)){
+            navigator.share(sd).catch(function(){ _downloadImg(dataUrl,ak2); });
+          } else { _downloadImg(dataUrl,ak2); }
+        },"image/png",1.0);
+      } else {
+        _downloadImg(dataUrl,ak2);
+      }
+    }).catch(function(err){
+      if(document.body.contains(snap)) document.body.removeChild(snap);
+      if(wasCollapsed) header.classList.add("collapsed");
+      showImportStatus("Error: "+err.message,"#f87171");
+    });
+  },60);
+}
+function _downloadImg(dataUrl,ak){
+  var a=document.createElement("a");
+  a.download="tasks-"+ak+".png"; a.href=dataUrl;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
 
 function exportAllToExcel(){
@@ -2416,6 +2751,18 @@ function setupListeners(){
     if(e.target.id==="tasks-next"){ const {canNext}=getTasksWindowKeys(); if(canNext)tasksOffset++; renderReports(); return; }
     const themeCell=e.target.closest("[data-theme-key]");
     if(themeCell){ const k=themeCell.dataset.themeKey; applyTheme(k); renderReports(); return; }
+    if(e.target.id==="haptic-toggle"||e.target.closest("#haptic-toggle")){
+      hapticEnabled=!hapticEnabled;
+      sv("rm_haptic",hapticEnabled);
+      var btn=document.getElementById("haptic-toggle");
+      if(btn){
+        btn.style.background=hapticEnabled?"#4ade80":"rgba(255,255,255,0.1)";
+        var knob=btn.querySelector("span");
+        if(knob)knob.style.left=hapticEnabled?"21px":"3px";
+      }
+      if(hapticEnabled)haptic("medium");
+      return;
+    }
     if(e.target.id==="settings-name-save"){
       var n=document.getElementById("settings-name-inp").value.trim();
       if(n){userName=n;persist();document.getElementById("header-username").textContent=n;showImportStatus("Name updated!","#4ade80");}return;
@@ -2703,7 +3050,10 @@ document.getElementById("view-macros").addEventListener("click",function(e){
       var btn=document.getElementById("splash-btn");
       var inp=document.createElement("input");
       inp.placeholder="Your name";inp.autocomplete="off";
-      inp.style.cssText="display:block;width:220px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#f0f0f0;padding:12px 16px;font-size:15px;border-radius:10px;font-family:inherit;text-align:center;margin:0 auto 16px;";
+      var bgCol=document.documentElement.style.getPropertyValue("--bg2")||"rgba(255,255,255,0.07)";
+      var textCol=document.documentElement.style.getPropertyValue("--text")||"#f0f0f0";
+      var borderCol=document.documentElement.style.getPropertyValue("--glass-border")||"rgba(255,255,255,0.15)";
+      inp.style.cssText="display:block;width:220px;background:"+bgCol+";border:1px solid "+borderCol+";color:"+textCol+";padding:12px 16px;font-size:15px;border-radius:10px;font-family:inherit;text-align:center;margin:0 auto 16px;";
       btn.parentNode.insertBefore(inp,btn);
       btn.textContent="Continue";
       document.getElementById("splash-sub").textContent="enter your name";
@@ -3081,6 +3431,104 @@ document.addEventListener("click",function(e){
   }
 
 });
+
+// ── CUSTOM THEME EDITOR ──────────────────────────────────────────────────────
+(function(){
+
+  // Show editor after Custom tile click (renderReports re-creates the DOM, so use setTimeout)
+  document.addEventListener('click',function(e){
+    const tile=e.target.closest('[data-theme-key]');
+    if(tile&&tile.dataset.themeKey==='custom'){
+      setTimeout(function(){
+        const ed=document.getElementById('custom-theme-editor');
+        if(ed){ ed.style.display='block'; updateCtPreview(); updateCtButtonStyle(); }
+      },50);
+    }
+  });
+
+  // Sync color picker ↔ hex text input (delegated — editor is re-rendered each time)
+  document.addEventListener('input',function(e){
+    const id=e.target.id;
+    if(!id||!id.startsWith('ct-')) return;
+    if(e.target.type==='color'){
+      const hex=document.getElementById(id+'-hex');
+      if(hex){ hex.value=e.target.value; }
+      updateCtPreview();
+    } else if(e.target.type==='text'&&id.endsWith('-hex')){
+      const base=id.slice(0,-4);
+      const v=e.target.value.trim();
+      if(/^#[0-9a-fA-F]{6}$/.test(v)){
+        const picker=document.getElementById(base);
+        if(picker) picker.value=v;
+        updateCtPreview();
+      }
+    }
+  });
+
+  function getCtValues(){
+    const g=id=>{ const el=document.getElementById(id+'-hex')||document.getElementById(id); return el?el.value.trim():''; };
+    return { bg:g('ct-bg'), card:g('ct-card'), accent:g('ct-accent'), text:g('ct-text'), text2:g('ct-text2'), text3:g('ct-text3') };
+  }
+
+  function updateCtPreview(){
+    const v=getCtValues();
+    const strip=document.getElementById('ct-preview-strip');
+    const dot=document.getElementById('ct-prev-dot');
+    const bar=document.getElementById('ct-prev-bar');
+    const txt=document.getElementById('ct-prev-text');
+    if(!strip||!dot||!bar||!txt) return;
+    strip.style.background=v.bg||'#111';
+    dot.style.background=v.accent||'#888';
+    bar.style.background=v.accent||'#888';
+    txt.style.color=v.text||'#fff';
+    updateCtButtonStyle();
+  }
+
+  function updateCtButtonStyle(){
+    const v=getCtValues();
+    const btn=document.getElementById('ct-apply-btn');
+    if(!btn) return;
+    btn.style.background=v.accent||'#6366f1';
+    // pick contrasting text colour for button
+    const r=parseInt((v.accent||'#6366f1').slice(1,3),16);
+    const g=parseInt((v.accent||'#6366f1').slice(3,5),16);
+    const b=parseInt((v.accent||'#6366f1').slice(5,7),16);
+    const lum=(r*299+g*587+b*114)/1000;
+    btn.style.color=lum>140?'#000':'#fff';
+  }
+
+  // Apply button
+  document.addEventListener('click',function(e){
+    if(e.target.id!=='ct-apply-btn') return;
+    const v=getCtValues();
+    if(!v.bg||!v.accent||!v.text){ showImportStatus('Fill all colour fields','#f87171'); return; }
+    const built=buildCustomTheme(v.bg, v.accent, v.text, v.text2||v.text, v.text3||v.text);
+    // override card bg if user set it explicitly
+    if(v.card&&/^#[0-9a-fA-F]{6}$/.test(v.card)){
+      built.bgCard=v.card;
+      built.bgCell=v.card;
+      built.preview[1]=v.card;
+    }
+    built._text2=v.text2||v.text;
+    built._text3=v.text3||v.text;
+    THEMES.custom=built;
+    try{ localStorage.setItem('rm_custom_theme', JSON.stringify(built)); }catch(err){}
+    applyTheme('custom');
+    renderReports();
+    showImportStatus('Custom theme applied!', built.accent);
+    haptic('success');
+  });
+
+  // Reset button
+  document.addEventListener('click',function(e){
+    if(e.target.id!=='ct-reset-btn') return;
+    try{ localStorage.removeItem('rm_custom_theme'); }catch(err){}
+    THEMES.custom=buildCustomTheme('#0f1117','#6366f1','#f0f0f4','#e0e0f0','#c0c0d0');
+    renderReports();
+    showImportStatus('Custom theme reset','#a0a0c0');
+  });
+
+})();
 
 </script>
 </body>
