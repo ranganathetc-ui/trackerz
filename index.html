@@ -323,13 +323,8 @@
     <button class="nav-btn active" data-view="tasks">Tasks</button>
     <button class="nav-btn" data-view="streak">Streak</button>
     <button class="nav-btn" data-view="macros">Macros</button>
-    <button class="nav-btn" data-view="reports">Reports</button>
-  </div>
-  <div id="sub-nav" class="visible">
-    <button class="sub-btn active" data-sub="today">Today</button>
-    <button class="sub-btn" data-sub="week">Week</button>
-    <button class="sub-btn" data-sub="month">Month</button>
-    <button class="sub-btn" data-sub="year">Year</button>
+    <button class="nav-btn" data-view="analytics">Analytics</button>
+    <button class="nav-btn" data-view="settings">Settings</button>
   </div>
   <div id="view-today" class="body"></div>
   <div id="view-week" class="body hidden"></div>
@@ -337,7 +332,9 @@
   <div id="view-year" class="body hidden"></div>
   <div id="view-streak" class="body hidden"></div>
   <div id="view-macros" class="body hidden"></div>
-  <div id="view-reports" class="body hidden"></div>
+  <div id="view-analytics" class="body hidden"></div>
+  <div id="view-settings" class="body hidden"></div>
+  <div id="view-reports" style="display:none"></div>
   <div id="view-task-detail">
     <div class="td-header">
       <button class="td-back" id="td-back-btn">&#8592; Back</button>
@@ -632,12 +629,15 @@ let logs=ld("rm_logs",{});
 let userName=ld("rm_username","");
 let appName=ld("rm_appname","Recovery Mode");
 let macros=ld("rm_macros",[]);
+let groups=ld("rm_groups",[]); // [{id,name,order}]
+let collapsedGroups={}; // session-only: {groupId: true}
 let editMode = false;
 let editId = null;
-let viewingKey = null; 
-let weekOffset = 0;   
-let monthOffset = 0;  
-let yearOffset = 0;   
+let editGroupId = null; // group being renamed
+let viewingKey = null;
+let weekOffset = 0;
+let monthOffset = 0;
+let yearOffset = 0;
 let currentView = "today";
 let reportPeriod="week";
 let reportOffset=0;
@@ -645,10 +645,10 @@ let chartInstances={};
 let macroEditMode=false;
 let macroEditId=null;
 let macroViewKey=null;
-let tasksSubPeriod = "all"; 
-let tasksOffset = 0; 
+let tasksSubPeriod = "all";
+let tasksOffset = 0;
 let taskDetailId = null;
-let taskDetailView = "month"; // "month" or "year"
+let taskDetailView = "month";
 let taskDetailMonthOffset = 0;
 let taskDetailYearOffset = 0;
 
@@ -679,7 +679,7 @@ function visibleTasksForDay(log, dayKey){
     return tasks.filter(t=>!hidden.includes(t.id)&&(!t.createdAt||t.createdAt<=key)&&(!t.deletedAt||t.deletedAt>key));
   }
 }
-function persist(){sv("rm_tasks",tasks);sv("rm_logs",logs);sv("rm_username",userName);sv("rm_macros",macros);sv("rm_appname",appName);sv("rm_haptic",hapticEnabled);}
+function persist(){sv("rm_tasks",tasks);sv("rm_logs",logs);sv("rm_username",userName);sv("rm_macros",macros);sv("rm_appname",appName);sv("rm_haptic",hapticEnabled);sv("rm_groups",groups);}
 
 // ── HAPTIC ENGINE ─────────────────────────────────────────────────────────────
 var hapticEnabled=ld("rm_haptic",true);
@@ -803,6 +803,14 @@ function renderToday(){
   const prevKey=(()=>{ const d=new Date(ayr,amo-1,ady); d.setDate(d.getDate()-1); return toKey(d); })();
   const nextKey=(()=>{ const d=new Date(ayr,amo-1,ady); d.setDate(d.getDate()+1); return toKey(d); })();
   const canGoNext = nextKey <= getTodayKey();
+  const visibleTasks = visibleTasksForDay(log, activeKey);
+
+  // Count done per group for collapsed header badges
+  function groupDone(gid){
+    const gt = visibleTasks.filter(t=>(t.groupId||null)===(gid||null));
+    return {done: gt.filter(t=>log[t.id]).length, total: gt.length};
+  }
+
   let html=`
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--bg-card);border-radius:8px;padding:10px 14px;border:1px solid var(--glass-border)">
     <button id="day-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:4px 12px;font-size:14px;border-radius:4px;cursor:pointer">‹</button>
@@ -814,19 +822,22 @@ function renderToday(){
   </div>
   <div class="section-header">
     <div class="lbl">${isLiveToday?"Today's Tasks":"Tasks — "+activeKey}</div>
-    <div style="display:flex;gap:6px">
+    <div style="display:flex;gap:6px;align-items:center">
+      ${groups.length>0?`<button id="collapse-all-btn" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:3px 9px;font-size:9px;letter-spacing:1px;border-radius:4px;cursor:pointer;font-family:monospace;text-transform:uppercase">${Object.keys(collapsedGroups).length>0?'EXPAND ALL':'COLLAPSE ALL'}</button>`:''}
       <button class="btn-edit ${editMode?'active':''}" id="edit-toggle">${editMode?"DONE":"EDIT"}</button>
     </div>
-  </div>
-  `;
+  </div>`;
 
-  const visibleTasks = visibleTasksForDay(log, activeKey);
-  visibleTasks.forEach(task=>{
+  // Render tasks grouped
+  const orderedGroups=[...groups].sort((a,b)=>a.order-b.order);
+  const ungrouped=visibleTasks.filter(t=>!t.groupId||!groups.find(g=>g.id===t.groupId));
+
+  function renderTaskRow(task){
     const done=!!log[task.id];
     if(editMode && editId===task.id){
-      const sn = task.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
-      const st = (task.time||'').replace(/"/g,'&quot;');
-      html+=`<div class="task-row">
+      const sn=task.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+      const st=(task.time||'').replace(/"/g,'&quot;');
+      return `<div class="task-row">
         <div class="edit-row">
           <input class="inp" id="edit-name-inp" value="${sn}" placeholder="Task name" style="margin-bottom:0;">
           <div class="edit-bottom">
@@ -835,40 +846,108 @@ function renderToday(){
           </div>
         </div>
       </div>`;
-    } else {
-      html+=`<div class="task-row">`;
-      if(!editMode){
-        html+=`<div class="check-circle ${done?'done':''}" data-toggle="${task.id}"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><polyline points="1.5,5 5,8.5 11.5,1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
-      }
-      html+=`<div class="task-info">
-        <div class="task-name ${done&&!editMode?'done':''}">${task.name}</div>
-        ${task.time&&!editMode?'<div class="task-time">'+task.time+'</div>':''}
+    }
+    const allGrouped=visibleTasks.filter(t=>t.groupId&&groups.find(g=>g.id===t.groupId));
+    const taskListForMove=task.groupId?visibleTasks.filter(t=>t.groupId===task.groupId):ungrouped;
+    const idx=taskListForMove.indexOf(task);
+    let row=`<div class="task-row">`;
+    if(!editMode){
+      row+=`<div class="check-circle ${done?'done':''}" data-toggle="${task.id}"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><polyline points="1.5,5 5,8.5 11.5,1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
+    }
+    row+=`<div class="task-info">
+      <div class="task-name ${done&&!editMode?'done':''}">${task.name}</div>
+      ${task.time&&!editMode?'<div class="task-time">'+task.time+'</div>':''}
+    </div>`;
+    if(editMode){
+      // Group selector dropdown
+      const gOptions=`<option value="">Ungrouped</option>`+groups.map(g=>`<option value="${g.id}" ${task.groupId===g.id?'selected':''}>${g.name}</option>`).join('');
+      row+=`<div class="task-actions" style="flex-wrap:wrap;gap:4px">
+        <button class="btn-move" data-up="${task.id}" ${idx===0?'style="opacity:0.2;pointer-events:none"':''}>↑</button>
+        <button class="btn-move" data-dn="${task.id}" ${idx===taskListForMove.length-1?'style="opacity:0.2;pointer-events:none"':''}>↓</button>
+        <select data-grp-assign="${task.id}" style="background:var(--bg2);border:1px solid var(--glass-border);color:var(--text2);padding:3px 5px;border-radius:4px;font-size:9px;cursor:pointer;max-width:80px">${gOptions}</select>
+        <button class="btn-edit" data-edit="${task.id}">edit</button>
+        <button class="btn-del" data-del="${task.id}" title="${isLiveToday?'Remove globally':'Hide for this day'}">${isLiveToday?"✕":"–"}</button>
       </div>`;
+    }
+    row+=`</div>`;
+    return row;
+  }
+
+  // Render each group
+  orderedGroups.forEach(g=>{
+    const gt=visibleTasks.filter(t=>t.groupId===g.id);
+    if(gt.length===0 && !editMode) return;
+    const collapsed=!!collapsedGroups[g.id];
+    const {done:gdone,total:gtotal}=groupDone(g.id);
+    const allDone=gtotal>0&&gdone===gtotal;
+
+    if(editMode && editGroupId===g.id){
+      html+=`<div style="display:flex;align-items:center;gap:8px;margin:14px 0 6px;padding:8px 10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:8px">
+        <input class="inp" id="grp-rename-inp" value="${g.name}" style="margin:0;flex:1;font-size:12px">
+        <button id="grp-rename-save" data-gid="${g.id}" class="btn-ok">OK</button>
+      </div>`;
+    } else {
+      html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin:14px 0 6px;padding:6px 10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;cursor:pointer" data-grp-toggle="${g.id}">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text)">${g.name}</span>
+          <span style="font-size:9px;color:${allDone?'#4ade80':'var(--text2)'};">${gdone}/${gtotal}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          ${editMode?`<button class="btn-edit" data-grp-edit="${g.id}" style="font-size:8px;padding:2px 7px">rename</button><button class="btn-del" data-grp-del="${g.id}" style="font-size:9px;padding:2px 7px">✕</button>`:''}
+          <span style="font-size:12px;color:var(--text2);transition:transform 0.2s;display:inline-block;transform:rotate(${collapsed?'0':'180'}deg)">⌄</span>
+        </div>
+      </div>`;
+    }
+
+    if(!collapsed){
+      gt.forEach(t=>{ html+=renderTaskRow(t); });
       if(editMode){
-        const idx=visibleTasks.indexOf(task);
-        html+=`<div class="task-actions">
-          <button class="btn-move" data-up="${task.id}" ${idx===0?'style="opacity:0.2;pointer-events:none"':''}>↑</button>
-          <button class="btn-move" data-dn="${task.id}" ${idx===visibleTasks.length-1?'style="opacity:0.2;pointer-events:none"':''}>↓</button>
-          <button class="btn-edit" data-edit="${task.id}">edit</button>
-          <button class="btn-del" data-del="${task.id}" title="${isLiveToday?'Remove globally':'Hide for this day'}">${isLiveToday?"✕":"–"}</button>
+        html+=`<div style="margin:4px 0 8px 0">
+          <input class="inp" id="grp-new-name-${g.id}" placeholder="New task in ${g.name}" style="margin-bottom:4px;font-size:12px">
+          <button class="btn-add" data-grp-add="${g.id}" style="font-size:9px;padding:7px 12px">+ ADD TO ${g.name.toUpperCase()}</button>
         </div>`;
       }
-      html+=`</div>`;
     }
   });
 
+  // Ungrouped tasks
+  if(ungrouped.length>0||(editMode)){
+    if(groups.length>0){
+      const {done:udone,total:utotal}=groupDone(null);
+      const ucollapsed=!!collapsedGroups['__ungrouped'];
+      html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin:14px 0 6px;padding:6px 10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;cursor:pointer" data-grp-toggle="__ungrouped">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2)">Other</span>
+          <span style="font-size:9px;color:var(--text2)">${udone}/${utotal}</span>
+        </div>
+        <span style="font-size:12px;color:var(--text2);display:inline-block;transform:rotate(${ucollapsed?'0':'180'}deg)">⌄</span>
+      </div>`;
+      if(!ucollapsed) ungrouped.forEach(t=>{ html+=renderTaskRow(t); });
+    } else {
+      ungrouped.forEach(t=>{ html+=renderTaskRow(t); });
+    }
+  }
+
   if(editMode){
-    html+=`<div class="card">
+    html+=`<div class="card" style="margin-top:14px">
       <div class="lbl" style="margin-bottom:12px">Add Task</div>
       <input class="inp" id="new-name" placeholder="Task name">
       <input class="inp" id="new-time" placeholder="Time (e.g. 6:00)">
+      <select id="new-task-group" style="width:100%;background:var(--bg2);border:1px solid var(--glass-border);color:var(--text);padding:10px;border-radius:8px;font-size:12px;margin-bottom:10px;cursor:pointer">
+        <option value="">No Group</option>
+        ${groups.map(g=>`<option value="${g.id}">${g.name}</option>`).join('')}
+      </select>
       <button class="btn-add" id="add-task-btn">ADD TASK</button>
+    </div>
+    <div class="card" style="margin-top:10px;border:1px solid var(--glass-border)">
+      <div class="lbl" style="margin-bottom:10px">Groups</div>
+      <input class="inp" id="new-group-name" placeholder="New group name">
+      <button class="btn-add" id="add-group-btn" style="background:var(--glass);border:1px solid var(--glass-border);color:var(--text)">+ ADD GROUP</button>
     </div>`;
   }
 
   html+='<button class="export-btn" id="save-tasks-img-btn" style="margin-top:16px">Save as Image</button>';
   el.innerHTML=html;
-
 }
 
 
@@ -1058,108 +1137,10 @@ function getTasksPerformanceData(){
   }).filter(t=>t.active>0); 
 }
 
-function renderReports(){
-  const el=document.getElementById("view-reports");
+function renderAnalytics(){
+  const el=document.getElementById("view-analytics");
   el.innerHTML=`
-    <div class="lbl" style="margin-bottom:14px">Reports</div>
-    <div class="card" style="margin-bottom:16px;border:1px solid rgba(255,255,255,0.06)">
-      <div class="lbl" style="margin-bottom:12px;font-size:9px;letter-spacing:2px;">Personalise</div>
-      <div style="margin-bottom:10px">
-        <div style="font-size:10px;color:var(--text3);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase">Your Name</div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <input id="settings-name-inp" class="inp" style="margin-bottom:0;flex:1" placeholder="Your name" value="${userName}">
-          <button id="settings-name-save" class="btn-ok" style="flex-shrink:0">Save</button>
-        </div>
-      </div>
-      <div>
-        <div style="font-size:10px;color:var(--text3);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase">App Mode Label</div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <input id="settings-mode-inp" class="inp" style="margin-bottom:0;flex:1" placeholder="e.g. Recovery Mode" value="${appName}">
-          <button id="settings-mode-save" class="btn-ok" style="flex-shrink:0">Save</button>
-        </div>
-        <div style="font-size:9px;color:var(--text3);margin-top:6px;opacity:0.5">Shows in the header above the date</div>
-      </div>
-
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05)">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <div>
-            <div style="font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase">Haptic Feedback</div>
-            <div style="font-size:9px;color:var(--text3);opacity:0.5;margin-top:2px">Vibration on taps &amp; swipes</div>
-          </div>
-          <button id="haptic-toggle" style="width:44px;height:26px;border-radius:13px;border:none;cursor:pointer;position:relative;transition:background 0.25s;background:${hapticEnabled?'#4ade80':'rgba(255,255,255,0.1)'}">
-            <span style="position:absolute;top:3px;left:${hapticEnabled?'21px':'3px'};width:20px;height:20px;border-radius:50%;background:white;transition:left 0.25s;display:block;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></span>
-          </button>
-        </div>
-      </div>
-
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05)">
-        <div style="font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">Theme</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-          ${Object.entries(THEMES).filter(([k])=>k!=='custom').map(([key,t])=>`
-            <div data-theme-key="${key}" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid ${currentTheme===key?t.accent:'transparent'};transition:border-color 0.2s;position:relative">
-              <div style="height:44px;background:linear-gradient(135deg,${t.preview[0]},${t.preview[1]});display:flex;align-items:flex-end;padding:5px 6px;gap:3px">
-                <div style="width:10px;height:10px;border-radius:50%;background:${t.preview[2]};opacity:0.9"></div>
-                <div style="width:18px;height:4px;border-radius:2px;background:${t.preview[2]};opacity:0.4"></div>
-              </div>
-              <div style="padding:5px 6px;background:${t.preview[1]}">
-                <div style="font-size:9px;font-weight:600;color:${t.text}">${t.name}</div>
-              </div>
-              ${currentTheme===key?'<div style="position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:'+t.accent+'"></div>':''}
-            </div>
-          `).join('')}
-          ${(function(){const ct=THEMES.custom;return`
-            <div data-theme-key="custom" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid ${currentTheme==='custom'?ct.accent:'rgba(255,255,255,0.1)'};transition:border-color 0.2s;position:relative">
-              <div style="height:44px;background:linear-gradient(135deg,${ct.preview[0]},${ct.preview[1]});display:flex;align-items:center;justify-content:center">
-                <div style="font-size:18px;opacity:0.7">🎨</div>
-              </div>
-              <div style="padding:5px 6px;background:${ct.preview[1]}">
-                <div style="font-size:9px;font-weight:600;color:${ct.text}">Custom</div>
-              </div>
-              ${currentTheme==='custom'?'<div style="position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:'+ct.accent+'"></div>':''}
-            </div>
-          `})()}
-        </div>
-
-        <!-- Custom theme editor — shown when custom tile clicked -->
-        <div id="custom-theme-editor" style="display:${currentTheme==='custom'?'block':'none'};margin-top:14px;padding:14px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px">
-          <div style="font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px">Customise Theme</div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-            ${[
-              ['ct-bg','Background','#0f1117'],
-              ['ct-card','Card / Surface','#161b26'],
-              ['ct-accent','Accent Color','#6366f1'],
-              ['ct-text','Primary Text','#f0f0f4'],
-              ['ct-text2','Secondary Text','#a0a0c0'],
-              ['ct-text3','Muted Text','#707090']
-            ].map(([id,label,def])=>{
-              const ct=THEMES.custom;
-              const val=id==='ct-bg'?(ct._bg||def):id==='ct-accent'?(ct._accent||def):id==='ct-text'?(ct._text||def):id==='ct-text2'?(ct._text2||def):id==='ct-text3'?(ct._text3||def):(ct.bgCard||def);
-              return `<div>
-                <div style="font-size:9px;color:var(--text3);letter-spacing:1px;margin-bottom:5px;text-transform:uppercase">${label}</div>
-                <div style="display:flex;align-items:center;gap:7px">
-                  <input type="color" id="${id}" value="${val.startsWith('#')?val:'#888888'}" style="width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;padding:2px;background:var(--bg2);flex-shrink:0">
-                  <input type="text" id="${id}-hex" value="${val.startsWith('#')?val:'#888888'}" maxlength="7" style="width:100%;background:var(--bg2);border:1px solid var(--glass-border);color:var(--text);padding:6px 8px;font-size:11px;border-radius:8px;font-family:monospace">
-                </div>
-              </div>`;
-            }).join('')}
-          </div>
-
-          <!-- Live preview strip -->
-          <div id="ct-preview-strip" style="height:36px;border-radius:8px;margin-bottom:10px;display:flex;align-items:center;padding:0 12px;gap:10px;transition:background 0.2s">
-            <div id="ct-prev-dot" style="width:12px;height:12px;border-radius:50%;flex-shrink:0"></div>
-            <div id="ct-prev-bar" style="flex:1;height:4px;border-radius:2px;opacity:0.4"></div>
-            <div id="ct-prev-text" style="font-size:11px;font-weight:600">Preview</div>
-          </div>
-
-          <div style="display:flex;gap:8px">
-            <button id="ct-apply-btn" style="flex:1;padding:10px;border:none;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:0.5px">Apply Theme</button>
-            <button id="ct-reset-btn" style="padding:10px 14px;border-radius:10px;font-size:11px;cursor:pointer;font-family:inherit;background:var(--glass);border:1px solid var(--glass-border);color:var(--text2)">Reset</button>
-          </div>
-        </div>
-      </div>
-      </div>
-    </div>
+    <div class="lbl" style="margin-bottom:14px">Analytics</div>
     <div class="report-tabs" style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;">
       <button class="rtab ${reportPeriod==='day'?'active':''}" id="rtab-day">Day</button>
       <button class="rtab ${reportPeriod==='week'?'active':''}" id="rtab-week">Week</button>
@@ -1167,7 +1148,7 @@ function renderReports(){
       <button class="rtab ${reportPeriod==='year'?'active':''}" id="rtab-year">Year</button>
       <button class="rtab ${reportPeriod==='tasks'?'active':''}" id="rtab-tasks">Tasks</button>
     </div>
-    ${(function(){if(reportPeriod==="tasks")return"";var cd=getReportData();return'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><button id="report-prev" class="nav-arrow">&#8249;</button><span style="font-size:12px;color:rgba(255,255,255,0.35);font-weight:500">'+reportTitle()+'</span><button id="report-next" class="nav-arrow" style="opacity:'+(cd&&cd.canNext?1:0.25)+'">&#8250;</button></div>';})()}
+    ${(function(){if(reportPeriod==="tasks")return"";var cd=getReportData();return'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><button id="report-prev" class="nav-arrow">&#8249;</button><span style="font-size:12px;color:var(--text2);font-weight:500">'+reportTitle()+'</span><button id="report-next" class="nav-arrow" style="opacity:'+(cd&&cd.canNext?1:0.25)+'">&#8250;</button></div>';})()}
     <div class="chart-wrap">
       <div class="chart-title">${reportPeriod==="day"?"Task Completion":"Score"}</div>
       <canvas id="bar-chart" height="160"></canvas>
@@ -1186,23 +1167,6 @@ function renderReports(){
     </div>
     <button class="export-btn" id="export-img-btn">Export as Image</button>
     <button class="export-btn" id="export-csv-btn" style="margin-top:6px">Export as CSV</button>
-    <button class="export-btn" id="download-template-btn" style="margin-top:6px">Download Template</button>
-    <button class="export-btn" id="export-excel-btn" style="margin-top:6px;background:#1a2a1a;border-color:#4ade80;color:#4ade80">&#8595; Export ALL Data to Excel</button>
-    
-    <label for="import-excel-input" style="display:block;margin-top:6px;width:100%;background:#1a1a2a;border:1px solid #818cf8;color:#818cf8;padding:11px;font-size:11px;letter-spacing:2px;border-radius:6px;cursor:pointer;font-family:monospace;text-transform:uppercase;text-align:center;box-sizing:border-box">&#8593; Import Tasks from Excel</label>
-    <input type="file" id="import-excel-input" accept=".xlsx,.xls" style="position:absolute;opacity:0;width:0;height:0">
-    <div style="font-size:10px;color:var(--text2);margin-top:8px;text-align:center;line-height:1.6">Edit the clean row log in "Manual Import-Export Tracker" sheet and import back safely. All analytical metrics and charts will auto-recalculate.</div>
-
-    <button class="export-btn" id="export-macros-btn" style="margin-top:6px;background:#1a1124;border-color:#a78bfa;color:#a78bfa">&#8595; Export Macro Tasks to Excel</button>
-    <label for="import-macros-input" style="display:block;margin-top:6px;width:100%;background:#1a1a1a;border:1px solid #a78bfa;color:#a78bfa;padding:11px;font-size:11px;letter-spacing:2px;border-radius:6px;cursor:pointer;font-family:monospace;text-transform:uppercase;text-align:center;box-sizing:border-box">&#8593; Import Macro Tasks from Excel</label>
-    <input type="file" id="import-macros-input" accept=".xlsx,.xls" style="position:absolute;opacity:0;width:0;height:0">
-    <div style="font-size:10px;color:var(--text2);margin-top:4px;text-align:center;line-height:1.6">Columns: <b style="color:var(--text);">date</b> &nbsp;|&nbsp; <b style="color:var(--text);">macro_name</b> &nbsp;|&nbsp; <b style="color:var(--text);">status</b> (Done / Undone). Any date format accepted.</div>
-
-    <div style="margin-top:20px;border-top:1px solid #1a1a1a;padding-top:16px;">
-      <div style="font-size:9px;color:var(--text2);letter-spacing:2px;text-align:center;margin-bottom:8px;text-transform:uppercase">Danger Zone</div>
-      <button id="master-erase-btn" style="display:block;width:100%;background:#1a0a0a;border:1px solid #7f1d1d;color:#f87171;padding:11px;font-size:11px;letter-spacing:2px;border-radius:6px;cursor:pointer;font-family:monospace;text-transform:uppercase;text-align:center">&#9888; Erase All Data</button>
-      <div style="font-size:10px;color:var(--text2);margin-top:6px;text-align:center;line-height:1.6">Wipes all logs, tasks, and macros. Cannot be undone. You can re-import tasks after.</div>
-    </div>
   `;
   document.getElementById("tasks-chart-wrap").style.display = reportPeriod==="tasks" ? "block" : "none";
 
@@ -1231,7 +1195,7 @@ function renderReports(){
       navHtml+='<button class="tasks-period-btn" data-p="'+p+'" style="background:'+(active?"var(--text)":"none")+';border:1px solid var(--glass-border);color:'+(active?"var(--bg)":"var(--text2)")+';padding:3px 8px;font-size:9px;letter-spacing:1px;border-radius:4px;cursor:pointer;font-family:monospace;text-transform:uppercase">'+p+'</button>';
     });
     navHtml+='</div>';
-    navHtml+='<button id="tasks-next" style="background:none;border:1px solid #2a2a2a;color:'+(twCanNext?"#555":"#2a2a2a")+';padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:'+(twCanNext?"auto":"none")+'">&#8250;</button>';
+    navHtml+='<button id="tasks-next" style="background:none;border:1px solid var(--glass-border);color:'+(twCanNext?"var(--text2)":"var(--glass-border)")+';padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:'+(twCanNext?"auto":"none")+'">&#8250;</button>';
     navHtml+='</div>';
     navHtml+='<div style="font-size:10px;color:var(--text2);letter-spacing:2px;margin-bottom:10px">'+twLabel.toUpperCase()+'</div>';
     tw.innerHTML='<div class="chart-title">Per-Task Performance</div>'+navHtml+'<canvas id="tasks-bar-chart" height="220"></canvas>';
@@ -1273,10 +1237,9 @@ function renderReports(){
           }
         }
       });
-      // Clickable task rows below chart
       let rowsHtml='<div style="margin-top:14px"><div style="font-size:9px;color:var(--text2);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">Tap a task to view its full history</div>';
       tdata.forEach(t=>{
-        rowsHtml+=`<div data-task-detail-id="${t.id}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;margin-bottom:6px;cursor:pointer;transition:background 0.15s;" onmouseenter="this.style.background='rgba(255,255,255,0.07)'" onmouseleave="this.style.background='rgba(255,255,255,0.03)'">
+        rowsHtml+=`<div data-task-detail-id="${t.id}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;margin-bottom:6px;cursor:pointer;transition:background 0.15s;">
           <div style="flex:1;min-width:0;font-size:13px;color:${t.deleted?"var(--text3)":"var(--text)"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.name}</div>
           <div style="font-size:13px;font-weight:600;color:${clr(t.rate)};flex-shrink:0">${t.rate}%</div>
           <div style="font-size:11px;color:var(--text2);flex-shrink:0">${t.done}/${t.active}d</div>
@@ -1333,6 +1296,124 @@ function renderReports(){
       }
     }
   });
+}
+
+function renderSettings(){
+  const el=document.getElementById("view-settings");
+  el.innerHTML=`
+    <div class="lbl" style="margin-bottom:14px">Settings</div>
+    <div class="card" style="margin-bottom:16px;border:1px solid var(--glass-border)">
+      <div class="lbl" style="margin-bottom:12px;font-size:9px;letter-spacing:2px;">Personalise</div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase">Your Name</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="settings-name-inp" class="inp" style="margin-bottom:0;flex:1" placeholder="Your name" value="${userName}">
+          <button id="settings-name-save" class="btn-ok" style="flex-shrink:0">Save</button>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:var(--text3);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase">App Mode Label</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="settings-mode-inp" class="inp" style="margin-bottom:0;flex:1" placeholder="e.g. Recovery Mode" value="${appName}">
+          <button id="settings-mode-save" class="btn-ok" style="flex-shrink:0">Save</button>
+        </div>
+        <div style="font-size:9px;color:var(--text3);margin-top:6px;opacity:0.5">Shows in the header above the date</div>
+      </div>
+
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--glass-border)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div>
+            <div style="font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase">Haptic Feedback</div>
+            <div style="font-size:9px;color:var(--text3);opacity:0.5;margin-top:2px">Vibration on taps &amp; swipes</div>
+          </div>
+          <button id="haptic-toggle" style="width:44px;height:26px;border-radius:13px;border:none;cursor:pointer;position:relative;transition:background 0.25s;background:${hapticEnabled?'#4ade80':'rgba(255,255,255,0.1)'}">
+            <span style="position:absolute;top:3px;left:${hapticEnabled?'21px':'3px'};width:20px;height:20px;border-radius:50%;background:white;transition:left 0.25s;display:block;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></span>
+          </button>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--glass-border)">
+        <div style="font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">Theme</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+          ${Object.entries(THEMES).filter(([k])=>k!=='custom').map(([key,t])=>`
+            <div data-theme-key="${key}" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid ${currentTheme===key?t.accent:'transparent'};transition:border-color 0.2s;position:relative">
+              <div style="height:44px;background:linear-gradient(135deg,${t.preview[0]},${t.preview[1]});display:flex;align-items:flex-end;padding:5px 6px;gap:3px">
+                <div style="width:10px;height:10px;border-radius:50%;background:${t.preview[2]};opacity:0.9"></div>
+                <div style="width:18px;height:4px;border-radius:2px;background:${t.preview[2]};opacity:0.4"></div>
+              </div>
+              <div style="padding:5px 6px;background:${t.preview[1]}">
+                <div style="font-size:9px;font-weight:600;color:${t.text}">${t.name}</div>
+              </div>
+              ${currentTheme===key?'<div style="position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:'+t.accent+'"></div>':''}
+            </div>
+          `).join('')}
+          ${(function(){const ct=THEMES.custom;return`
+            <div data-theme-key="custom" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid ${currentTheme==='custom'?ct.accent:'rgba(255,255,255,0.1)'};transition:border-color 0.2s;position:relative">
+              <div style="height:44px;background:linear-gradient(135deg,${ct.preview[0]},${ct.preview[1]});display:flex;align-items:center;justify-content:center">
+                <div style="font-size:18px;opacity:0.7">🎨</div>
+              </div>
+              <div style="padding:5px 6px;background:${ct.preview[1]}">
+                <div style="font-size:9px;font-weight:600;color:${ct.text}">Custom</div>
+              </div>
+              ${currentTheme==='custom'?'<div style="position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:'+ct.accent+'"></div>':''}
+            </div>
+          `})()}
+        </div>
+
+        <div id="custom-theme-editor" style="display:${currentTheme==='custom'?'block':'none'};margin-top:14px;padding:14px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px">
+          <div style="font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px">Customise Theme</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+            ${[
+              ['ct-bg','Background','#0f1117'],
+              ['ct-card','Card / Surface','#161b26'],
+              ['ct-accent','Accent Color','#6366f1'],
+              ['ct-text','Primary Text','#f0f0f4'],
+              ['ct-text2','Secondary Text','#a0a0c0'],
+              ['ct-text3','Muted Text','#707090']
+            ].map(([id,label,def])=>{
+              const ct=THEMES.custom;
+              const val=id==='ct-bg'?(ct._bg||def):id==='ct-accent'?(ct._accent||def):id==='ct-text'?(ct._text||def):id==='ct-text2'?(ct._text2||def):id==='ct-text3'?(ct._text3||def):(ct.bgCard||def);
+              return `<div>
+                <div style="font-size:9px;color:var(--text3);letter-spacing:1px;margin-bottom:5px;text-transform:uppercase">${label}</div>
+                <div style="display:flex;align-items:center;gap:7px">
+                  <input type="color" id="${id}" value="${val.startsWith('#')?val:'#888888'}" style="width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;padding:2px;background:var(--bg2);flex-shrink:0">
+                  <input type="text" id="${id}-hex" value="${val.startsWith('#')?val:'#888888'}" maxlength="7" style="width:100%;background:var(--bg2);border:1px solid var(--glass-border);color:var(--text);padding:6px 8px;font-size:11px;border-radius:8px;font-family:monospace">
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+          <div id="ct-preview-strip" style="height:36px;border-radius:8px;margin-bottom:10px;display:flex;align-items:center;padding:0 12px;gap:10px;transition:background 0.2s">
+            <div id="ct-prev-dot" style="width:12px;height:12px;border-radius:50%;flex-shrink:0"></div>
+            <div id="ct-prev-bar" style="flex:1;height:4px;border-radius:2px;opacity:0.4"></div>
+            <div id="ct-prev-text" style="font-size:11px;font-weight:600">Preview</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button id="ct-apply-btn" style="flex:1;padding:10px;border:none;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:0.5px">Apply Theme</button>
+            <button id="ct-reset-btn" style="padding:10px 14px;border-radius:10px;font-size:11px;cursor:pointer;font-family:inherit;background:var(--glass);border:1px solid var(--glass-border);color:var(--text2)">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border:1px solid var(--glass-border)">
+      <div class="lbl" style="margin-bottom:12px;font-size:9px;letter-spacing:2px;">Data</div>
+      <button class="export-btn" id="export-excel-btn" style="background:var(--glass);border-color:var(--green);color:var(--green)">&#8595; Export ALL Data to Excel</button>
+      <label for="import-excel-input" style="display:block;margin-top:6px;width:100%;background:var(--glass);border:1px solid #818cf8;color:#818cf8;padding:11px;font-size:11px;letter-spacing:2px;border-radius:6px;cursor:pointer;font-family:monospace;text-transform:uppercase;text-align:center;box-sizing:border-box">&#8593; Import Tasks from Excel</label>
+      <input type="file" id="import-excel-input" accept=".xlsx,.xls" style="position:absolute;opacity:0;width:0;height:0">
+      <div style="font-size:10px;color:var(--text2);margin-top:6px;text-align:center;line-height:1.6">Edit the clean row log in "Manual Import-Export Tracker" sheet and import back safely.</div>
+      <button class="export-btn" id="download-template-btn" style="margin-top:6px">Download Template</button>
+      <button class="export-btn" id="export-macros-btn" style="margin-top:6px;border-color:#a78bfa;color:#a78bfa">&#8595; Export Macro Tasks to Excel</button>
+      <label for="import-macros-input" style="display:block;margin-top:6px;width:100%;background:var(--glass);border:1px solid #a78bfa;color:#a78bfa;padding:11px;font-size:11px;letter-spacing:2px;border-radius:6px;cursor:pointer;font-family:monospace;text-transform:uppercase;text-align:center;box-sizing:border-box">&#8593; Import Macro Tasks from Excel</label>
+      <input type="file" id="import-macros-input" accept=".xlsx,.xls" style="position:absolute;opacity:0;width:0;height:0">
+      <div style="font-size:10px;color:var(--text2);margin-top:4px;text-align:center;line-height:1.6">Columns: <b style="color:var(--text);">date</b> &nbsp;|&nbsp; <b style="color:var(--text);">macro_name</b> &nbsp;|&nbsp; <b style="color:var(--text);">status</b> (Done / Undone).</div>
+
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--glass-border)">
+        <div style="font-size:9px;color:var(--text2);letter-spacing:2px;text-align:center;margin-bottom:8px;text-transform:uppercase">Danger Zone</div>
+        <button id="master-erase-btn" style="display:block;width:100%;background:#1a0a0a;border:1px solid #7f1d1d;color:#f87171;padding:11px;font-size:11px;letter-spacing:2px;border-radius:6px;cursor:pointer;font-family:monospace;text-transform:uppercase;text-align:center">&#9888; Erase All Data</button>
+        <div style="font-size:10px;color:var(--text2);margin-top:6px;text-align:center;line-height:1.6">Wipes all logs, tasks, and macros. Cannot be undone.</div>
+      </div>
+    </div>
+  `;
 }
 
 // Returns day-specific macro tasks (per-day, stored in logs[date].__macroTasks)
@@ -1763,7 +1844,8 @@ function render(){
   else if(currentView==="year") renderYear();
   else if(currentView==="streak") renderStreak();
   else if(currentView==="macros") renderMacros();
-  else if(currentView==="reports") renderReports();
+  else if(currentView==="analytics") renderAnalytics();
+  else if(currentView==="settings") renderSettings();
 }
 
 function calcStreak(){
@@ -1782,86 +1864,117 @@ function calcStreak(){
 
 let streakMonth = getToday().getMonth();
 let streakYear = getToday().getFullYear();
-let streakView = "month"; // "month" or "year"
+let streakView = "month"; // "week" | "month" | "year"
 let streakYearOffset = 0;
+let streakWeekOffset = 0;
 
 function renderStreak(){
   const el=document.getElementById("view-streak");
   const {cur,best}=calcStreak();
   const todayScore=scoreOf(logs[getTodayKey()],getTodayKey());
+  const todayK=getTodayKey();
 
-  const yr=streakYear, mo=streakMonth;
-  const daysInMonth=new Date(yr,mo+1,0).getDate();
-  const firstDay=new Date(yr,mo,1).getDay();
-  const monthDates=Array.from({length:daysInMonth},(_,i)=>new Date(yr,mo,i+1));
-  const canGoNext=!(yr===getToday().getFullYear()&&mo===getToday().getMonth());
+  // ── helpers ──────────────────────────────────────────────────
+  function todayPill(show){ return show?`<button id="streak-jump-today" style="background:var(--accent);color:var(--bg);border:none;padding:5px 16px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:monospace;margin-top:4px;box-shadow:0 0 12px var(--accent-glow)">↩ Today</button>`:''; }
 
+  const tabs=`<div style="display:flex;gap:6px">
+    <button id="streak-tab-week" class="rtab ${streakView==='week'?'active':''}" style="padding:4px 12px;font-size:9px">Week</button>
+    <button id="streak-tab-month" class="rtab ${streakView==='month'?'active':''}" style="padding:4px 12px;font-size:9px">Month</button>
+    <button id="streak-tab-year" class="rtab ${streakView==='year'?'active':''}" style="padding:4px 12px;font-size:9px">Year</button>
+  </div>`;
 
+  let calHtml="";
 
-  // ── Tab nav bar ──
-  const streakYr = getToday().getFullYear()+streakYearOffset;
-  const canGoNextY = !(streakYearOffset>=0);
-  let calHtml = "";
-
-  // Tab row + nav
-  if(streakView==="month"){
-    calHtml += `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+  if(streakView==="week"){
+    const base=new Date(getToday());
+    base.setDate(base.getDate()+streakWeekOffset*7);
+    const weekDates=Array.from({length:7},(_,i)=>{ const d=new Date(base); d.setDate(base.getDate()-base.getDay()+i); return d; });
+    const weekStart=weekDates[0], weekEnd=weekDates[6];
+    const label=weekStart.toLocaleDateString("en-IN",{day:"numeric",month:"short"})+" – "+weekEnd.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+    const isCurrentWeek=streakWeekOffset===0;
+    const canNext=streakWeekOffset<0;
+    calHtml+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
       <button id="streak-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
-        <div style="display:flex;gap:6px">
-          <button id="streak-tab-month" class="rtab active" style="padding:4px 12px;font-size:9px">Month</button>
-          <button id="streak-tab-year" class="rtab" style="padding:4px 12px;font-size:9px">Year</button>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+        ${tabs}
+        <div style="font-size:12px;color:var(--text);font-weight:600">${isCurrentWeek?"This Week":label}</div>
+        ${todayPill(!isCurrentWeek)}
+      </div>
+      <button id="streak-next" style="background:none;border:1px solid var(--glass-border);color:${canNext?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNext?"auto":"none"}">›</button>
+    </div>`;
+    let total=0,cnt=0;
+    weekDates.forEach(d=>{
+      const k=toKey(d); const sc=scoreOf(logs[k],k);
+      const isToday=k===todayK; const future=k>todayK;
+      if(!future){total+=sc;cnt++;}
+      calHtml+=`<div class="week-row" style="opacity:${future?0.3:1};cursor:${future?"default":"pointer"}" ${future?"":'data-daykey="'+k+'"'}>
+        <div class="week-day">
+          <div class="week-day-name">${DAYS[d.getDay()]}</div>
+          <div class="week-day-num ${isToday?'today':''}">${d.getDate()}</div>
         </div>
-        <div style="font-size:13px;color:var(--text);font-weight:600;margin-top:0">${MONTHS[mo]} ${yr}</div>
+        <div class="bar-wrap"><div class="bar-fill" style="width:${future?0:sc}%;background:${clr(sc)}"></div></div>
+        <div class="score-text" style="color:${clr(sc)}">${future?"—":sc+"%"}</div>
+      </div>`;
+    });
+    const avg=cnt?Math.round(total/cnt):0;
+    calHtml+=`<div class="stat-card"><div class="lbl">Week Avg</div><div class="stat-avg" style="color:${clr(avg)}">${avg}%</div></div>`;
+
+  } else if(streakView==="month"){
+    const yr=streakYear, mo=streakMonth;
+    const daysInMonth=new Date(yr,mo+1,0).getDate();
+    const firstDay=new Date(yr,mo,1).getDay();
+    const monthDates=Array.from({length:daysInMonth},(_,i)=>new Date(yr,mo,i+1));
+    const canGoNext=!(yr===getToday().getFullYear()&&mo===getToday().getMonth());
+    const isCurrentMonth=!canGoNext;
+    calHtml+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <button id="streak-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+        ${tabs}
+        <div style="font-size:13px;color:var(--text);font-weight:600">${MONTHS[mo]} ${yr}</div>
+        ${todayPill(!isCurrentMonth)}
       </div>
       <button id="streak-next" style="background:none;border:1px solid var(--glass-border);color:${canGoNext?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canGoNext?"auto":"none"}">›</button>
     </div>`;
-    calHtml += `<div class="month-grid">`;
+    calHtml+=`<div class="month-grid">`;
     DAYS.forEach(d=>{ calHtml+=`<div class="month-day-header">${d}</div>`; });
-    calHtml += `</div><div class="month-grid">`;
+    calHtml+=`</div><div class="month-grid">`;
     for(let i=0;i<firstDay;i++) calHtml+=`<div></div>`;
     monthDates.forEach(d=>{
-      const k=toKey(d);
-      const sc=scoreOf(logs[k],k);
-      const isToday=k===getTodayKey();
-      const future=k>getTodayKey();
+      const k=toKey(d); const sc=scoreOf(logs[k],k);
+      const isToday=k===todayK; const future=k>todayK;
       const bg=future?"var(--bg-card)":sc===0?"var(--bg-cell)":clr(sc)+"25";
-      const dataKey=future?'':'data-daykey="'+k+'"';
-      const slog=logs[k]||{};
-      const svt=visibleTasksForDay(slog,k);
-      const sdone=svt.filter(t=>slog[t.id]).length;
-      const stotal=svt.length;
-      const taskLabel=!future&&stotal>0?`<div style="font-size:7px;color:${clr(sc)};font-weight:600;margin-top:1px;line-height:1.2">${sdone}/${stotal}</div>`:"";
-      calHtml+=`<div ${dataKey} class="month-cell ${isToday?"today":""} ${future?"future":""}" style="background:${bg};cursor:${future?"default":"pointer"}">
+      const slog=logs[k]||{}; const svt=visibleTasksForDay(slog,k);
+      const sdone=svt.filter(t=>slog[t.id]).length; const stotal=svt.length;
+      calHtml+=`<div ${future?"":'data-daykey="'+k+'"'} class="month-cell ${isToday?"today":""} ${future?"future":""}" style="background:${bg};cursor:${future?"default":"pointer"}">
         <div class="month-cell-num ${isToday?"today":""}">${d.getDate()}</div>
-        ${taskLabel}
+        ${!future&&stotal>0?`<div style="font-size:7px;color:${clr(sc)};font-weight:600;margin-top:1px">${sdone}/${stotal}</div>`:""}
         ${!future&&sc>0?'<div class="month-cell-pct" style="color:'+clr(sc)+'">'+sc+'%</div>':''}
       </div>`;
     });
-    calHtml += `</div>`;
+    calHtml+=`</div>`;
+
   } else {
     // ── Year view ──
-    calHtml += `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    const streakYr=getToday().getFullYear()+streakYearOffset;
+    const canGoNextY=streakYearOffset<0;
+    const isCurrentYear=streakYearOffset===0;
+    calHtml+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
       <button id="streak-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
-        <div style="display:flex;gap:6px">
-          <button id="streak-tab-month" class="rtab" style="padding:4px 12px;font-size:9px">Month</button>
-          <button id="streak-tab-year" class="rtab active" style="padding:4px 12px;font-size:9px">Year</button>
-        </div>
-        <div style="font-size:13px;color:var(--text);font-weight:600;margin-top:0">${streakYr}</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+        ${tabs}
+        <div style="font-size:13px;color:var(--text);font-weight:600">${streakYr}</div>
+        ${todayPill(!isCurrentYear)}
       </div>
       <button id="streak-next" style="background:none;border:1px solid var(--glass-border);color:${canGoNextY?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canGoNextY?"auto":"none"}">›</button>
     </div>`;
     MONTHS.forEach((m,mi)=>{
       const mdays=new Date(streakYr,mi+1,0).getDate();
       const mDates=Array.from({length:mdays},(_,i)=>new Date(streakYr,mi,i+1));
-      const past=mDates.filter(d=>toKey(d)<=getTodayKey());
+      const past=mDates.filter(d=>toKey(d)<=todayK);
       const avg=past.length?Math.round(past.reduce((a,d)=>a+scoreOf(logs[toKey(d)],toKey(d)),0)/past.length):null;
       const isFuture=new Date(streakYr,mi,1)>getToday();
       const mk=streakYr+"-"+String(mi+1).padStart(2,"0");
-      const strongDays=past.filter(d=>scoreOf(logs[toKey(d)],toKey(d))>=80).length;
-      const streakRowAttr = isFuture ? "" : 'data-streak-monthkey="'+mk+'"';
-      calHtml+=`<div class="year-row" style="opacity:${isFuture?0.25:1};cursor:${isFuture?"default":"pointer"};border-radius:6px;transition:background 0.15s;" ${streakRowAttr}>
+      calHtml+=`<div class="year-row" style="opacity:${isFuture?0.25:1};cursor:${isFuture?"default":"pointer"};border-radius:6px;" ${isFuture?"":'data-streak-monthkey="'+mk+'"'}>
         <div class="year-month">${m}</div>
         <div class="bar-wrap"><div class="bar-fill" style="width:${avg||0}%;background:${clr(avg||0)}"></div></div>
         <div class="score-text" style="color:${clr(avg||0)}">${avg===null?"—":avg+"%"}</div>
@@ -1939,7 +2052,7 @@ function renderStreak(){
 }
 
 function exportReportImage(){
-  const reportEl = document.getElementById("view-reports");
+  const reportEl = document.getElementById("view-analytics");
   if(typeof html2canvas !== "undefined"){
     html2canvas(reportEl, {
       backgroundColor: "var(--bg)",
@@ -2034,7 +2147,6 @@ function saveTasksImage(){
     // Capture header + full scrollable today view — not just viewport
     var headerEl=document.getElementById("header");
     var navEl=document.getElementById("nav");
-    var subNavEl=document.getElementById("sub-nav");
     var bodyEl=document.getElementById("view-today");
 
     // Build off-screen container with real layout — no fixed positioning
@@ -2059,7 +2171,6 @@ function saveTasksImage(){
     // Always include header (even if collapsed)
     snapClone(headerEl,{opacity:"1",transform:"none"});
     snapClone(navEl);
-    if(subNavEl&&subNavEl.classList.contains("visible")) snapClone(subNavEl,{display:"flex"});
     // Full body — no height/overflow restriction so ALL tasks show
     snapClone(bodyEl,{paddingTop:"16px",overflow:"visible",maxHeight:"none",height:"auto"});
 
@@ -2693,64 +2804,52 @@ function showImportStatus(msg,color){
 }
 
 function navigateTo(view, targetOffset){
-  // "view" can be a top-level (tasks/streak/macros/reports) or sub-view (today/week/month/year)
-  const subViews=["today","week","month","year"];
-  const topViews=["tasks","streak","macros","reports"];
-  const isSubView=subViews.indexOf(view)>=0;
-  const isTopView=topViews.indexOf(view)>=0;
-
-  if(isSubView){
-    // Switch sub-tab — keep top nav on "tasks"
-    currentView=view;
-    if(view==="week") weekOffset=targetOffset!==undefined?targetOffset:0;
-    if(view==="month") monthOffset=targetOffset!==undefined?targetOffset:0;
-    if(view==="year") yearOffset=targetOffset!==undefined?targetOffset:0;
-    document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view==="tasks"));
-    document.querySelectorAll(".sub-btn").forEach(b=>b.classList.toggle("active",b.dataset.sub===view));
-    document.getElementById("sub-nav").classList.add("visible");
-    ["today","week","month","year","streak","macros","reports"].forEach(v=>{
-      document.getElementById("view-"+v).classList.toggle("hidden",v!==view);
-    });
-  } else {
-    // Top-level nav
-    currentView = view==="tasks" ? "today" : view;
-    if(view==="tasks"){
-      // Restore last sub-view active state
-      document.querySelectorAll(".sub-btn").forEach(b=>b.classList.toggle("active",b.dataset.sub===currentView));
-      document.getElementById("sub-nav").classList.add("visible");
-    } else {
-      document.getElementById("sub-nav").classList.remove("visible");
-    }
-    document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
-    ["today","week","month","year","streak","macros","reports"].forEach(v=>{
-      document.getElementById("view-"+v).classList.toggle("hidden",v!==currentView);
-    });
-  }
+  const allViews=["today","week","month","year","streak","macros","analytics","settings"];
+  currentView=(view==="tasks")?"today":view;
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===view||(view==="tasks"&&b.dataset.view==="tasks")));
+  allViews.forEach(v=>{
+    const el=document.getElementById("view-"+v);
+    if(el) el.classList.toggle("hidden",v!==currentView);
+  });
   render();
 }
 
 function setupListeners(){
   document.querySelectorAll(".nav-btn").forEach(btn=>{
-    btn.addEventListener("click",()=>{navigateTo(btn.dataset.view);});
-  });
-  document.querySelectorAll(".sub-btn").forEach(btn=>{
-    btn.addEventListener("click",()=>{navigateTo(btn.dataset.sub);});
+    btn.addEventListener("click",()=>{ navigateTo(btn.dataset.view); });
   });
 
-  const reportsContainer = document.getElementById("view-reports");
-  
-  reportsContainer.addEventListener("click",e=>{
+  // ── Analytics view click handler ─────────────────────────────────────────
+  document.getElementById("view-analytics").addEventListener("click",e=>{
     const rtab=e.target.closest("[id^='rtab-']");
     if(rtab){
       const p=rtab.id.replace("rtab-","");
-      reportPeriod=p; reportOffset=0; tasksOffset=0; renderReports(); return;
+      reportPeriod=p; reportOffset=0; tasksOffset=0; renderAnalytics(); return;
     }
     const pb=e.target.closest(".tasks-period-btn");
-    if(pb){ tasksSubPeriod=pb.dataset.p; tasksOffset=0; renderReports(); return; }
-    if(e.target.id==="tasks-prev"){ if(tasksSubPeriod!=="all")tasksOffset--; renderReports(); return; }
-    if(e.target.id==="tasks-next"){ const {canNext}=getTasksWindowKeys(); if(canNext)tasksOffset++; renderReports(); return; }
+    if(pb){ tasksSubPeriod=pb.dataset.p; tasksOffset=0; renderAnalytics(); return; }
+    if(e.target.id==="tasks-prev"){ if(tasksSubPeriod!=="all")tasksOffset--; renderAnalytics(); return; }
+    if(e.target.id==="tasks-next"){ const {canNext}=getTasksWindowKeys(); if(canNext)tasksOffset++; renderAnalytics(); return; }
+    if(e.target.id==="export-img-btn"){ exportReportImage(); return; }
+    if(e.target.id==="report-prev"){ reportOffset--; renderAnalytics(); return; }
+    if(e.target.id==="report-next"){ if(reportOffset<0){reportOffset++;renderAnalytics();} return; }
+    if(e.target.id==="export-csv-btn"){
+      const data=getReportData();
+      let csv="Date,Score(%)\n";
+      data.labels.forEach((lbl,i)=>{ const sc=data.scores[i]; csv+=lbl+","+(sc===null?"":sc)+"\n"; });
+      const blob=new Blob([csv],{type:"text/csv"});
+      const a=document.createElement("a");
+      a.download="tracker-"+reportPeriod+".csv"; a.href=URL.createObjectURL(blob); a.click();
+      return;
+    }
+    const bar=e.target.closest("[data-task-detail-id]");
+    if(bar){ openTaskDetail(bar.dataset.taskDetailId); return; }
+  });
+
+  // ── Settings view click handler ───────────────────────────────────────────
+  document.getElementById("view-settings").addEventListener("click",e=>{
     const themeCell=e.target.closest("[data-theme-key]");
-    if(themeCell){ const k=themeCell.dataset.themeKey; applyTheme(k); renderReports(); return; }
+    if(themeCell){ const k=themeCell.dataset.themeKey; applyTheme(k); renderSettings(); return; }
     if(e.target.id==="haptic-toggle"||e.target.closest("#haptic-toggle")){
       hapticEnabled=!hapticEnabled;
       sv("rm_haptic",hapticEnabled);
@@ -2771,32 +2870,13 @@ function setupListeners(){
       var m=document.getElementById("settings-mode-inp").value.trim();
       if(m){appName=m;persist();var ml=document.getElementById("app-mode-label");if(ml)ml.textContent=m;showImportStatus("App label updated!","#4ade80");}return;
     }
-    if(e.target.id==="export-img-btn"){ exportReportImage(); return; }
-    if(e.target.id==="report-prev"){reportOffset--;renderReports();return;}
-    if(e.target.id==="report-next"){if(reportOffset<0){reportOffset++;renderReports();}return;}
-    if(e.target.id==="download-template-btn"){downloadTemplate();return;}
-    if(e.target.id==="export-excel-btn"){exportAllToExcel();return;}
-
-    if(e.target.id==="export-csv-btn"){
-      const data=getReportData();
-      let csv="Date,Score(%)\n";
-      data.labels.forEach((lbl,i)=>{ const sc=data.scores[i]; csv+=lbl+","+(sc===null?"":sc)+"\n"; });
-      const blob=new Blob([csv],{type:"text/csv"});
-      const a=document.createElement("a");
-      a.download="tracker-"+reportPeriod+".csv"; a.href=URL.createObjectURL(blob); a.click();
-      return;
-    }
   });
 
-  reportsContainer.addEventListener("change", e => {
-    if (e.target && e.target.id === "import-excel-input") {
-      const file = e.target.files[0];
-      if (file) {
-        importFromExcel(file);
-        e.target.value = "";
-      }
-    }
+  document.getElementById("view-settings").addEventListener("change",e=>{
+    // file imports handled by global document change listener
   });
+
+
 
   document.getElementById("view-week").addEventListener("click",e=>{
     if(e.target.id==="week-prev"){ weekOffset--; renderWeek(); return; }
@@ -2839,43 +2919,73 @@ function setupListeners(){
 
   document.getElementById("view-streak").addEventListener("click",e=>{
     // Tab switching
+    if(e.target.id==="streak-tab-week"){ streakView="week"; renderStreak(); return; }
     if(e.target.id==="streak-tab-month"){ streakView="month"; renderStreak(); return; }
     if(e.target.id==="streak-tab-year"){ streakView="year"; renderStreak(); return; }
 
-    // Prev/Next navigation
-    if(e.target.id==="streak-prev"){
-      if(streakView==="month"){ streakMonth--; if(streakMonth<0){streakMonth=11;streakYear--;} }
-      else { streakYearOffset--; }
-      renderStreak(); return;
-    }
-    if(e.target.id==="streak-next"){
-      if(streakView==="month"){
-        const cN=!(streakYear===getToday().getFullYear()&&streakMonth===getToday().getMonth());
-        if(cN){streakMonth++;if(streakMonth>11){streakMonth=0;streakYear++;}}
-      } else {
-        if(streakYearOffset<0) streakYearOffset++;
-      }
+    // Today pill — jump back to current period
+    if(e.target.id==="streak-jump-today"){
+      if(streakView==="week") streakWeekOffset=0;
+      else if(streakView==="month"){ streakMonth=getToday().getMonth(); streakYear=getToday().getFullYear(); }
+      else streakYearOffset=0;
       renderStreak(); return;
     }
 
-    // Month view: tap a day → go to Today
+    // Skip arrows (‹‹/›› = ~4 weeks or 1 year)
+    if(e.target.id==="streak-skip-prev-month"){
+      if(streakView==="week") streakWeekOffset-=4;
+      else if(streakView==="month"){ streakMonth-=1; if(streakMonth<0){streakMonth=11;streakYear--;} }
+      else streakYearOffset--;
+      renderStreak(); return;
+    }
+    if(e.target.id==="streak-skip-next-month"){
+      if(streakView==="week"){ if(streakWeekOffset+4<=0)streakWeekOffset+=4; else streakWeekOffset=0; }
+      else if(streakView==="month"){
+        const cN=!(streakYear===getToday().getFullYear()&&streakMonth===getToday().getMonth());
+        if(cN){streakMonth+=1;if(streakMonth>11){streakMonth=0;streakYear++;}}
+      } else { if(streakYearOffset<0)streakYearOffset++; }
+      renderStreak(); return;
+    }
+
+    // Prev/Next single step
+    if(e.target.id==="streak-prev"){
+      if(streakView==="week") streakWeekOffset--;
+      else if(streakView==="month"){ streakMonth--; if(streakMonth<0){streakMonth=11;streakYear--;} }
+      else streakYearOffset--;
+      renderStreak(); return;
+    }
+    if(e.target.id==="streak-next"){
+      if(streakView==="week"){ if(streakWeekOffset<0)streakWeekOffset++; }
+      else if(streakView==="month"){
+        const cN=!(streakYear===getToday().getFullYear()&&streakMonth===getToday().getMonth());
+        if(cN){streakMonth++;if(streakMonth>11){streakMonth=0;streakYear++;}}
+      } else { if(streakYearOffset<0)streakYearOffset++; }
+      renderStreak(); return;
+    }
+
+    // Week view: tap a day row → go to Today for that date
+    if(streakView==="week"){
+      const row=e.target.closest("[data-daykey]");
+      if(row){ const k=row.dataset.daykey; if(!k||k>getTodayKey())return; viewingKey=k===getTodayKey()?null:k; editMode=false; editId=null; navigateTo("tasks"); return; }
+    }
+
+    // Month view: tap a day cell → go to Today
     const cell=e.target.closest("[data-daykey]");
     if(cell){
       const k=cell.dataset.daykey;
       if(!k||k>getTodayKey()) return;
       viewingKey=k===getTodayKey()?null:k;
       editMode=false; editId=null;
-      navigateTo("today"); return;
+      navigateTo("tasks"); return;
     }
 
-    // Year view: tap a month → go to that month in Month view
+    // Year view: tap a month → go to that month in Streak month view
     const mrow=e.target.closest("[data-streak-monthkey]");
-    if(mrow){const mk=mrow.dataset.streakMonthkey;
+    if(mrow){ const mk=mrow.dataset.streakMonthkey;
       const yr=parseInt(mk.split("-")[0]);
       const mo=parseInt(mk.split("-")[1])-1;
-      const today=getToday();
-      const offset=(yr-today.getFullYear())*12+(mo-today.getMonth());
-      navigateTo("month", offset);
+      streakYear=yr; streakMonth=mo; streakView="month";
+      renderStreak(); return;
     }
   });
 
@@ -2893,8 +3003,88 @@ function setupListeners(){
       if(nk>getTodayKey()) return;
       viewingKey=nk>=getTodayKey()?null:nk; editMode=false; editId=null; render(); return;
     }
-    if(e.target.id==="edit-toggle"){ editMode=!editMode; editId=null; render(); return; }
+    if(e.target.id==="edit-toggle"){ editMode=!editMode; editId=null; editGroupId=null; render(); return; }
     if(e.target.id==="save-tasks-img-btn"){ saveTasksImage(); return; }
+
+    // Collapse/expand all
+    if(e.target.id==="collapse-all-btn"){
+      const anyCollapsed=Object.keys(collapsedGroups).length>0;
+      if(anyCollapsed){
+        collapsedGroups={};
+      } else {
+        groups.forEach(g=>{ collapsedGroups[g.id]=true; });
+        collapsedGroups['__ungrouped']=true;
+      }
+      render(); return;
+    }
+
+    // Group toggle collapse
+    const grpToggle=e.target.closest("[data-grp-toggle]");
+    if(grpToggle&&!e.target.closest("[data-grp-edit]")&&!e.target.closest("[data-grp-del]")){
+      const gid=grpToggle.dataset.grpToggle;
+      if(collapsedGroups[gid]) delete collapsedGroups[gid];
+      else collapsedGroups[gid]=true;
+      render(); return;
+    }
+
+    // Group rename button
+    const grpEditBtn=e.target.closest("[data-grp-edit]");
+    if(grpEditBtn&&editMode){ editGroupId=grpEditBtn.dataset.grpEdit; render(); return; }
+
+    // Group rename save
+    if(e.target.id==="grp-rename-save"){
+      const gid=e.target.dataset.gid;
+      const inp=document.getElementById("grp-rename-inp");
+      const name=inp?inp.value.trim():"";
+      if(name){ groups=groups.map(g=>g.id===gid?Object.assign({},g,{name}):g); persist(); }
+      editGroupId=null; render(); return;
+    }
+
+    // Group delete
+    const grpDelBtn=e.target.closest("[data-grp-del]");
+    if(grpDelBtn&&editMode){
+      const gid=grpDelBtn.dataset.grpDel;
+      groups=groups.filter(g=>g.id!==gid);
+      tasks=tasks.map(t=>t.groupId===gid?Object.assign({},t,{groupId:null}):t);
+      persist(); render(); return;
+    }
+
+    // Add group
+    if(e.target.id==="add-group-btn"){
+      const inp=document.getElementById("new-group-name");
+      const name=inp?inp.value.trim():"";
+      if(!name) return;
+      const maxOrder=groups.length?Math.max(...groups.map(g=>g.order)):0;
+      groups.push({id:"g"+Date.now(),name,order:maxOrder+1});
+      persist(); render(); return;
+    }
+
+    // Assign task to group via select (handled in change event)
+
+    // Add task to specific group
+    const grpAddBtn=e.target.closest("[data-grp-add]");
+    if(grpAddBtn&&editMode){
+      const gid=grpAddBtn.dataset.grpAdd;
+      const inp=document.getElementById("grp-new-name-"+gid);
+      const name=inp?inp.value.trim():"";
+      if(!name) return;
+      const ak=viewingKey||getTodayKey();
+      const newTask={id:"t"+Date.now(),name,time:"",createdAt:ak,groupId:gid};
+      tasks.push(newTask);
+      const newId=newTask.id;
+      Object.keys(logs).forEach(k=>{
+        if(k>=ak&&logs[k]&&logs[k].__taskIds&&!logs[k].__taskIds.includes(newId))
+          logs[k].__taskIds=[...logs[k].__taskIds,newId];
+      });
+      const _al=logs[ak]||{};
+      if(!_al.__taskIds){
+        logs[ak]=Object.assign({},_al,{__taskIds:tasks.filter(t=>(!t.createdAt||t.createdAt<=ak)).map(t=>t.id)});
+      } else if(!logs[ak].__taskIds.includes(newId)){
+        logs[ak].__taskIds=[...logs[ak].__taskIds,newId];
+      }
+      persist(); render(); return;
+    }
+
     const circ=e.target.closest("[data-toggle]");
     if(circ&&!editMode){
       const ak=viewingKey||getTodayKey();
@@ -2907,7 +3097,6 @@ function setupListeners(){
       if(nowDone){
         const el=document.querySelector("[data-toggle='"+id+"']");
         if(el){el.classList.add("just-checked");el.addEventListener("animationend",function h(){el.classList.remove("just-checked");el.removeEventListener("animationend",h);},{once:true});}
-        // Check if all tasks are now done — slight delay so render settles
         setTimeout(()=>checkAllTasksDone(ak), 320);
       }
       return;
@@ -2943,19 +3132,36 @@ function setupListeners(){
     }
     const upBtn=e.target.closest("[data-up]");
     if(upBtn&&editMode){
-      const i=tasks.findIndex(t=>t.id===upBtn.dataset.up);
-      if(i>0){[tasks[i],tasks[i-1]]=[tasks[i-1],tasks[i]]; tasks=[...tasks]; persist(); render();} return;
+      const tid=upBtn.dataset.up;
+      const t=tasks.find(x=>x.id===tid);
+      const grpTasks=tasks.filter(x=>x.groupId===(t?t.groupId:null)&&!x.deletedAt);
+      const i=tasks.findIndex(x=>x.id===tid);
+      const gi=grpTasks.findIndex(x=>x.id===tid);
+      if(gi>0){
+        const prevId=grpTasks[gi-1].id;
+        const pi=tasks.findIndex(x=>x.id===prevId);
+        [tasks[i],tasks[pi]]=[tasks[pi],tasks[i]]; tasks=[...tasks]; persist(); render();
+      } return;
     }
     const dnBtn=e.target.closest("[data-dn]");
     if(dnBtn&&editMode){
-      const i=tasks.findIndex(t=>t.id===dnBtn.dataset.dn);
-      if(i<tasks.length-1){[tasks[i],tasks[i+1]]=[tasks[i+1],tasks[i]]; tasks=[...tasks]; persist(); render();} return;
+      const tid=dnBtn.dataset.dn;
+      const t=tasks.find(x=>x.id===tid);
+      const grpTasks=tasks.filter(x=>x.groupId===(t?t.groupId:null)&&!x.deletedAt);
+      const i=tasks.findIndex(x=>x.id===tid);
+      const gi=grpTasks.findIndex(x=>x.id===tid);
+      if(gi<grpTasks.length-1){
+        const nextId=grpTasks[gi+1].id;
+        const ni=tasks.findIndex(x=>x.id===nextId);
+        [tasks[i],tasks[ni]]=[tasks[ni],tasks[i]]; tasks=[...tasks]; persist(); render();
+      } return;
     }
     if(e.target.id==="add-task-btn"){const ak=viewingKey||getTodayKey();
       const name=document.getElementById("new-name").value.trim();
       const time=document.getElementById("new-time").value.trim();
+      const gid=document.getElementById("new-task-group")?.value||"";
       if(!name) return;
-      const newTask={id:"t"+Date.now(),name,time,createdAt:ak};
+      const newTask={id:"t"+Date.now(),name,time,createdAt:ak,groupId:gid||null};
       tasks.push(newTask);
       const newId=newTask.id;
       Object.keys(logs).forEach(k=>{
@@ -2964,11 +3170,21 @@ function setupListeners(){
       });
       const _al=logs[ak]||{};
       if(!_al.__taskIds){
-        const snap=tasks.filter(t=>(!t.createdAt||t.createdAt<=ak)&&(!t.deletedAt||t.deletedAt>k)).map(t=>t.id);
-        logs[ak]=Object.assign({},_al,{__taskIds:snap});
+        logs[ak]=Object.assign({},_al,{__taskIds:tasks.filter(t=>(!t.createdAt||t.createdAt<=ak)).map(t=>t.id)});
       } else if(!logs[ak].__taskIds.includes(newId)){
         logs[ak].__taskIds=[...logs[ak].__taskIds,newId];
       }
+      persist(); render(); return;
+    }
+  });
+
+  // Group assign via select dropdown
+  document.getElementById("view-today").addEventListener("change",e=>{
+    const sel=e.target.closest("[data-grp-assign]");
+    if(sel&&editMode){
+      const tid=sel.dataset.grpAssign;
+      const gid=sel.value||null;
+      tasks=tasks.map(t=>t.id===tid?Object.assign({},t,{groupId:gid}):t);
       persist(); render(); return;
     }
   });
@@ -3069,14 +3285,11 @@ document.getElementById("view-macros").addEventListener("click",function(e){
 function applyHeaderOffset(){
   const header=document.getElementById("header");
   const nav=document.getElementById("nav");
-  const subnav=document.getElementById("sub-nav");
   if(!header||!nav) return;
   const hh=headerCollapsed?0:header.offsetHeight;
   const nh=nav.offsetHeight;
-  const sh=subnav&&subnav.classList.contains("visible")?subnav.offsetHeight:0;
-  const total=hh+nh+sh;
+  const total=hh+nh;
   nav.style.top=hh+"px";
-  if(subnav) subnav.style.top=(hh+nh)+"px";
   document.querySelectorAll(".body").forEach(el=>{
     el.style.paddingTop=(total+16)+"px";
   });
@@ -3176,16 +3389,10 @@ document.getElementById("td-body").addEventListener("click",function(e){
   }
 });
 
-// ── TASK DETAIL: click task bar in Reports > Tasks ────────────────────────────
-document.getElementById("view-reports").addEventListener("click",function(e){
-  const bar=e.target.closest("[data-task-detail-id]");
-  if(bar){ openTaskDetail(bar.dataset.taskDetailId); return; }
-},true);
-
 // ── SWIPE — Pro motion with real-time drag + blur ────────────────────────────
 (function(){
-  const TOP=['tasks','streak','macros','reports'];
-  const SUB=['today','week','month','year'];
+  const TOP=['tasks','streak','macros','analytics','settings'];
+  const SUB=[];
   const EASE='cubic-bezier(0.32,0.72,0,1)'; // iOS-like deceleration
   const DUR=340;
   let busy=false;
@@ -3323,20 +3530,10 @@ document.getElementById("view-reports").addEventListener("click",function(e){
 
   // ── Single document-level swipe — works on entire screen including empty areas ──
   function getSwipeTarget(dir){
-    const isSubView=SUB.indexOf(currentView)>=0;
-    if(isSubView){
-      const i=SUB.indexOf(currentView);
-      if(dir==='left'&&i<SUB.length-1) return SUB[i+1];
-      if(dir==='right'&&i>0) return SUB[i-1];
-      const topI=TOP.indexOf('tasks');
-      if(dir==='left'&&i===SUB.length-1&&topI<TOP.length-1) return TOP[topI+1];
-      if(dir==='right'&&i===0&&topI>0) return TOP[topI-1];
-    } else {
-      const cur=SUB.includes(currentView)?'tasks':currentView;
-      const i=TOP.indexOf(cur);
-      if(dir==='left'&&i<TOP.length-1) return TOP[i+1];
-      if(dir==='right'&&i>0) return TOP[i-1];
-    }
+    const cur=currentView==="today"?"tasks":currentView;
+    const i=TOP.indexOf(cur);
+    if(dir==="left"&&i<TOP.length-1) return TOP[i+1];
+    if(dir==="right"&&i>0) return TOP[i-1];
     return null;
   }
   addSwipe(document.documentElement, getSwipeTarget);
@@ -3435,7 +3632,7 @@ document.addEventListener("click",function(e){
 // ── CUSTOM THEME EDITOR ──────────────────────────────────────────────────────
 (function(){
 
-  // Show editor after Custom tile click (renderReports re-creates the DOM, so use setTimeout)
+  // Show editor after Custom tile click (renderSettings re-creates the DOM, so use setTimeout)
   document.addEventListener('click',function(e){
     const tile=e.target.closest('[data-theme-key]');
     if(tile&&tile.dataset.themeKey==='custom'){
@@ -3514,7 +3711,7 @@ document.addEventListener("click",function(e){
     THEMES.custom=built;
     try{ localStorage.setItem('rm_custom_theme', JSON.stringify(built)); }catch(err){}
     applyTheme('custom');
-    renderReports();
+    renderSettings();
     showImportStatus('Custom theme applied!', built.accent);
     haptic('success');
   });
@@ -3524,7 +3721,7 @@ document.addEventListener("click",function(e){
     if(e.target.id!=='ct-reset-btn') return;
     try{ localStorage.removeItem('rm_custom_theme'); }catch(err){}
     THEMES.custom=buildCustomTheme('#0f1117','#6366f1','#f0f0f4','#e0e0f0','#c0c0d0');
-    renderReports();
+    renderSettings();
     showImportStatus('Custom theme reset','#a0a0c0');
   });
 
