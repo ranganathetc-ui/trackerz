@@ -6,7 +6,7 @@
 <title>Recovery Mode Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=DM+Serif+Display:ital@0;1&family=Bodoni+Moda:opsz,wght@6..96,300&family=Playfair+Display:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@200;300&family=DM+Serif+Display:ital@0;1&family=Bodoni+Moda:opsz,wght@6..96,200;300&family=Playfair+Display:wght@300;400&family=EB+Garamond:wght@400&family=Libre+Baskerville:wght@400&family=Cinzel:wght@300;400&family=Josefin+Sans:wght@100;200;300&family=Outfit:wght@100;200;300&display=swap" rel="stylesheet">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
   :root{--bg:#0d0d0d;--bg2:rgba(255,255,255,0.03);--bg3:rgba(255,255,255,0.06);--bg4:rgba(255,255,255,0.09);--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--text:#f0f0f0;--text2:rgba(255,255,255,0.35);--text3:rgba(255,255,255,0.2);--green:#4ade80;--yellow:#fbbf24;--red:#f87171;--radius:14px;--bg-card:#111111;--bg-cell:#141414;--bg-lift:#1a1a1a;}
@@ -14,26 +14,42 @@
   body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;min-height:100vh;overflow-x:hidden;}
   #app{max-width:480px;margin:0 auto;padding-bottom:100px;}
   /* SPLASH */
-  #splash{position:fixed;inset:0;z-index:100;background:#0d0d0d;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 28px;gap:0;}
+  #splash{position:fixed;inset:0;z-index:100;background:#0d0d0d;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:56px 36px 44px;}
   @keyframes orbit-spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
   @keyframes logo-pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
   @keyframes logo-glow{0%,100%{box-shadow:0 0 18px 4px rgba(255,255,255,0.06);}50%{box-shadow:0 0 32px 10px rgba(255,255,255,0.13);}}
   @keyframes sp-twinkle{0%,100%{opacity:0;transform:scale(0.4);}50%{opacity:1;transform:scale(1);}}
   #splash.hide{display:none!important;}
-  .splash-logo{margin-bottom:20px;}
-  .splash-clock{font-size:44px;font-weight:100;letter-spacing:4px;color:var(--text);font-family:'Inter','Helvetica Neue','Segoe UI',sans-serif;line-height:1;margin-bottom:6px;text-align:center;opacity:0.9;}
-  .splash-day{font-size:9px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;text-align:center;margin-bottom:2px;font-weight:300;}
-  .splash-date{font-size:12px;color:var(--text2);letter-spacing:1px;text-align:center;margin-bottom:22px;font-weight:300;}
-  .splash-divider{width:28px;height:1px;background:var(--glass-border);margin:0 auto 18px;}
+  .splash-top{display:flex;flex-direction:column;align-items:center;width:100%;}
+  .splash-logo{margin-bottom:28px;}
+  .splash-clock{font-size:54px;font-weight:300;letter-spacing:6px;color:var(--text);line-height:1;margin-bottom:10px;text-align:center;opacity:0.95;transition:font-family 0.3s ease,letter-spacing 0.3s ease,font-weight 0.3s ease;}
+  #clock-settings-btn{color:var(--text);}
+  .clock-opt-btn{border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.5);cursor:pointer;font-family:inherit;text-transform:uppercase;letter-spacing:1px;transition:all 0.2s;}
+  .clock-opt-btn.active{border-color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.95);}
+  #clock-settings-panel{color:rgba(255,255,255,0.9);}
+  /* Landscape fullscreen clock */
+  @media (orientation:landscape){
+    #splash.landscape-clock-mode .splash-top{flex:1;display:flex;align-items:center;justify-content:center;}
+    #splash.landscape-clock-mode .splash-clock{font-size:18vw;letter-spacing:2vw;}
+    #splash.landscape-clock-mode .splash-logo,
+    #splash.landscape-clock-mode .splash-day,
+    #splash.landscape-clock-mode .splash-date{display:none;}
+    #splash.landscape-clock-mode .splash-bottom{display:none;}
+    #splash.landscape-clock-mode{justify-content:center;}
+  }
+  .splash-day{font-size:9px;color:var(--text3);letter-spacing:5px;text-transform:uppercase;text-align:center;margin-bottom:3px;font-weight:300;}
+  .splash-date{font-size:11px;color:var(--text2);letter-spacing:2px;text-align:center;font-weight:300;}
+  .splash-bottom{display:flex;flex-direction:column;align-items:center;width:100%;}
+  .splash-divider{width:20px;height:1px;background:var(--glass-border);margin:0 auto 20px;}
   .splash-greeting{font-size:9px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;margin-bottom:5px;text-align:center;font-weight:300;}
-  .splash-name{font-size:20px;font-weight:300;color:var(--text);margin-bottom:8px;letter-spacing:1px;text-align:center;}
-  .splash-quote{font-size:11px;color:var(--text3);text-align:center;line-height:1.9;max-width:240px;margin-bottom:20px;font-weight:300;font-style:italic;}
-  .splash-stats{display:flex;gap:28px;margin-bottom:28px;align-items:center;}
-  .splash-stat{font-size:9px;color:var(--text3);letter-spacing:2px;text-align:center;text-transform:uppercase;font-weight:300;}
-  .splash-stat span{display:block;font-size:20px;font-weight:200;color:var(--accent);letter-spacing:0;margin-bottom:3px;font-family:'Inter','Helvetica Neue',sans-serif;}
-  .splash-stat-sep{width:1px;height:28px;background:var(--glass-border);}
-  .splash-btn{background:var(--text);border:none;color:#0d0d0d;padding:13px 44px;font-size:10px;font-weight:500;letter-spacing:3px;border-radius:50px;cursor:pointer;font-family:inherit;text-transform:uppercase;}
-  .splash-sub{font-size:8px;color:var(--text3);margin-top:12px;letter-spacing:3px;text-transform:uppercase;font-weight:300;opacity:0.6;}
+  .splash-name{font-size:17px;font-weight:300;color:var(--text);margin-bottom:10px;letter-spacing:2px;text-align:center;}
+  .splash-quote{font-size:10px;color:var(--text3);text-align:center;line-height:2;max-width:210px;margin-bottom:20px;font-weight:300;font-style:italic;opacity:0.7;}
+  .splash-stats{display:flex;gap:32px;margin-bottom:26px;align-items:center;}
+  .splash-stat{font-size:8px;color:var(--text3);letter-spacing:2px;text-align:center;text-transform:uppercase;font-weight:300;}
+  .splash-stat span{display:block;font-size:17px;font-weight:300;color:var(--accent);letter-spacing:0;margin-bottom:3px;}
+  .splash-stat-sep{width:1px;height:22px;background:var(--glass-border);opacity:0.4;}
+  .splash-btn{background:var(--text);border:none;color:#0d0d0d;padding:12px 48px;font-size:10px;font-weight:500;letter-spacing:3px;border-radius:50px;cursor:pointer;font-family:inherit;text-transform:uppercase;}
+  .splash-sub{font-size:8px;color:var(--text3);margin-top:10px;letter-spacing:3px;text-transform:uppercase;font-weight:300;opacity:0.35;}
   /* HEADER */
 
 
@@ -291,42 +307,86 @@
 <body>
 <div id="app">
   <div id="splash">
-    <div class="splash-logo" style="position:relative;width:80px;height:80px;margin-left:auto;margin-right:auto;">
-      <svg style="position:absolute;inset:0;width:80px;height:80px;animation:orbit-spin 6s linear infinite;" viewBox="0 0 80 80">
-        <circle cx="40" cy="40" r="34" fill="none" stroke="var(--splash-ring,rgba(255,255,255,0.06))" stroke-width="1.5"/>
-        <circle cx="40" cy="40" r="34" fill="none" stroke="var(--splash-stroke,rgba(255,255,255,0.35))" stroke-width="1.5" stroke-dasharray="30 184" stroke-linecap="round"/>
-      </svg>
-      <svg style="position:absolute;inset:0;width:80px;height:80px;animation:logo-pulse 2.4s ease-in-out infinite;" viewBox="0 0 80 80">
-        <defs><linearGradient id="dGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e8e8e8"/><stop offset="100%" stop-color="#666"/></linearGradient></defs>
-        <polygon points="40,14 58,40 40,62 22,40" fill="url(#dGrad)" opacity="0.15"/>
-        <polygon points="40,14 58,40 40,62 22,40" fill="none" stroke="var(--splash-stroke,rgba(255,255,255,0.7))" stroke-width="1.2" stroke-linejoin="round"/>
-        <polygon points="40,24 52,40 40,54 28,40" fill="var(--splash-ring,rgba(255,255,255,0.08))" stroke="var(--splash-mid,rgba(255,255,255,0.3))" stroke-width="0.8"/>
-        <circle cx="40" cy="40" r="3" fill="var(--splash-stroke,white)" opacity="0.9"/>
-      </svg>
-      <svg style="position:absolute;inset:0;width:80px;height:80px;" viewBox="0 0 80 80">
-        <circle cx="40" cy="6"  r="2" fill="var(--splash-stroke,white)" style="animation:sp-twinkle 2s ease-in-out infinite 0s;opacity:0"/>
-        <circle cx="74" cy="40" r="1.5" fill="var(--splash-stroke,white)" style="animation:sp-twinkle 2s ease-in-out infinite 0.5s;opacity:0"/>
-        <circle cx="40" cy="74" r="2" fill="var(--splash-stroke,white)" style="animation:sp-twinkle 2s ease-in-out infinite 1s;opacity:0"/>
-        <circle cx="6"  cy="40" r="1.5" fill="var(--splash-stroke,white)" style="animation:sp-twinkle 2s ease-in-out infinite 1.5s;opacity:0"/>
-        <circle cx="66" cy="14" r="1.5" fill="var(--splash-stroke,white)" style="animation:sp-twinkle 1.6s ease-in-out infinite 0.3s;opacity:0"/>
-        <circle cx="14" cy="66" r="1.5" fill="var(--splash-stroke,white)" style="animation:sp-twinkle 1.6s ease-in-out infinite 0.9s;opacity:0"/>
-      </svg>
-      <div style="position:absolute;inset:0;border-radius:50%;animation:logo-glow 2.4s ease-in-out infinite;pointer-events:none;"></div>
+    <div class="splash-top">
+      <div class="splash-logo" style="position:relative;width:64px;height:64px;margin-left:auto;margin-right:auto;">
+        <svg style="position:absolute;inset:0;width:64px;height:64px;animation:orbit-spin 6s linear infinite;" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--splash-ring,rgba(255,255,255,0.06))" stroke-width="1.5"/>
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--splash-stroke,rgba(255,255,255,0.35))" stroke-width="1.5" stroke-dasharray="30 184" stroke-linecap="round"/>
+        </svg>
+        <svg style="position:absolute;inset:0;width:64px;height:64px;animation:logo-pulse 2.4s ease-in-out infinite;" viewBox="0 0 80 80">
+          <defs><linearGradient id="dGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e8e8e8"/><stop offset="100%" stop-color="#666"/></linearGradient></defs>
+          <polygon points="40,14 58,40 40,62 22,40" fill="url(#dGrad)" opacity="0.15"/>
+          <polygon points="40,14 58,40 40,62 22,40" fill="none" stroke="var(--splash-stroke,rgba(255,255,255,0.7))" stroke-width="1.2" stroke-linejoin="round"/>
+          <polygon points="40,24 52,40 40,54 28,40" fill="var(--splash-ring,rgba(255,255,255,0.08))" stroke="var(--splash-mid,rgba(255,255,255,0.3))" stroke-width="0.8"/>
+          <circle cx="40" cy="40" r="3" fill="var(--splash-stroke,white)" opacity="0.9"/>
+        </svg>
+        <div style="position:absolute;inset:0;border-radius:50%;animation:logo-glow 2.4s ease-in-out infinite;pointer-events:none;"></div>
+      </div>
+      <div class="splash-clock" id="splash-clock">00:00</div>
+      <div class="splash-day" id="splash-day"></div>
+      <div class="splash-date" id="splash-date"></div>
     </div>
-    <div class="splash-clock" id="splash-clock">00:00</div>
-    <div class="splash-day" id="splash-day"></div>
-    <div class="splash-date" id="splash-date"></div>
-    <div class="splash-divider"></div>
-    <div class="splash-greeting" id="splash-greeting"></div>
-    <div class="splash-name" id="splash-name"></div>
-    <div class="splash-quote" id="splash-quote"></div>
-    <div class="splash-stats">
-      <div class="splash-stat"><span id="splash-streak">—</span>Streak</div>
-      <div class="splash-stat-sep"></div>
-      <div class="splash-stat"><span id="splash-yesterday">—</span>Yesterday</div>
+    <div class="splash-bottom">
+      <div class="splash-divider"></div>
+      <div class="splash-greeting" id="splash-greeting"></div>
+      <div class="splash-name" id="splash-name"></div>
+      <div class="splash-quote" id="splash-quote"></div>
+      <div class="splash-stats">
+        <div class="splash-stat"><span id="splash-streak">—</span>Streak</div>
+        <div class="splash-stat-sep"></div>
+        <div class="splash-stat"><span id="splash-yesterday">—</span>Yesterday</div>
+      </div>
+      <button class="splash-btn" id="splash-btn">Start</button>
+      <div class="splash-sub" id="splash-sub">tap to continue</div>
+      <button id="clock-settings-btn" style="position:absolute;bottom:28px;right:24px;background:none;border:none;cursor:pointer;opacity:0.35;padding:8px;transition:opacity 0.2s">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
     </div>
-    <button class="splash-btn" id="splash-btn">Start</button>
-    <div class="splash-sub" id="splash-sub">tap to continue</div>
+  </div>
+
+  <!-- Clock Settings Panel -->
+  <div id="clock-settings-panel" style="display:none;position:fixed;inset:0;z-index:998;background:rgba(0,0,0,0.7);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);overflow-y:auto;padding:40px 20px 60px">
+    <div style="max-width:380px;margin:0 auto">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px">
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.5)">Clock Settings</div>
+        <button id="clock-settings-close" style="background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.6);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">✕</button>
+      </div>
+
+      <!-- Live preview -->
+      <div id="clock-preview" style="text-align:center;padding:32px 0 24px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:24px">
+        <div id="clock-preview-time" style="font-size:64px;line-height:1;color:rgba(255,255,255,0.9)">12:00</div>
+      </div>
+
+      <!-- Font -->
+      <div style="margin-bottom:24px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px">Typeface</div>
+        <div id="clock-font-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"></div>
+      </div>
+
+      <!-- Style -->
+      <div style="margin-bottom:24px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px">Style</div>
+        <div id="clock-style-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+      </div>
+
+      <!-- Format -->
+      <div style="margin-bottom:24px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px">Format</div>
+        <div style="display:flex;gap:8px">
+          <button data-clock-fmt="12" class="clock-opt-btn" style="flex:1;padding:10px;border-radius:10px;font-size:11px;letter-spacing:1px">12H</button>
+          <button data-clock-fmt="24" class="clock-opt-btn" style="flex:1;padding:10px;border-radius:10px;font-size:11px;letter-spacing:1px">24H</button>
+          <button data-clock-sec="1" class="clock-opt-btn" style="flex:1;padding:10px;border-radius:10px;font-size:11px;letter-spacing:1px">Seconds</button>
+        </div>
+      </div>
+
+      <!-- Landscape -->
+      <div style="margin-bottom:24px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px">Landscape Mode</div>
+        <button data-clock-landscape="1" class="clock-opt-btn" style="width:100%;padding:12px;border-radius:10px;font-size:11px;letter-spacing:1px">Fullscreen clock on rotate</button>
+      </div>
+    </div>
   </div>
   <div id="header">
     <div id="header-top">
@@ -621,7 +681,7 @@ function applyTheme(key){
         #cp-dismiss { background: rgba(255,255,255,0.12) !important; border-color: rgba(255,255,255,0.25) !important; color: #ffffff !important; }
         .cp-close { color: rgba(255,255,255,0.8) !important; }
         .splash-greeting, .splash-name, .splash-sub, .splash-quote, .splash-day, .splash-date, .splash-clock { color: #111111 !important; }
-        .splash-stat-sep { background: rgba(0,0,0,0.15) !important; }
+        .splash-stat-sep { background: rgba(0,0,0,0.12) !important; }
         @keyframes logo-glow { 0%,100%{box-shadow:0 0 18px 4px rgba(0,0,0,0.08);}50%{box-shadow:0 0 32px 10px rgba(0,0,0,0.15);} }
       `;
     } else {
@@ -663,7 +723,11 @@ let autoCollapseGroups=ld("rm_auto_collapse",false);
 let dailyIntention=ld("rm_intention","");
 let reminderTime=ld("rm_reminder_time","");
 let reminderEnabled=ld("rm_reminder_on",false);
-let clockFont=ld("rm_clock_font","cormorant"); // cormorant|bodoni|playfair|dm|system
+let clockFont=ld("rm_clock_font","cormorant");
+let clockStyle=ld("rm_clock_style","default"); // default|thin|spaced|minimal|digital
+let clockFormat=ld("rm_clock_format","12"); // 12|24
+let clockSeconds=ld("rm_clock_seconds",false); // show seconds
+let clockLandscape=ld("rm_clock_landscape",false); // landscape fullscreen mode
 let trackingSince=ld("rm_tracking_since","");
 let editMode = false;
 let editId = null;
@@ -713,7 +777,7 @@ function visibleTasksForDay(log, dayKey){
     return tasks.filter(t=>!hidden.includes(t.id)&&(!t.createdAt||t.createdAt<=key)&&(!t.deletedAt||t.deletedAt>key));
   }
 }
-function persist(){sv("rm_tasks",tasks);sv("rm_logs",logs);sv("rm_username",userName);sv("rm_macros",macros);sv("rm_appname",appName);sv("rm_groups",groups);sv("rm_week_start",weekStartsMonday);sv("rm_compact",compactMode);sv("rm_score_fmt",scoreFormat);sv("rm_week_nums",showWeekNumbers);sv("rm_auto_collapse",autoCollapseGroups);sv("rm_intention",dailyIntention);sv("rm_reminder_time",reminderTime);sv("rm_reminder_on",reminderEnabled);sv("rm_tracking_since",trackingSince);sv("rm_clock_font",clockFont);}
+function persist(){sv("rm_tasks",tasks);sv("rm_logs",logs);sv("rm_username",userName);sv("rm_macros",macros);sv("rm_appname",appName);sv("rm_groups",groups);sv("rm_week_start",weekStartsMonday);sv("rm_compact",compactMode);sv("rm_score_fmt",scoreFormat);sv("rm_week_nums",showWeekNumbers);sv("rm_auto_collapse",autoCollapseGroups);sv("rm_intention",dailyIntention);sv("rm_reminder_time",reminderTime);sv("rm_reminder_on",reminderEnabled);sv("rm_tracking_since",trackingSince);sv("rm_clock_font",clockFont);sv("rm_clock_style",clockStyle);sv("rm_clock_format",clockFormat);sv("rm_clock_seconds",clockSeconds);sv("rm_clock_landscape",clockLandscape);}
 
 // Set tracking since date on first ever use
 if(!trackingSince){ trackingSince=getTodayKey(); persist(); }
@@ -721,13 +785,34 @@ if(!trackingSince){ trackingSince=getTodayKey(); persist(); }
 if(compactMode) document.body.classList.add("compact");
 
 const CLOCK_FONTS={
-  cormorant:"'Cormorant Garamond',Georgia,serif",
-  bodoni:"'Bodoni Moda',Georgia,serif",
-  playfair:"'Playfair Display',Georgia,serif",
-  dm:"'DM Serif Display',Georgia,serif",
-  system:"'Inter','Helvetica Neue',sans-serif"
+  cormorant:{family:"'Cormorant Garamond',Georgia,serif",weight:"200"},
+  bodoni:{family:"'Bodoni Moda',Georgia,serif",weight:"200"},
+  playfair:{family:"'Playfair Display',Georgia,serif",weight:"300"},
+  dm:{family:"'DM Serif Display',Georgia,serif",weight:"400"},
+  cinzel:{family:"'Cinzel',Georgia,serif",weight:"300"},
+  garamond:{family:"'EB Garamond',Georgia,serif",weight:"400"},
+  josefin:{family:"'Josefin Sans',sans-serif",weight:"100"},
+  outfit:{family:"'Outfit',sans-serif",weight:"100"},
+  system:{family:"'Inter','Helvetica Neue',sans-serif",weight:"200"}
 };
-function clockFontFamily(){ return CLOCK_FONTS[clockFont]||CLOCK_FONTS.cormorant; }
+const CLOCK_STYLE_CSS={
+  default:{letterSpacing:"6px",opacity:"0.95"},
+  thin:{letterSpacing:"12px",opacity:"0.7"},
+  spaced:{letterSpacing:"20px",opacity:"0.85"},
+  minimal:{letterSpacing:"2px",opacity:"0.6"},
+  digital:{letterSpacing:"4px",opacity:"0.9",fontVariantNumeric:"tabular-nums"}
+};
+function clockFontFamily(){ return (CLOCK_FONTS[clockFont]||CLOCK_FONTS.cormorant).family; }
+function clockFontWeight(){ return (CLOCK_FONTS[clockFont]||CLOCK_FONTS.cormorant).weight; }
+function clockStyleCSS(){ return CLOCK_STYLE_CSS[clockStyle]||CLOCK_STYLE_CSS.default; }
+function formatClockTime(now){
+  var h=now.getHours(), m=now.getMinutes(), s=now.getSeconds();
+  var h12=h%12||12;
+  var hStr=clockFormat==="24"?String(h).padStart(2,"0"):String(h12);
+  var mStr=String(m).padStart(2,"0");
+  var sStr=String(s).padStart(2,"0");
+  return clockSeconds? hStr+":"+mStr+":"+sStr : hStr+":"+mStr;
+}
 
 function haptic(){} // removed
 
@@ -1111,6 +1196,7 @@ function getPieData(){
 }
 
 function destroyChart(id){ if(chartInstances[id]){ chartInstances[id].destroy(); delete chartInstances[id]; } }
+function destroyAllCharts(){ ["bar","pie","tasks","radar","hist","dow"].forEach(destroyChart); }
 
 function reportTitle(){const d=getReportData();return(d&&d.title)||getToday().getFullYear()+"";}
 
@@ -1158,163 +1244,327 @@ function getTasksPerformanceData(){
 
 function renderAnalytics(){
   const el=document.getElementById("view-analytics");
+  const isTimePeriod=["day","week","month","year"].includes(reportPeriod);
+
+  // ── HTML shell ─────────────────────────────────────────────────────────────
   el.innerHTML=`
     <div class="lbl" style="margin-bottom:14px">Analytics</div>
-    <div class="report-tabs" style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;">
-      <button class="rtab ${reportPeriod==='day'?'active':''}" id="rtab-day">Day</button>
-      <button class="rtab ${reportPeriod==='week'?'active':''}" id="rtab-week">Week</button>
-      <button class="rtab ${reportPeriod==='month'?'active':''}" id="rtab-month">Month</button>
-      <button class="rtab ${reportPeriod==='year'?'active':''}" id="rtab-year">Year</button>
-      <button class="rtab ${reportPeriod==='tasks'?'active':''}" id="rtab-tasks">Tasks</button>
+    <div class="report-tabs" style="display:grid;grid-template-columns:repeat(6,1fr);gap:3px;margin-bottom:14px">
+      ${["day","week","month","year","heat","tasks"].map(p=>`
+        <button class="rtab ${reportPeriod===p?'active':''}" id="rtab-${p}" style="font-size:9px;padding:5px 2px">${p==="heat"?"Heat":p.charAt(0).toUpperCase()+p.slice(1)}</button>
+      `).join('')}
     </div>
-    ${(function(){if(reportPeriod==="tasks")return"";var cd=getReportData();return'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><button id="report-prev" class="nav-arrow">&#8249;</button><span style="font-size:12px;color:var(--text2);font-weight:500">'+reportTitle()+'</span><button id="report-next" class="nav-arrow" style="opacity:'+(cd&&cd.canNext?1:0.25)+'">&#8250;</button></div>';})()}
-    <div class="chart-wrap">
-      <div class="chart-title">${reportPeriod==="day"?"Task Completion":"Score"}</div>
-      <canvas id="bar-chart" height="160"></canvas>
-    </div>
-    <div class="chart-wrap">
-      <div class="chart-title">Breakdown</div>
-      <canvas id="pie-chart" height="160"></canvas>
-    </div>
-    <div class="chart-wrap">
-      <div class="chart-title">Summary</div>
-      <div id="summary-text"></div>
-    </div>
-    <div id="tasks-chart-wrap" style="display:none" class="chart-wrap">
-      <div class="chart-title">Per-Task Performance</div>
-      <canvas id="tasks-bar-chart" height="220"></canvas>
-    </div>
-    <button class="export-btn" id="export-img-btn">Export as Image</button>
+    ${isTimePeriod?`
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <button id="report-prev" class="nav-arrow">&#8249;</button>
+        <span style="font-size:12px;color:var(--text2);font-weight:500">${reportTitle()}</span>
+        <button id="report-next" class="nav-arrow" style="opacity:${getReportData().canNext?1:0.25}">&#8250;</button>
+      </div>` : ''}
+
+    ${reportPeriod==="heat"?`
+      <div id="heat-wrap"></div>
+    `:reportPeriod==="tasks"?`
+      <div id="tasks-chart-wrap" class="chart-wrap"></div>
+    `:`
+      <!-- Consistency stat cards -->
+      <div id="consistency-cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px"></div>
+      <!-- Bar + Trend line -->
+      <div class="chart-wrap">
+        <div class="chart-title">${reportPeriod==="day"?"Task Completion":"Score + Trend"}</div>
+        <canvas id="bar-chart" height="160"></canvas>
+      </div>
+      <!-- Doughnut breakdown -->
+      <div class="chart-wrap">
+        <div class="chart-title">Breakdown</div>
+        <canvas id="pie-chart" height="160"></canvas>
+      </div>
+      <!-- Score Distribution Histogram -->
+      ${reportPeriod!=="day"?`<div class="chart-wrap">
+        <div class="chart-title">Score Distribution</div>
+        <canvas id="hist-chart" height="120"></canvas>
+      </div>`:''}
+      <!-- Day-of-Week Analysis -->
+      ${reportPeriod!=="day"?`<div class="chart-wrap">
+        <div class="chart-title">Best Day of Week</div>
+        <canvas id="dow-chart" height="120"></canvas>
+      </div>`:''}
+      <!-- Summary -->
+      <div class="chart-wrap">
+        <div class="chart-title">Summary</div>
+        <div id="summary-text"></div>
+      </div>
+    `}
+    <button class="export-btn" id="export-img-btn" style="margin-top:8px">Export as Image</button>
     <button class="export-btn" id="export-csv-btn" style="margin-top:6px">Export as CSV</button>
   `;
-  document.getElementById("tasks-chart-wrap").style.display = reportPeriod==="tasks" ? "block" : "none";
 
-  const data=getReportData();
-  const pieData=getPieData();
-  const valid=data.scores.filter(s=>s!==null);
-  const avg=valid.length?Math.round(valid.reduce((a,b)=>a+b,0)/valid.length):0;
-  const strong=valid.filter(s=>s>=80).length;
+  // ── HEAT MAP ───────────────────────────────────────────────────────────────
+  if(reportPeriod==="heat"){
+    const wrap=document.getElementById("heat-wrap");
+    const todayK=getTodayKey();
+    // build 53 weeks × 7 days grid going back from today
+    const today=new Date(getToday());
+    // start from Sunday of the week 52 weeks ago
+    const start=new Date(today);
+    start.setDate(today.getDate()-today.getDay()-52*7);
+    const cells=[];
+    for(let i=0;i<53*7;i++){
+      const d=new Date(start);
+      d.setDate(start.getDate()+i);
+      cells.push(d);
+    }
+    // get year options
+    const years=[...new Set(Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)).map(k=>k.slice(0,4)))].sort();
+    if(!years.includes(getTodayKey().slice(0,4))) years.push(getTodayKey().slice(0,4));
 
-  document.getElementById("summary-text").innerHTML=`
-    <div style="font-size:13px;margin-bottom:6px;color:var(--text)">${avg}% average score</div>
-    <div style="font-size:11px;color:var(--text2);margin-bottom:3px">${strong} strong days (80%+)</div>
-    <div style="font-size:11px;color:var(--text2);margin-bottom:3px">${pieData.partial} partial days (50–79%)</div>
-    <div style="font-size:11px;color:var(--text2);margin-bottom:3px">${pieData.weak} weak days (1–49%)</div>
-    <div style="font-size:11px;color:var(--text2)">${pieData.zero} missed days</div>
-  `;
+    // stat cards
+    const allScored=Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)&&k<=todayK&&scoreOf(logs[k],k)>0);
+    const allAvg=allScored.length?Math.round(allScored.reduce((a,k)=>a+scoreOf(logs[k],k),0)/allScored.length):0;
+    const {cur:hCur,best:hBest}=calcStreak();
+    const consistency=Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)&&k<=todayK).length;
+    const totalDays=Math.max(1,Math.floor((getToday()-new Date(trackingSince||todayK))/(1000*60*60*24))+1);
 
+    wrap.innerHTML=`
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+        <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;text-align:center">
+          <div style="font-size:20px;font-weight:600;color:var(--accent)">${hCur}</div>
+          <div style="font-size:8px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Cur streak</div>
+        </div>
+        <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;text-align:center">
+          <div style="font-size:20px;font-weight:600;color:var(--accent)">${hBest}</div>
+          <div style="font-size:8px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Best streak</div>
+        </div>
+        <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;text-align:center">
+          <div style="font-size:20px;font-weight:600;color:${clr(allAvg)}">${allAvg}%</div>
+          <div style="font-size:8px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">All-time avg</div>
+        </div>
+      </div>
+      <div style="font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Last 12 Months</div>
+      <div style="overflow-x:auto;padding-bottom:6px">
+        <div style="display:grid;grid-template-columns:repeat(53,1fr);gap:2px;min-width:480px">
+          ${cells.map(d=>{
+            const k=toKey(d);
+            const future=k>todayK;
+            const sc=future?null:scoreOf(logs[k],k);
+            const col=future?'var(--glass)':sc===0?'var(--bg-cell)':sc>=80?'#4ade8088':sc>=50?'#facc1588':'#f8717188';
+            const border=future?'var(--glass-border)':sc===0?'var(--glass-border)':sc>=80?'#4ade80':sc>=50?'#facc15':'#f87171';
+            return `<div title="${k}${sc!==null?' — '+sc+'%':''}" style="aspect-ratio:1;border-radius:2px;background:${col};border:1px solid ${border};opacity:${future?0.2:1}"></div>`;
+          }).join('')}
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;margin-top:8px;justify-content:flex-end">
+        <span style="font-size:8px;color:var(--text3)">Less</span>
+        ${['var(--bg-cell)','#f8717144','#facc1544','#4ade8044'].map(c=>`<div style="width:10px;height:10px;border-radius:2px;background:${c};border:1px solid var(--glass-border)"></div>`).join('')}
+        <span style="font-size:8px;color:var(--text3)">More</span>
+      </div>
+    `;
+    return;
+  }
+
+  // ── TASKS TAB ──────────────────────────────────────────────────────────────
   if(reportPeriod==="tasks"){
-    const {label:twLabel, canNext:twCanNext}=getTasksWindowKeys();
     const tw=document.getElementById("tasks-chart-wrap");
-    let navHtml='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">';
-    navHtml+='<button id="tasks-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>';
-    navHtml+='<div style="display:flex;gap:6px">';
-    ["all","month","year"].forEach(p=>{
-      const active=tasksSubPeriod===p;
-      navHtml+='<button class="tasks-period-btn" data-p="'+p+'" style="background:'+(active?"var(--text)":"none")+';border:1px solid var(--glass-border);color:'+(active?"var(--bg)":"var(--text2)")+';padding:3px 8px;font-size:9px;letter-spacing:1px;border-radius:4px;cursor:pointer;font-family:monospace;text-transform:uppercase">'+p+'</button>';
-    });
-    navHtml+='</div>';
-    navHtml+='<button id="tasks-next" style="background:none;border:1px solid var(--glass-border);color:'+(twCanNext?"var(--text2)":"var(--glass-border)")+';padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:'+(twCanNext?"auto":"none")+'">&#8250;</button>';
-    navHtml+='</div>';
-    navHtml+='<div style="font-size:10px;color:var(--text2);letter-spacing:2px;margin-bottom:10px">'+twLabel.toUpperCase()+'</div>';
-    tw.innerHTML='<div class="chart-title">Per-Task Performance</div>'+navHtml+'<canvas id="tasks-bar-chart" height="220"></canvas>';
-
+    const {label:twLabel,canNext:twCanNext}=getTasksWindowKeys();
     const tdata=getTasksPerformanceData();
-    const tCtx=document.getElementById("tasks-bar-chart").getContext("2d");
-    destroyChart("tasks");
+    const todayK=getTodayKey();
+
+    let navHtml=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <button id="tasks-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
+      <div style="display:flex;gap:5px">${["all","month","year"].map(p=>`<button class="tasks-period-btn" data-p="${p}" style="background:${tasksSubPeriod===p?"var(--text)":"none"};border:1px solid var(--glass-border);color:${tasksSubPeriod===p?"var(--bg)":"var(--text2)"};padding:3px 8px;font-size:9px;letter-spacing:1px;border-radius:4px;cursor:pointer;text-transform:uppercase">${p}</button>`).join('')}</div>
+      <button id="tasks-next" style="background:none;border:1px solid var(--glass-border);color:${twCanNext?"var(--text2)":"var(--glass-border)"};padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${twCanNext?"auto":"none"}">&#8250;</button>
+    </div>
+    <div style="font-size:10px;color:var(--text2);letter-spacing:2px;margin-bottom:12px">${twLabel.toUpperCase()}</div>`;
+    tw.innerHTML=navHtml;
+
     if(tdata.length===0){
-      tw.innerHTML+='<div style="font-size:12px;color:var(--text2);margin-top:8px">No task data for this period.</div>';
+      tw.innerHTML+=`<div style="font-size:12px;color:var(--text2);margin-top:8px">No task data for this period.</div>`;
     } else {
-      const cheight=Math.max(180, tdata.length*28);
-      document.getElementById("tasks-bar-chart").height=cheight;
-      chartInstances["tasks"]=new Chart(tCtx,{
-        type:"bar",
+      // Radar chart
+      const radarCanvas=document.createElement("canvas");
+      radarCanvas.height=220; radarCanvas.id="radar-chart";
+      tw.appendChild(radarCanvas);
+      destroyChart("radar");
+      chartInstances["radar"]=new Chart(radarCanvas.getContext("2d"),{
+        type:"radar",
         data:{
-          labels:tdata.map(t=>t.name.length>16?t.name.slice(0,16)+"…":t.name),
+          labels:tdata.slice(0,10).map(t=>t.name.replace(/^[◉●] /,"").slice(0,12)),
           datasets:[{
-            label:"Completion Rate",
-            data:tdata.map(t=>t.rate),
-            backgroundColor:tdata.map(t=>t.deleted?"rgba(255,255,255,0.1)":clr(t.rate)+"bb"),
-            borderColor:tdata.map(t=>t.deleted?"rgba(255,255,255,0.2)":clr(t.rate)),
-            borderWidth:1,
-            borderRadius:3,
+            data:tdata.slice(0,10).map(t=>t.rate),
+            backgroundColor:cssVar("--accent").replace(")",",0.15)").replace("rgb","rgba")||"rgba(99,102,241,0.15)",
+            borderColor:cssVar("--accent")||"#6366f1",
+            borderWidth:1.5,
+            pointBackgroundColor:tdata.slice(0,10).map(t=>clr(t.rate)),
+            pointRadius:3,
           }]
         },
         options:{
-          indexAxis:"y",
           responsive:true,
-          plugins:{
-            legend:{display:false},
-            tooltip:{callbacks:{label:ctx=>{
-              const t=tdata[ctx.dataIndex];
-              return (t.deleted?"[removed] ":"")+ctx.raw+"% ("+t.done+"/"+t.active+" days)";
-            }}}
-          },
-          scales:{
-            x:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},
-            y:{ticks:{color:cssVar("--text2"),font:{size:9}},grid:{display:false}}
-          }
+          plugins:{legend:{display:false}},
+          scales:{r:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:8},stepSize:25},grid:{color:cssVar("--glass-border")},pointLabels:{color:cssVar("--text2"),font:{size:9}},angleLines:{color:cssVar("--glass-border")}}}
         }
       });
-      let rowsHtml='<div style="margin-top:14px"><div style="font-size:9px;color:var(--text2);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">Tap a task to view its full history</div>';
+
+      // Longevity timeline
+      const sortedByAge=[...tdata].sort((a,b)=>{
+        const ta=tasks.find(t=>t.id===a.id); const tb=tasks.find(t=>t.id===b.id);
+        return (ta?.createdAt||"")>(tb?.createdAt||"")?1:-1;
+      });
+      const longevityHtml=`<div style="margin-top:14px"><div class="chart-title">Task Longevity</div>
+        ${sortedByAge.map(t=>{
+          const task=tasks.find(x=>x.id===t.id);
+          const start=task?.createdAt||trackingSince||todayK;
+          const end=task?.deletedAt||todayK;
+          const [sy,sm,sd]=start.split("-").map(Number);
+          const [ey,em,ed]=end.split("-").map(Number);
+          const startDate=new Date(sy,sm-1,sd);
+          const endDate=new Date(ey,em-1,ed);
+          const anchor=new Date(trackingSince||todayK);
+          const total=Math.max(1,Math.floor((getToday()-anchor)/(1000*60*60*24)));
+          const startPct=Math.max(0,Math.floor((startDate-anchor)/(1000*60*60*24))/total*100);
+          const widthPct=Math.min(100-startPct,Math.floor((endDate-startDate)/(1000*60*60*24))/total*100);
+          const name=task?.name?.replace(/^[◉●] /,"")||t.name;
+          return `<div style="margin-bottom:8px">
+            <div style="font-size:10px;color:var(--text2);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>
+            <div style="background:var(--bg-cell);border-radius:3px;height:6px;position:relative">
+              <div style="position:absolute;left:${startPct}%;width:${Math.max(2,widthPct)}%;height:100%;background:${clr(t.rate)};border-radius:3px;opacity:0.8"></div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+      tw.insertAdjacentHTML("beforeend",longevityHtml);
+
+      // Horizontal bar
+      const hBarCanvas=document.createElement("canvas");
+      hBarCanvas.height=Math.max(180,tdata.length*26); hBarCanvas.id="tasks-bar-chart";
+      tw.insertAdjacentHTML("beforeend",'<div class="chart-title" style="margin-top:14px">Completion Rate</div>');
+      tw.appendChild(hBarCanvas);
+      destroyChart("tasks");
+      chartInstances["tasks"]=new Chart(hBarCanvas.getContext("2d"),{
+        type:"bar",
+        data:{
+          labels:tdata.map(t=>t.name.replace(/^[◉●] /,"").slice(0,16)),
+          datasets:[{data:tdata.map(t=>t.rate),backgroundColor:tdata.map(t=>t.deleted?"rgba(255,255,255,0.1)":clr(t.rate)+"bb"),borderColor:tdata.map(t=>t.deleted?"rgba(255,255,255,0.2)":clr(t.rate)),borderWidth:1,borderRadius:3}]
+        },
+        options:{indexAxis:"y",responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const t=tdata[ctx.dataIndex];return ctx.raw+"% ("+t.done+"/"+t.active+" days)";} }}},
+          scales:{x:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},y:{ticks:{color:cssVar("--text2"),font:{size:9}},grid:{display:false}}}}
+      });
+
+      // Task rows
+      let rowsHtml='<div style="margin-top:14px"><div style="font-size:9px;color:var(--text2);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">Tap for full history</div>';
       tdata.forEach(t=>{
-        rowsHtml+=`<div data-task-detail-id="${t.id}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;margin-bottom:6px;cursor:pointer;transition:background 0.15s;">
-          <div style="flex:1;min-width:0;font-size:13px;color:${t.deleted?"var(--text3)":"var(--text)"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.name}</div>
+        rowsHtml+=`<div data-task-detail-id="${t.id}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;margin-bottom:6px;cursor:pointer">
+          <div style="flex:1;min-width:0;font-size:13px;color:${t.deleted?"var(--text3)":"var(--text)"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.name.replace(/^[◉●] /,"")}</div>
           <div style="font-size:13px;font-weight:600;color:${clr(t.rate)};flex-shrink:0">${t.rate}%</div>
           <div style="font-size:11px;color:var(--text2);flex-shrink:0">${t.done}/${t.active}d</div>
           <div style="font-size:14px;color:var(--text2);flex-shrink:0">›</div>
         </div>`;
       });
       rowsHtml+='</div>';
-      tw.insertAdjacentHTML("beforeend", rowsHtml);
+      tw.insertAdjacentHTML("beforeend",rowsHtml);
     }
+    return;
   }
 
+  // ── TIME PERIOD TABS (Day / Week / Month / Year) ───────────────────────────
+  const data=getReportData();
+  const pieData=getPieData();
+  const valid=data.scores.filter(s=>s!==null);
+  const avg=valid.length?Math.round(valid.reduce((a,b)=>a+b,0)/valid.length):0;
+
+  // Consistency stat cards
+  const {cur:streakCur,best:streakBest}=calcStreak();
+  const consistency=valid.length>0?Math.round(valid.filter(s=>s>0).length/valid.length*100):0;
+  const cards=[
+    {label:"Avg Score",val:avg+"%",color:clr(avg)},
+    {label:"Cur Streak",val:streakCur+"d",color:"var(--accent)"},
+    {label:"Consistency",val:consistency+"%",color:clr(consistency)},
+  ];
+  document.getElementById("consistency-cards").innerHTML=cards.map(c=>`
+    <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;text-align:center">
+      <div style="font-size:18px;font-weight:600;color:${c.color}">${c.val}</div>
+      <div style="font-size:8px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">${c.label}</div>
+    </div>`).join('');
+
+  // Bar + Trend line overlay
   const barCtx=document.getElementById("bar-chart").getContext("2d");
   destroyChart("bar");
+  // rolling 7-pt average for trend
+  const trendData=data.scores.map((s,i,arr)=>{
+    const window=arr.slice(Math.max(0,i-3),i+4).filter(x=>x!==null);
+    return window.length?Math.round(window.reduce((a,b)=>a+b,0)/window.length):null;
+  });
   chartInstances["bar"]=new Chart(barCtx,{
     type:"bar",
     data:{
       labels:data.labels,
-      datasets:[{
-        data:data.scores.map(s=>s===null?0:s),
-        backgroundColor:data.scores.map(s=>s===null?cssVar("--glass-border"):clr(s)+"bb"),
-        borderColor:data.scores.map(s=>s===null?cssVar("--glass-border"):clr(s)),
-        borderWidth:1,
-        borderRadius:3,
-      }]
+      datasets:[
+        {type:"bar",data:data.scores.map(s=>s===null?0:s),backgroundColor:data.scores.map(s=>s===null?cssVar("--glass-border"):clr(s)+"88"),borderColor:data.scores.map(s=>s===null?cssVar("--glass-border"):clr(s)),borderWidth:1,borderRadius:3,order:2},
+        ...(reportPeriod!=="day"?[{type:"line",data:trendData,borderColor:cssVar("--accent")||"#6366f1",borderWidth:2,pointRadius:0,tension:0.4,fill:false,order:1,label:"Trend"}]:[])
+      ]
     },
-    options:{
-      responsive:true,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+"%"}}},
-      scales:{
-        y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},
-        x:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{display:false}}
-      }
-    }
+    options:{responsive:true,plugins:{legend:{display:reportPeriod!=="day",labels:{color:cssVar("--text2"),font:{size:9},boxWidth:10}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label?ctx.dataset.label+": "+ctx.raw+"%":ctx.raw+"%"}}},
+      scales:{y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{display:false}}}}
   });
 
+  // Doughnut
   const pieCtx=document.getElementById("pie-chart").getContext("2d");
   destroyChart("pie");
   chartInstances["pie"]=new Chart(pieCtx,{
     type:"doughnut",
-    data:{
-      labels:["Strong (80%+)","Partial (50-79%)","Weak (1-49%)","Missed"],
-      datasets:[{
-        data:[pieData.strong,pieData.partial,pieData.weak,pieData.zero],
-        backgroundColor:["#4ade80bb","#facc15bb","#f87171bb",cssVar("--glass-border")],
-        borderColor:["#4ade80","#facc15","#f87171",cssVar("--glass-border")],
-        borderWidth:1,
-      }]
-    },
-    options:{
-      responsive:true,
-      plugins:{
-        legend:{display:true,position:"bottom",labels:{color:cssVar("--text2"),font:{size:10},padding:10,boxWidth:12}},
-        tooltip:{callbacks:{label:ctx=>ctx.label+": "+ctx.raw+" days"}}
-      }
-    }
+    data:{labels:["Strong 80%+","Partial 50-79%","Weak 1-49%","Missed"],
+      datasets:[{data:[pieData.strong,pieData.partial,pieData.weak,pieData.zero],backgroundColor:["#4ade8088","#facc1588","#f8717188",cssVar("--glass-border")],borderColor:["#4ade80","#facc15","#f87171",cssVar("--glass-border")],borderWidth:1}]},
+    options:{responsive:true,plugins:{legend:{display:true,position:"bottom",labels:{color:cssVar("--text2"),font:{size:9},padding:8,boxWidth:10}},tooltip:{callbacks:{label:ctx=>ctx.label+": "+ctx.raw+" days"}}}}
   });
+
+  if(reportPeriod!=="day"){
+    // Score Distribution Histogram (10 buckets 0-9%, 10-19%...90-100%)
+    const buckets=Array(10).fill(0);
+    valid.forEach(s=>{ buckets[Math.min(9,Math.floor(s/10))]++; });
+    const histCtx=document.getElementById("hist-chart").getContext("2d");
+    destroyChart("hist");
+    chartInstances["hist"]=new Chart(histCtx,{
+      type:"bar",
+      data:{
+        labels:["0-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80-89","90-100"],
+        datasets:[{data:buckets,backgroundColor:["#f87171","#f87171","#f87171","#f87171","#f87171","#facc15","#facc15","#facc15","#4ade80","#4ade80"].map(c=>c+"88"),borderColor:["#f87171","#f87171","#f87171","#f87171","#f87171","#facc15","#facc15","#facc15","#4ade80","#4ade80"],borderWidth:1,borderRadius:3}]
+      },
+      options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+" days"}}},
+        scales:{y:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:8}},grid:{display:false}}}}
+    });
+
+    // Day-of-week analysis
+    const todayK=getTodayKey();
+    const dowTotals=Array(7).fill(0), dowCounts=Array(7).fill(0);
+    Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)&&k<=todayK).forEach(k=>{
+      const [y,m,d]=k.split("-").map(Number);
+      const dow=new Date(y,m-1,d).getDay();
+      const sc=scoreOf(logs[k],k);
+      if(sc>0){ dowTotals[dow]+=sc; dowCounts[dow]++; }
+    });
+    const dowAvg=dowTotals.map((t,i)=>dowCounts[i]?Math.round(t/dowCounts[i]):0);
+    const bestDow=dowAvg.indexOf(Math.max(...dowAvg));
+    const dowCtx=document.getElementById("dow-chart").getContext("2d");
+    destroyChart("dow");
+    chartInstances["dow"]=new Chart(dowCtx,{
+      type:"bar",
+      data:{
+        labels:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+        datasets:[{data:dowAvg,backgroundColor:dowAvg.map((s,i)=>i===bestDow?clr(s)+"cc":clr(s)+"55"),borderColor:dowAvg.map(s=>clr(s)),borderWidth:1,borderRadius:3}]
+      },
+      options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+"%"}}},
+        scales:{y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{display:false}}}}
+    });
+  }
+
+  // Summary text
+  document.getElementById("summary-text").innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><div style="font-size:11px;color:var(--text2)">Average</div><div style="font-size:16px;font-weight:600;color:${clr(avg)}">${avg}%</div></div>
+      <div><div style="font-size:11px;color:var(--text2)">Strong days</div><div style="font-size:16px;font-weight:600;color:#4ade80">${pieData.strong}</div></div>
+      <div><div style="font-size:11px;color:var(--text2)">Partial days</div><div style="font-size:16px;font-weight:600;color:#facc15">${pieData.partial}</div></div>
+      <div><div style="font-size:11px;color:var(--text2)">Missed days</div><div style="font-size:16px;font-weight:600;color:#f87171">${pieData.zero}</div></div>
+    </div>
+  `;
 }
 
 function renderSettings(){
@@ -1420,6 +1670,24 @@ function renderSettings(){
         ${tog('pref-compact','Compact Mode','Smaller task rows, tighter spacing',compactMode)}
         ${tog('pref-week-nums','Show Week Numbers','Display ISO week numbers in month view',showWeekNumbers)}
         ${tog('pref-auto-collapse','Auto-collapse Groups','Groups start collapsed when opening app',autoCollapseGroups)}
+        <div style="padding:10px 0;border-bottom:1px solid var(--glass-border)">
+          <div style="font-size:11px;color:var(--text);margin-bottom:6px">Clock Font</div>
+          <div style="font-size:9px;color:var(--text3);margin-bottom:10px">Welcome screen time display</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+            ${[
+              ['cormorant','Cormorant','Cormorant Garamond'],
+              ['bodoni','Bodoni','Bodoni Moda'],
+              ['playfair','Playfair','Playfair Display'],
+              ['dm','DM Serif','DM Serif Display'],
+              ['system','System','Inter']
+            ].map(([key,label,family])=>`
+              <button data-clock-font="${key}" style="padding:10px 8px;border-radius:8px;border:1px solid ${clockFont===key?'var(--accent)':'var(--glass-border)'};background:${clockFont===key?'var(--glass)':'transparent'};cursor:pointer;text-align:center">
+                <div style="font-size:18px;font-weight:300;color:${clockFont===key?'var(--accent)':'var(--text2)'};font-family:'${family}',serif;letter-spacing:2px;margin-bottom:3px">12:00</div>
+                <div style="font-size:8px;color:var(--text3);letter-spacing:1px;text-transform:uppercase">${label}</div>
+              </button>
+            `).join('')}
+          </div>
+        </div>
         <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--glass-border)">
           <div><div style="font-size:11px;color:var(--text)">Score Format</div><div style="font-size:9px;color:var(--text3);margin-top:2px">How scores display in headers and views</div></div>
           <div style="display:flex;gap:4px">
@@ -2923,8 +3191,7 @@ function setupListeners(){
     if(rtab){
       const p=rtab.id.replace("rtab-","");
       reportPeriod=p; reportOffset=0; tasksOffset=0; renderAnalytics(); return;
-    }
-    const pb=e.target.closest(".tasks-period-btn");
+    }    const pb=e.target.closest(".tasks-period-btn");
     if(pb){ tasksSubPeriod=pb.dataset.p; tasksOffset=0; renderAnalytics(); return; }
     if(e.target.id==="tasks-prev"){ if(tasksSubPeriod!=="all")tasksOffset--; renderAnalytics(); return; }
     if(e.target.id==="tasks-next"){ const {canNext}=getTasksWindowKeys(); if(canNext)tasksOffset++; renderAnalytics(); return; }
@@ -2956,6 +3223,9 @@ function setupListeners(){
       var m=document.getElementById("settings-mode-inp").value.trim();
       if(m){appName=m;persist();var ml=document.getElementById("app-mode-label");if(ml)ml.textContent=m;showImportStatus("App label updated!","#4ade80");}return;
     }
+    // Clock font
+    const cfBtn=e.target.closest("[data-clock-font]");
+    if(cfBtn){ clockFont=cfBtn.dataset.clockFont; sv("rm_clock_font",clockFont); renderSettings(); return; }
     // Toggle prefs
     function handleToggle(id,getter,setter,key){
       if(e.target.id===id||e.target.closest("#"+id)){
@@ -3388,11 +3658,31 @@ document.getElementById("view-macros").addEventListener("click",function(e){
   // Clock tick
   function tickClock(){
     var now=new Date();
-    var h=String(now.getHours()).padStart(2,"0");
-    var m=String(now.getMinutes()).padStart(2,"0");
-    var s=String(now.getSeconds()).padStart(2,"0");
     var clk=document.getElementById("splash-clock");
-    if(clk) clk.textContent=h+":"+m+":"+s;
+    if(clk){
+      clk.textContent=formatClockTime(now);
+      clk.style.fontFamily=clockFontFamily();
+      clk.style.fontWeight=clockFontWeight();
+      var sc=clockStyleCSS();
+      clk.style.letterSpacing=sc.letterSpacing||"6px";
+      clk.style.opacity=sc.opacity||"0.95";
+    }
+    // Update preview if panel open
+    var prev=document.getElementById("clock-preview-time");
+    if(prev){
+      prev.textContent=formatClockTime(now);
+      prev.style.fontFamily=clockFontFamily();
+      prev.style.fontWeight=clockFontWeight();
+      var sc2=clockStyleCSS();
+      prev.style.letterSpacing=sc2.letterSpacing||"6px";
+      prev.style.opacity=sc2.opacity||"0.95";
+    }
+    // Landscape mode
+    var splash=document.getElementById("splash");
+    if(splash){
+      if(clockLandscape&&window.innerWidth>window.innerHeight) splash.classList.add("landscape-clock-mode");
+      else splash.classList.remove("landscape-clock-mode");
+    }
   }
   tickClock();
   var _clockInterval=setInterval(tickClock,1000);
@@ -3531,6 +3821,48 @@ applyHeaderOffset();
 // Re-run after navigateTo since sub-nav may show/hide
 const _origNav=window.navigateTo;
 window.navigateTo=function(v,o){_origNav(v,o);setTimeout(applyHeaderOffset,50);};
+
+// ── CLOCK SETTINGS PANEL ──────────────────────────────────────────────────────
+function renderClockPanel(){
+  var fontGrid=document.getElementById("clock-font-grid");
+  if(fontGrid){
+    fontGrid.innerHTML=Object.entries(CLOCK_FONTS).map(function(e){
+      var key=e[0],val=e[1],active=clockFont===key;
+      return '<button data-cp-font="'+key+'" style="padding:12px 6px;border-radius:10px;border:1px solid '+(active?"rgba(255,255,255,0.6)":"rgba(255,255,255,0.08)")+';background:'+(active?"rgba(255,255,255,0.1)":"rgba(255,255,255,0.02)")+';cursor:pointer;text-align:center;transition:all 0.2s">'+
+        '<div style="font-size:22px;font-weight:'+val.weight+';color:'+(active?"rgba(255,255,255,0.95)":"rgba(255,255,255,0.35)")+';font-family:'+val.family+';letter-spacing:2px;margin-bottom:4px">12:00</div>'+
+        '<div style="font-size:7px;color:rgba(255,255,255,0.3);letter-spacing:1.5px;text-transform:uppercase">'+key+'</div></button>';
+    }).join("");
+  }
+  var styleGrid=document.getElementById("clock-style-grid");
+  if(styleGrid){
+    var styleLabels={default:"Default",thin:"Thin",spaced:"Wide",minimal:"Minimal",digital:"Tabular"};
+    styleGrid.innerHTML=Object.entries(CLOCK_STYLE_CSS).map(function(e){
+      var key=e[0],val=e[1],active=clockStyle===key;
+      return '<button data-cp-style="'+key+'" style="padding:12px;border-radius:10px;border:1px solid '+(active?"rgba(255,255,255,0.6)":"rgba(255,255,255,0.08)")+';background:'+(active?"rgba(255,255,255,0.1)":"rgba(255,255,255,0.02)")+';cursor:pointer;text-align:center;transition:all 0.2s">'+
+        '<div style="font-size:20px;font-weight:'+clockFontWeight()+';color:'+(active?"rgba(255,255,255,0.9)":"rgba(255,255,255,0.3)")+';font-family:'+clockFontFamily()+';letter-spacing:'+(val.letterSpacing||"6px")+';opacity:'+(val.opacity||0.9)+';margin-bottom:4px">12:00</div>'+
+        '<div style="font-size:7px;color:rgba(255,255,255,0.3);letter-spacing:1.5px;text-transform:uppercase">'+styleLabels[key]+"</div></button>";
+    }).join("");
+  }
+  document.querySelectorAll("[data-clock-fmt]").forEach(function(b){b.classList.toggle("active",b.dataset.clockFmt===clockFormat);});
+  var secB=document.querySelector("[data-clock-sec]"); if(secB) secB.classList.toggle("active",clockSeconds);
+  var lsB=document.querySelector("[data-clock-landscape]"); if(lsB) lsB.classList.toggle("active",clockLandscape);
+}
+function openClockPanel(){ var p=document.getElementById("clock-settings-panel"); if(!p) return; renderClockPanel(); p.style.display="block"; }
+function closeClockPanel(){ var p=document.getElementById("clock-settings-panel"); if(p) p.style.display="none"; }
+
+document.getElementById("clock-settings-btn").addEventListener("click",function(e){ e.stopPropagation(); openClockPanel(); });
+document.getElementById("clock-settings-close").addEventListener("click",closeClockPanel);
+document.getElementById("clock-settings-panel").addEventListener("click",function(e){
+  var t=e.target;
+  var cfB=t.closest("[data-cp-font]"); if(cfB){ clockFont=cfB.dataset.cpFont; sv("rm_clock_font",clockFont); renderClockPanel(); tickClock(); return; }
+  var csB=t.closest("[data-cp-style]"); if(csB){ clockStyle=csB.dataset.cpStyle; sv("rm_clock_style",clockStyle); renderClockPanel(); tickClock(); return; }
+  if(t.dataset.clockFmt){ clockFormat=t.dataset.clockFmt; sv("rm_clock_format",clockFormat); renderClockPanel(); tickClock(); return; }
+  if(t.dataset.clockSec){ clockSeconds=!clockSeconds; sv("rm_clock_seconds",clockSeconds); renderClockPanel(); tickClock(); return; }
+  if(t.dataset.clockLandscape){ clockLandscape=!clockLandscape; sv("rm_clock_landscape",clockLandscape); renderClockPanel(); tickClock(); return; }
+  if(t.id==="clock-settings-panel") closeClockPanel();
+});
+window.addEventListener("orientationchange",function(){ setTimeout(tickClock,100); });
+window.addEventListener("resize",function(){ var s=document.getElementById("splash"); if(s&&s.style.display!=="none") tickClock(); });
 
 document.getElementById("splash-btn").addEventListener("click",function(){
   dismiss();
