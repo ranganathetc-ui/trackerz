@@ -6,7 +6,7 @@
 <title>Recovery Mode Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@200;300&family=DM+Serif+Display:ital@0;1&family=Bodoni+Moda:opsz,wght@6..96,200;300&family=Playfair+Display:wght@300;400&family=EB+Garamond:wght@400&family=Libre+Baskerville:wght@400&family=Cinzel:wght@300;400&family=Josefin+Sans:wght@100;200;300&family=Outfit:wght@100;200;300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@200;300&family=Bodoni+Moda:opsz,wght@6..96,200&family=Cinzel:wght@300&family=Josefin+Sans:wght@100&family=Rajdhani:wght@300&family=Orbitron:wght@400;500&family=Share+Tech+Mono&family=Syne:wght@200&family=Unbounded:wght@200&family=Italiana&family=Poiret+One&family=Exo+2:wght@100;200&family=Saira+Condensed:wght@200;300&display=swap" rel="stylesheet">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
   :root{--bg:#0d0d0d;--bg2:rgba(255,255,255,0.03);--bg3:rgba(255,255,255,0.06);--bg4:rgba(255,255,255,0.09);--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--text:#f0f0f0;--text2:rgba(255,255,255,0.35);--text3:rgba(255,255,255,0.2);--green:#4ade80;--yellow:#fbbf24;--red:#f87171;--radius:14px;--bg-card:#111111;--bg-cell:#141414;--bg-lift:#1a1a1a;}
@@ -24,9 +24,32 @@
   .splash-logo{margin-bottom:28px;}
   .splash-clock{font-size:54px;font-weight:300;letter-spacing:6px;color:var(--text);line-height:1;margin-bottom:10px;text-align:center;opacity:0.95;transition:font-family 0.3s ease,letter-spacing 0.3s ease,font-weight 0.3s ease;}
   #clock-settings-btn{color:var(--text);}
+  #splash-clock-wrap{transition:all 0.4s ease;width:100%;max-width:100%;box-sizing:border-box;overflow:hidden;}
+  /* Ring face */
+  #splash-clock-wrap.face-ring::before{content:'';position:absolute;width:140px;height:140px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+  #splash-clock-wrap.face-ring::after{content:'';position:absolute;width:160px;height:160px;border-radius:50%;border:1px solid rgba(255,255,255,0.05);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+  #splash-clock-wrap.face-ring .splash-clock{font-size:44px;letter-spacing:4px;}
+  /* Rectangle face */
+  #splash-clock-wrap.face-rectangle{border:1px solid rgba(255,255,255,0.15);padding:16px 28px;border-radius:4px;}
+  /* Digital face */
+  #splash-clock-wrap.face-digital{background:rgba(0,255,120,0.04);border:1px solid rgba(0,255,120,0.15);padding:12px 24px;border-radius:6px;}
+  #splash-clock-wrap.face-digital .splash-clock{color:#00ff78!important;font-family:'Share Tech Mono',monospace!important;font-weight:400!important;letter-spacing:6px;text-shadow:0 0 12px rgba(0,255,120,0.5);}
+  /* Arc face */
+  #splash-clock-wrap.face-arc{padding-top:16px;}
+  #splash-clock-wrap.face-arc::before{content:'';position:absolute;width:200px;height:100px;border-radius:100px 100px 0 0;border:1px solid rgba(255,255,255,0.12);border-bottom:none;top:0;left:50%;transform:translateX(-50%);pointer-events:none;}
+  /* Pill face */
+  #splash-clock-wrap.face-pill{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);padding:14px 36px;border-radius:60px;}
+  /* Split face */
+  #splash-clock-wrap.face-split .splash-clock{letter-spacing:0;font-size:48px;}
+  /* Neon face */
+  #splash-clock-wrap.face-neon{border:1px solid rgba(255,255,255,0.3);padding:12px 28px;border-radius:8px;box-shadow:0 0 20px rgba(255,255,255,0.08),inset 0 0 20px rgba(255,255,255,0.02);}
+  #splash-clock-wrap.face-neon .splash-clock{text-shadow:0 0 16px rgba(255,255,255,0.4);}
+  /* Font dropdown */
+  #clock-font-dropdown{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);padding:10px 14px;font-size:13px;border-radius:10px;font-family:inherit;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+  #clock-font-dropdown option{background:#1a1a1a;color:#e0e0e0;}
   .clock-opt-btn{border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.5);cursor:pointer;font-family:inherit;text-transform:uppercase;letter-spacing:1px;transition:all 0.2s;}
-  .clock-opt-btn.active{border-color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.95);}
-  #clock-settings-panel{color:rgba(255,255,255,0.9);}
+  .clock-opt-btn.active{border-color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.1);color:var(--text);}
+  #clock-settings-panel{color:var(--text);}
   /* Landscape fullscreen clock */
   @media (orientation:landscape){
     #splash.landscape-clock-mode .splash-top{flex:1;display:flex;align-items:center;justify-content:center;}
@@ -285,14 +308,14 @@
     margin-bottom:16px;line-height:1;
   }
   #cp-sub{
-    font-size:12px;color:rgba(255,255,255,0.7);
+    font-size:12px;color:var(--text2);
     line-height:2;letter-spacing:2px;
     text-transform:uppercase;margin-bottom:60px;
   }
   #cp-dismiss{
     background:rgba(255,255,255,0.12);
     border:1px solid rgba(255,255,255,0.25);
-    color:rgba(255,255,255,0.9);
+    color:var(--text);
     padding:16px 48px;font-size:11px;letter-spacing:3px;
     border-radius:40px;cursor:pointer;
     font-family:inherit;text-transform:uppercase;
@@ -322,7 +345,9 @@
         </svg>
         <div style="position:absolute;inset:0;border-radius:50%;animation:logo-glow 2.4s ease-in-out infinite;pointer-events:none;"></div>
       </div>
-      <div class="splash-clock" id="splash-clock">00:00</div>
+      <div id="splash-clock-wrap" style="position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:10px;min-height:80px;">
+        <div class="splash-clock" id="splash-clock">00:00</div>
+      </div>
       <div class="splash-day" id="splash-day"></div>
       <div class="splash-date" id="splash-date"></div>
     </div>
@@ -359,16 +384,43 @@
         <div id="clock-preview-time" style="font-size:64px;line-height:1;color:rgba(255,255,255,0.9)">12:00</div>
       </div>
 
-      <!-- Font -->
+      <!-- Font dropdown -->
       <div style="margin-bottom:24px">
-        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px">Typeface</div>
-        <div id="clock-font-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"></div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px">Typeface</div>
+        <select id="clock-font-dropdown">
+          <optgroup label="Luxury Serif">
+            <option value="cormorant">Cormorant Garamond — Hairline thin serif</option>
+            <option value="cinzel">Cinzel — Roman inscribed caps</option>
+            <option value="italiana">Italiana — Tall elegant italic</option>
+          </optgroup>
+          <optgroup label="Geometric Sans">
+            <option value="josefin">Josefin Sans — Ultra thin geometric</option>
+            <option value="syne">Syne — Wide modern grotesque</option>
+            <option value="poiret">Poiret One — Art deco rounded</option>
+            <option value="unbounded">Unbounded — Extended futuristic</option>
+          </optgroup>
+          <optgroup label="Technical">
+            <option value="exo">Exo 2 — Sci-fi ultra thin</option>
+            <option value="rajdhani">Rajdhani — Structured condensed</option>
+          </optgroup>
+          <optgroup label="Monospace / Digital">
+            <option value="sharetech">Share Tech Mono — Terminal fixed-width</option>
+            <option value="orbitron">Orbitron — Sci-fi display</option>
+          </optgroup>
+        </select>
+        <div id="clock-font-preview" style="margin-top:10px;text-align:center;font-size:28px;letter-spacing:4px;color:rgba(255,255,255,0.5);transition:all 0.3s">12:00</div>
       </div>
 
       <!-- Style -->
       <div style="margin-bottom:24px">
-        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px">Style</div>
-        <div id="clock-style-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px">Letter Style</div>
+        <div id="clock-style-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"></div>
+      </div>
+
+      <!-- Face / Shape -->
+      <div style="margin-bottom:24px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px">Clock Face</div>
+        <div id="clock-face-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
       </div>
 
       <!-- Format -->
@@ -486,7 +538,7 @@ const THEMES = {
   tokyonight:{name:"Tokyo Night",desc:"VS Code cult favourite",bgCard:"#1a1b2e",bgCell:"#1f2040",bgLift:"#252645",bg:"#13141f",nav:"rgba(19,20,31,0.96)",navBorder:"rgba(122,162,247,0.12)",glass:"rgba(122,162,247,0.05)",glassBorder:"rgba(122,162,247,0.13)",bg2:"rgba(122,162,247,0.04)",text:"#c0caf5",text2:"rgba(169,177,214,0.55)",text3:"rgba(169,177,214,0.3)",accent:"#7aa2f7",accentGlow:"rgba(122,162,247,0.38)",preview:["#13141f","#1f2040","#7aa2f7"]},
   rosepine:{name:"Rosé Pine",desc:"Neovim & Notion darling",bgCard:"#1f1d2e",bgCell:"#26233a",bgLift:"#2d2a3e",bg:"#191724",nav:"rgba(25,23,36,0.96)",navBorder:"rgba(235,188,186,0.1)",glass:"rgba(235,188,186,0.05)",glassBorder:"rgba(235,188,186,0.12)",bg2:"rgba(235,188,186,0.04)",text:"#e0def4",text2:"rgba(224,222,244,0.45)",text3:"rgba(224,222,244,0.25)",accent:"#eb6f92",accentGlow:"rgba(235,111,146,0.38)",preview:["#191724","#26233a","#eb6f92"]},
   githubdark:{name:"GitHub Dark",desc:"The developer's default",bgCard:"#161b22",bgCell:"#1c2128",bgLift:"#21262d",bg:"#0d1117",nav:"rgba(13,17,23,0.96)",navBorder:"rgba(48,54,61,0.8)",glass:"rgba(240,246,252,0.04)",glassBorder:"rgba(48,54,61,0.6)",bg2:"rgba(240,246,252,0.03)",text:"#e6edf3",text2:"rgba(230,237,243,0.45)",text3:"rgba(230,237,243,0.25)",accent:"#58a6ff",accentGlow:"rgba(88,166,255,0.35)",preview:["#0d1117","#21262d","#58a6ff"]},
-  abyss:{name:"Abyss",desc:"Pitch black, white accent",bgCard:"#080808",bgCell:"#0a0a0a",bgLift:"#111111",bg:"#000000",nav:"rgba(0,0,0,0.97)",navBorder:"rgba(255,255,255,0.06)",glass:"rgba(255,255,255,0.03)",glassBorder:"rgba(255,255,255,0.07)",bg2:"rgba(255,255,255,0.025)",text:"#ffffff",text2:"rgba(255,255,255,0.45)",text3:"rgba(255,255,255,0.22)",accent:"#ffffff",accentGlow:"rgba(255,255,255,0.2)",preview:["#000000","#111111","#ffffff"]},
+  abyss:{name:"Abyss",desc:"Pitch black, white accent",bgCard:"#080808",bgCell:"#0a0a0a",bgLift:"#111111",bg:"#000000",nav:"rgba(0,0,0,0.97)",navBorder:"rgba(255,255,255,0.06)",glass:"rgba(255,255,255,0.03)",glassBorder:"rgba(255,255,255,0.07)",bg2:"rgba(255,255,255,0.025)",text:"#ffffff",text2:"rgba(255,255,255,0.45)",text3:"rgba(255,255,255,0.22)",accent:"#ffffff",accentGlow:"var(--glass-border)",preview:["#000000","#111111","#ffffff"]},
   bluemoon:{name:"Blue Moon",desc:"Midnight black, electric blue",bgCard:"#06090f",bgCell:"#080c14",bgLift:"#0b1020",bg:"#020408",nav:"rgba(2,4,8,0.97)",navBorder:"rgba(56,139,253,0.15)",glass:"rgba(56,139,253,0.06)",glassBorder:"rgba(56,139,253,0.16)",bg2:"rgba(56,139,253,0.04)",text:"#e8f0ff",text2:"rgba(200,220,255,0.48)",text3:"rgba(200,220,255,0.26)",accent:"#388bfd",accentGlow:"rgba(56,139,253,0.45)",preview:["#020408","#0b1020","#388bfd"]},
   gridpaper:{name:"Grid Paper",desc:"Notebook texture, black ink",bgCard:"#f5f5f0",bgCell:"#eeeeea",bgLift:"#e8e8e4",bg:"#fafaf7",bgImage:"linear-gradient(rgba(0,0,0,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.07) 1px,transparent 1px)",bgSize:"24px 24px",nav:"rgba(250,250,247,0.96)",navBorder:"rgba(0,0,0,0.1)",glass:"rgba(0,0,0,0.04)",glassBorder:"rgba(0,0,0,0.11)",bg2:"rgba(0,0,0,0.05)",text:"#0a0a0a",text2:"rgba(0,0,0,0.55)",text3:"rgba(0,0,0,0.38)",accent:"#111111",accentGlow:"rgba(0,0,0,0.15)",preview:["#fafaf7","#e8e8e4","#111111"]},
   darkgrid:{name:"Dark Grid",desc:"Graphite paper texture",bgCard:"#1e1e1e",bgCell:"#242424",bgLift:"#2a2a2a",bg:"#181818",bgImage:"linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px)",bgSize:"24px 24px",nav:"rgba(24,24,24,0.95)",navBorder:"rgba(255,255,255,0.07)",glass:"rgba(255,255,255,0.03)",glassBorder:"rgba(255,255,255,0.08)",bg2:"rgba(255,255,255,0.03)",text:"#e8e8e8",text2:"rgba(232,232,232,0.42)",text3:"rgba(232,232,232,0.24)",accent:"#d4d4d4",accentGlow:"rgba(212,212,212,0.18)",preview:["#181818","#2a2a2a","#d4d4d4"]},
@@ -715,19 +767,15 @@ let appName=ld("rm_appname","Recovery Mode");
 let macros=ld("rm_macros",[]);
 let groups=ld("rm_groups",[]); // [{id,name,order}]
 let collapsedGroups={}; // session-only: {groupId: true}
-let weekStartsMonday=ld("rm_week_start",false);
 let compactMode=ld("rm_compact",false);
-let scoreFormat=ld("rm_score_fmt","pct"); // "pct" or "fraction"
-let showWeekNumbers=ld("rm_week_nums",false);
 let autoCollapseGroups=ld("rm_auto_collapse",false);
-let dailyIntention=ld("rm_intention","");
-let reminderTime=ld("rm_reminder_time","");
-let reminderEnabled=ld("rm_reminder_on",false);
+
 let clockFont=ld("rm_clock_font","cormorant");
-let clockStyle=ld("rm_clock_style","default"); // default|thin|spaced|minimal|digital
-let clockFormat=ld("rm_clock_format","12"); // 12|24
-let clockSeconds=ld("rm_clock_seconds",false); // show seconds
-let clockLandscape=ld("rm_clock_landscape",false); // landscape fullscreen mode
+let clockStyle=ld("rm_clock_style","default");
+let clockFace=(function(){var f=ld("rm_clock_face","plain");return ['plain','analog','neon','outline','fade','stacked'].indexOf(f)>=0?f:'plain';})();
+let clockFormat=ld("rm_clock_format","12");
+let clockSeconds=ld("rm_clock_seconds",false);
+let clockLandscape=ld("rm_clock_landscape",false);
 let trackingSince=ld("rm_tracking_since","");
 let editMode = false;
 let editId = null;
@@ -777,7 +825,7 @@ function visibleTasksForDay(log, dayKey){
     return tasks.filter(t=>!hidden.includes(t.id)&&(!t.createdAt||t.createdAt<=key)&&(!t.deletedAt||t.deletedAt>key));
   }
 }
-function persist(){sv("rm_tasks",tasks);sv("rm_logs",logs);sv("rm_username",userName);sv("rm_macros",macros);sv("rm_appname",appName);sv("rm_groups",groups);sv("rm_week_start",weekStartsMonday);sv("rm_compact",compactMode);sv("rm_score_fmt",scoreFormat);sv("rm_week_nums",showWeekNumbers);sv("rm_auto_collapse",autoCollapseGroups);sv("rm_intention",dailyIntention);sv("rm_reminder_time",reminderTime);sv("rm_reminder_on",reminderEnabled);sv("rm_tracking_since",trackingSince);sv("rm_clock_font",clockFont);sv("rm_clock_style",clockStyle);sv("rm_clock_format",clockFormat);sv("rm_clock_seconds",clockSeconds);sv("rm_clock_landscape",clockLandscape);}
+function persist(){sv("rm_tasks",tasks);sv("rm_logs",logs);sv("rm_username",userName);sv("rm_macros",macros);sv("rm_appname",appName);sv("rm_groups",groups);sv("rm_compact",compactMode);sv("rm_auto_collapse",autoCollapseGroups);sv("rm_tracking_since",trackingSince);sv("rm_clock_font",clockFont);sv("rm_clock_style",clockStyle);sv("rm_clock_face",clockFace);sv("rm_clock_format",clockFormat);sv("rm_clock_seconds",clockSeconds);sv("rm_clock_landscape",clockLandscape);}
 
 // Set tracking since date on first ever use
 if(!trackingSince){ trackingSince=getTodayKey(); persist(); }
@@ -785,23 +833,43 @@ if(!trackingSince){ trackingSince=getTodayKey(); persist(); }
 if(compactMode) document.body.classList.add("compact");
 
 const CLOCK_FONTS={
-  cormorant:{family:"'Cormorant Garamond',Georgia,serif",weight:"200"},
-  bodoni:{family:"'Bodoni Moda',Georgia,serif",weight:"200"},
-  playfair:{family:"'Playfair Display',Georgia,serif",weight:"300"},
-  dm:{family:"'DM Serif Display',Georgia,serif",weight:"400"},
-  cinzel:{family:"'Cinzel',Georgia,serif",weight:"300"},
-  garamond:{family:"'EB Garamond',Georgia,serif",weight:"400"},
-  josefin:{family:"'Josefin Sans',sans-serif",weight:"100"},
-  outfit:{family:"'Outfit',sans-serif",weight:"100"},
-  system:{family:"'Inter','Helvetica Neue',sans-serif",weight:"200"}
+  // ── Luxury Serifs — each visually distinct ─────────────────────────
+  cormorant:{family:"'Cormorant Garamond',serif",weight:"200",label:"Cormorant — Thin hairline serif"},
+  cinzel:{family:"'Cinzel',serif",weight:"300",label:"Cinzel — Roman inscribed caps"},
+  italiana:{family:"'Italiana',serif",weight:"400",label:"Italiana — Tall elegant italic"},
+  // ── Geometric Sans ─────────────────────────────────────────────────
+  josefin:{family:"'Josefin Sans',sans-serif",weight:"100",label:"Josefin — Ultra-thin geometric"},
+  syne:{family:"'Syne',sans-serif",weight:"200",label:"Syne — Wide modern grotesque"},
+  poiret:{family:"'Poiret One',sans-serif",weight:"400",label:"Poiret — Art deco rounded"},
+  unbounded:{family:"'Unbounded',sans-serif",weight:"200",label:"Unbounded — Extended futuristic"},
+  // ── Technical / Condensed ──────────────────────────────────────────
+  exo:{family:"'Exo 2',sans-serif",weight:"100",label:"Exo 2 — Sci-fi ultra-thin"},
+  rajdhani:{family:"'Rajdhani',sans-serif",weight:"300",label:"Rajdhani — Structured condensed"},
+  // ── Monospace / Digital ────────────────────────────────────────────
+  sharetech:{family:"'Share Tech Mono',monospace",weight:"400",label:"Mono — Terminal fixed-width"},
+  orbitron:{family:"'Orbitron',sans-serif",weight:"400",label:"Orbitron — Sci-fi display"},
 };
+// Clock visual STYLES — these are CSS applied to the text display
 const CLOCK_STYLE_CSS={
   default:{letterSpacing:"6px",opacity:"0.95"},
-  thin:{letterSpacing:"12px",opacity:"0.7"},
-  spaced:{letterSpacing:"20px",opacity:"0.85"},
-  minimal:{letterSpacing:"2px",opacity:"0.6"},
-  digital:{letterSpacing:"4px",opacity:"0.9",fontVariantNumeric:"tabular-nums"}
+  thin:{letterSpacing:"14px",opacity:"0.65"},
+  wide:{letterSpacing:"24px",opacity:"0.8"},
+  minimal:{letterSpacing:"1px",opacity:"0.5"},
+  tabular:{letterSpacing:"4px",opacity:"0.9",fontVariantNumeric:"tabular-nums"},
 };
+
+// Clock FACE types — each renders a distinct visual clock style
+const CLOCK_FACES={
+  plain:   {label:"Plain",     desc:"Clean floating text"},
+  analog:  {label:"Analog",   desc:"Minimal hand clock"},
+  neon:    {label:"Neon",      desc:"Glowing outline"},
+  outline: {label:"Outline",   desc:"Letterpress engraved"},
+  fade:    {label:"Fade",      desc:"Large ghosted type"},
+  stacked: {label:"Stacked",   desc:"Hours over minutes"},
+};
+
+// Renders the analog/ring/wall face as an SVG overlay
+// clockFontFamily/Weight/StyleCSS — used by older paths, kept for compat
 function clockFontFamily(){ return (CLOCK_FONTS[clockFont]||CLOCK_FONTS.cormorant).family; }
 function clockFontWeight(){ return (CLOCK_FONTS[clockFont]||CLOCK_FONTS.cormorant).weight; }
 function clockStyleCSS(){ return CLOCK_STYLE_CSS[clockStyle]||CLOCK_STYLE_CSS.default; }
@@ -814,7 +882,12 @@ function formatClockTime(now){
   return clockSeconds? hStr+":"+mStr+":"+sStr : hStr+":"+mStr;
 }
 
-function haptic(){} // removed
+// ── HAPTIC ENGINE ─────────────────────────────────────────────────────────────
+var hapticEnabled=ld("rm_haptic",true);
+var _isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+var _hapticAudio=null;
+function _iosHaptic(type){try{if(!_hapticAudio)_hapticAudio=new(window.AudioContext||window.webkitAudioContext)();var ctx2=_hapticAudio;if(ctx2.state==="suspended")ctx2.resume();var clicks=type==="heavy"?3:type==="medium"||type==="success"||type==="warning"?2:1;var gap=type==="success"?0.04:type==="warning"?0.05:0.02;for(var i2=0;i2<clicks;i2++){var osc=ctx2.createOscillator();var gain=ctx2.createGain();osc.connect(gain);gain.connect(ctx2.destination);var freq=type==="heavy"?80:type==="light"?180:120;osc.type="sine";osc.frequency.value=freq;gain.gain.setValueAtTime(0.0001,ctx2.currentTime+i2*gap);gain.gain.linearRampToValueAtTime(0.00001,ctx2.currentTime+i2*gap+0.012);osc.start(ctx2.currentTime+i2*gap);osc.stop(ctx2.currentTime+i2*gap+0.015);}}catch(e){}}
+function haptic(type){if(!hapticEnabled)return;if(_isIOS){_iosHaptic(type);return;}if(!navigator.vibrate)return;if(type==="light")navigator.vibrate(8);else if(type==="medium")navigator.vibrate(15);else if(type==="heavy")navigator.vibrate([20,10,20]);else if(type==="success")navigator.vibrate([8,50,12]);else if(type==="warning")navigator.vibrate([12,30,20,30,12]);else navigator.vibrate(10);}
 
 
 // ── COMPLETION CELEBRATION ────────────────────────────────────────────────────
@@ -1196,7 +1269,7 @@ function getPieData(){
 }
 
 function destroyChart(id){ if(chartInstances[id]){ chartInstances[id].destroy(); delete chartInstances[id]; } }
-function destroyAllCharts(){ ["bar","pie","tasks","radar","hist","dow"].forEach(destroyChart); }
+function destroyAllCharts(){ ["bar","pie","tasks","radar","hist","dow","hdow","hmom","hhist","momentum"].forEach(destroyChart); }
 
 function reportTitle(){const d=getReportData();return(d&&d.title)||getToday().getFullYear()+"";}
 
@@ -1288,6 +1361,21 @@ function renderAnalytics(){
         <div class="chart-title">Best Day of Week</div>
         <canvas id="dow-chart" height="120"></canvas>
       </div>`:''}
+      <!-- Momentum Flow -->
+      ${(reportPeriod==="month"||reportPeriod==="year")?`<div class="chart-wrap">
+        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Momentum Flow</span><span style="font-size:8px;font-weight:400;opacity:0.45;letter-spacing:0">Rolling avg \u00b7 gradient fill</span></div>
+        <canvas id="momentum-chart" height="130"></canvas>
+      </div>`:''}
+      <!-- Consistency Rings -->
+      ${(reportPeriod==="month"||reportPeriod==="year")?`<div class="chart-wrap">
+        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Consistency Rings</span><span style="font-size:8px;font-weight:400;opacity:0.45;letter-spacing:0">${reportPeriod==="month"?"Per week":"Per month"}</span></div>
+        <div id="rings-canvas-wrap" style="overflow-x:auto;overflow-y:hidden;padding-bottom:4px"></div>
+      </div>`:''}
+      <!-- Streak Density -->
+      ${(reportPeriod==="month"||reportPeriod==="year")?`<div class="chart-wrap">
+        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Streak Density</span><span style="font-size:8px;font-weight:400;opacity:0.45;letter-spacing:0">Run lengths \u00b7 day by day</span></div>
+        <div id="streak-density-wrap" style="width:100%;overflow:hidden;border-radius:6px"></div>
+      </div>`:''}
       <!-- Summary -->
       <div class="chart-wrap">
         <div class="chart-title">Summary</div>
@@ -1302,62 +1390,197 @@ function renderAnalytics(){
   if(reportPeriod==="heat"){
     const wrap=document.getElementById("heat-wrap");
     const todayK=getTodayKey();
-    // build 53 weeks × 7 days grid going back from today
     const today=new Date(getToday());
-    // start from Sunday of the week 52 weeks ago
-    const start=new Date(today);
-    start.setDate(today.getDate()-today.getDay()-52*7);
-    const cells=[];
-    for(let i=0;i<53*7;i++){
-      const d=new Date(start);
-      d.setDate(start.getDate()+i);
-      cells.push(d);
-    }
-    // get year options
-    const years=[...new Set(Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)).map(k=>k.slice(0,4)))].sort();
-    if(!years.includes(getTodayKey().slice(0,4))) years.push(getTodayKey().slice(0,4));
 
     // stat cards
-    const allScored=Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)&&k<=todayK&&scoreOf(logs[k],k)>0);
+    const allKeys=Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)&&k<=todayK);
+    const allScored=allKeys.filter(k=>scoreOf(logs[k],k)>0);
     const allAvg=allScored.length?Math.round(allScored.reduce((a,k)=>a+scoreOf(logs[k],k),0)/allScored.length):0;
     const {cur:hCur,best:hBest}=calcStreak();
-    const consistency=Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)&&k<=todayK).length;
-    const totalDays=Math.max(1,Math.floor((getToday()-new Date(trackingSince||todayK))/(1000*60*60*24))+1);
+    const totalLogged=allScored.length;
+    const totalDaysTracked=Math.max(1,Math.floor((getToday()-new Date(trackingSince||todayK))/(1000*60*60*24))+1);
+    const logRate=Math.round(totalLogged/totalDaysTracked*100);
+
+    // ── Year switcher ────────────────────────────────────────────────────────
+    if(typeof window._heatYear==="undefined") window._heatYear=today.getFullYear();
+    const heatYear=window._heatYear;
+    const isCurrentYear=heatYear===today.getFullYear();
+
+    // ── Vertical grid: 12 month rows × 31 day columns ────────────────────────
+    const C=Math.max(9,Math.min(13,Math.floor((window.innerWidth-60)/33)));
+    const GAP=2;
+
+    let monthRows='';
+    for(let mo=0;mo<12;mo++){
+      const daysInMonth=new Date(heatYear,mo+1,0).getDate();
+      let dayCells='';
+      for(let d=1;d<=daysInMonth;d++){
+        const date=new Date(heatYear,mo,d);
+        const k=toKey(date);
+        const future=k>todayK;
+        const sc=future?null:scoreOf(logs[k],k);
+        const bg=future?'var(--glass)':sc===null||sc===0?'var(--bg2)':sc>=80?'#4ade80':sc>=50?'#facc15':'#f87171';
+        const op=future?0.15:sc===0?0.25:1;
+        dayCells+=`<div data-k="${k}" style="width:${C}px;height:${C}px;border-radius:2px;background:${bg};opacity:${op};flex-shrink:0;cursor:${future||sc===null?'default':'pointer'}"></div>`;
+      }
+      for(let p=daysInMonth;p<31;p++) dayCells+=`<div style="width:${C}px;height:${C}px;flex-shrink:0"></div>`;
+      monthRows+=`<div style="display:flex;align-items:center;gap:${GAP}px;margin-bottom:${GAP}px">
+        <div style="font-size:8px;color:var(--text3);width:28px;flex-shrink:0;text-align:right;padding-right:6px">${MONTHS[mo].slice(0,3).toUpperCase()}</div>
+        <div style="display:flex;gap:${GAP}px">${dayCells}</div>
+      </div>`;
+    }
+
+    let dayHeader='<div style="display:flex;align-items:center;gap:'+GAP+'px;margin-bottom:5px"><div style="width:28px;flex-shrink:0"></div><div style="display:flex;gap:'+GAP+'px">';
+    for(let d=1;d<=31;d++){
+      dayHeader+=`<div style="width:${C}px;font-size:6px;color:var(--text3);text-align:center;flex-shrink:0;opacity:${d%5===0||d===1?0.7:0}">${d%5===0||d===1?d:''}</div>`;
+    }
+    dayHeader+='</div></div>';
 
     wrap.innerHTML=`
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px">
         <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;text-align:center">
           <div style="font-size:20px;font-weight:600;color:var(--accent)">${hCur}</div>
-          <div style="font-size:8px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Cur streak</div>
+          <div style="font-size:7px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Streak</div>
         </div>
         <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;text-align:center">
           <div style="font-size:20px;font-weight:600;color:var(--accent)">${hBest}</div>
-          <div style="font-size:8px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Best streak</div>
+          <div style="font-size:7px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Best</div>
         </div>
         <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;text-align:center">
           <div style="font-size:20px;font-weight:600;color:${clr(allAvg)}">${allAvg}%</div>
-          <div style="font-size:8px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">All-time avg</div>
+          <div style="font-size:7px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Avg</div>
+        </div>
+        <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;text-align:center">
+          <div style="font-size:20px;font-weight:600;color:${clr(logRate)}">${logRate}%</div>
+          <div style="font-size:7px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Log rate</div>
         </div>
       </div>
-      <div style="font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Last 12 Months</div>
-      <div style="overflow-x:auto;padding-bottom:6px">
-        <div style="display:grid;grid-template-columns:repeat(53,1fr);gap:2px;min-width:480px">
-          ${cells.map(d=>{
-            const k=toKey(d);
-            const future=k>todayK;
-            const sc=future?null:scoreOf(logs[k],k);
-            const col=future?'var(--glass)':sc===0?'var(--bg-cell)':sc>=80?'#4ade8088':sc>=50?'#facc1588':'#f8717188';
-            const border=future?'var(--glass-border)':sc===0?'var(--glass-border)':sc>=80?'#4ade80':sc>=50?'#facc15':'#f87171';
-            return `<div title="${k}${sc!==null?' — '+sc+'%':''}" style="aspect-ratio:1;border-radius:2px;background:${col};border:1px solid ${border};opacity:${future?0.2:1}"></div>`;
-          }).join('')}
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase">Activity ${heatYear}</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button id="heat-year-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text3);padding:3px 12px;border-radius:4px;cursor:pointer;font-size:13px">‹</button>
+          <button id="heat-year-next" style="background:none;border:1px solid var(--glass-border);color:${isCurrentYear?'var(--glass-border)':'var(--text3)'};padding:3px 12px;border-radius:4px;cursor:pointer;font-size:13px;pointer-events:${isCurrentYear?'none':'auto'}">›</button>
         </div>
       </div>
-      <div style="display:flex;gap:6px;align-items:center;margin-top:8px;justify-content:flex-end">
-        <span style="font-size:8px;color:var(--text3)">Less</span>
-        ${['var(--bg-cell)','#f8717144','#facc1544','#4ade8044'].map(c=>`<div style="width:10px;height:10px;border-radius:2px;background:${c};border:1px solid var(--glass-border)"></div>`).join('')}
-        <span style="font-size:8px;color:var(--text3)">More</span>
+
+      <div id="heat-grid">
+        ${dayHeader}
+        ${monthRows}
+      </div>
+
+      <div style="display:flex;gap:6px;align-items:center;margin-top:10px;justify-content:flex-end">
+        <span style="font-size:8px;color:var(--text3)">None</span>
+        <div style="width:10px;height:10px;border-radius:2px;background:var(--bg2);border:1px solid var(--glass-border)"></div>
+        <div style="width:10px;height:10px;border-radius:2px;background:#f87171"></div>
+        <div style="width:10px;height:10px;border-radius:2px;background:#facc15"></div>
+        <div style="width:10px;height:10px;border-radius:2px;background:#4ade80"></div>
+        <span style="font-size:8px;color:var(--text3)">100%</span>
+      </div>
+
+      <div style="margin-top:20px">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">Day of Week Strength</div>
+        <canvas id="heat-dow-chart" height="140"></canvas>
+      </div>
+
+      <div style="margin-top:20px">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">Monthly Momentum</div>
+        <canvas id="heat-momentum-chart" height="140"></canvas>
+      </div>
+
+      <div style="margin-top:20px">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Score Distribution</div>
+        <canvas id="heat-hist-chart" height="120"></canvas>
       </div>
     `;
+
+    // Wire clicks
+    document.getElementById("heat-grid").addEventListener("click",function(e){
+      const cell=e.target.closest("[data-k]");
+      if(!cell) return;
+      const k=cell.dataset.k;
+      if(!k||k>todayK) return;
+      haptic("light");
+      viewingKey=k===todayK?null:k;
+      editMode=false; editId=null;
+      navigateTo("today");
+    });
+    document.getElementById("heat-year-prev").addEventListener("click",function(){
+      window._heatYear=(window._heatYear||new Date().getFullYear())-1;
+      render();
+    });
+    const _hNext=document.getElementById("heat-year-next");
+    if(_hNext) _hNext.addEventListener("click",function(){
+      if((window._heatYear||new Date().getFullYear())<new Date().getFullYear()){
+        window._heatYear++;render();
+      }
+    });
+
+    // Wire cell clicks → navigate to that day
+    document.getElementById("heat-grid").addEventListener("click",function(e){
+      const cell=e.target.closest("[data-k]");
+      if(!cell) return;
+      const k=cell.dataset.k;
+      if(!k||k>todayK) return;
+      haptic("light");
+      viewingKey=k===todayK?null:k;
+      editMode=false; editId=null;
+      navigateTo("today");
+    });
+
+
+    // Day-of-week chart
+    const dowT=Array(7).fill(0), dowC=Array(7).fill(0);
+    allKeys.forEach(k=>{
+      const [y,m,d]=k.split("-").map(Number);
+      const sc=scoreOf(logs[k],k);
+      const dow=new Date(y,m-1,d).getDay();
+      if(sc>0){dowT[dow]+=sc;dowC[dow]++;}
+    });
+    const dowAvg=dowT.map((t,i)=>dowC[i]?Math.round(t/dowC[i]):0);
+    destroyChart("hdow");
+    chartInstances["hdow"]=new Chart(document.getElementById("heat-dow-chart").getContext("2d"),{
+      type:"bar",
+      data:{labels:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+        datasets:[{data:dowAvg,backgroundColor:dowAvg.map(s=>clr(s)+"66"),borderColor:dowAvg.map(s=>clr(s)),borderWidth:1,borderRadius:4}]},
+      options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+"%"}}},
+        scales:{y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{display:false}}}}
+    });
+
+    // Monthly momentum — last 12 months avg per month
+    const mLabels=[], mData=[];
+    for(let i=11;i>=0;i--){
+      const d=new Date(today.getFullYear(),today.getMonth()-i,1);
+      const yr=d.getFullYear(), mo=d.getMonth();
+      const label=MONTHS[mo].slice(0,3)+" "+String(yr).slice(2);
+      const mKeys=allKeys.filter(k=>{const[ky,km]=k.split("-").map(Number);return ky===yr&&km-1===mo;});
+      const mScores=mKeys.map(k=>scoreOf(logs[k],k)).filter(s=>s>0);
+      mLabels.push(label);
+      mData.push(mScores.length?Math.round(mScores.reduce((a,b)=>a+b,0)/mScores.length):null);
+    }
+    destroyChart("hmom");
+    chartInstances["hmom"]=new Chart(document.getElementById("heat-momentum-chart").getContext("2d"),{
+      type:"line",
+      data:{labels:mLabels,
+        datasets:[
+          {data:mData,borderColor:cssVar("--accent")||"#6366f1",borderWidth:2,pointRadius:3,pointBackgroundColor:mData.map(v=>v===null?"transparent":clr(v||0)),tension:0.4,fill:true,backgroundColor:"rgba(99,102,241,0.08)",spanGaps:true},
+        ]},
+      options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw===null?"No data":c.raw+"%"}}},
+        scales:{y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:8},maxRotation:45},grid:{display:false}}}}
+    });
+
+    // Score Distribution Histogram
+    const buckets=Array(10).fill(0);
+    allScored.forEach(k=>{ const s=scoreOf(logs[k],k); buckets[Math.min(9,Math.floor(s/10))]++; });
+    destroyChart("hhist");
+    chartInstances["hhist"]=new Chart(document.getElementById("heat-hist-chart").getContext("2d"),{
+      type:"bar",
+      data:{labels:["0","10","20","30","40","50","60","70","80","90+"],
+        datasets:[{data:buckets,backgroundColor:["#f87171","#f87171","#f87171","#f87171","#f87171","#facc15","#facc15","#facc15","#4ade80","#4ade80"].map(c=>c+"77"),borderColor:["#f87171","#f87171","#f87171","#f87171","#f87171","#facc15","#facc15","#facc15","#4ade80","#4ade80"],borderWidth:1,borderRadius:3}]},
+      options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+" days"}}},
+        scales:{y:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:8}},grid:{display:false}}}}
+    });
+
     return;
   }
 
@@ -1443,7 +1666,7 @@ function renderAnalytics(){
         type:"bar",
         data:{
           labels:tdata.map(t=>t.name.replace(/^[◉●] /,"").slice(0,16)),
-          datasets:[{data:tdata.map(t=>t.rate),backgroundColor:tdata.map(t=>t.deleted?"rgba(255,255,255,0.1)":clr(t.rate)+"bb"),borderColor:tdata.map(t=>t.deleted?"rgba(255,255,255,0.2)":clr(t.rate)),borderWidth:1,borderRadius:3}]
+          datasets:[{data:tdata.map(t=>t.rate),backgroundColor:tdata.map(t=>t.deleted?"rgba(255,255,255,0.1)":clr(t.rate)+"bb"),borderColor:tdata.map(t=>t.deleted?"var(--glass-border)":clr(t.rate)),borderWidth:1,borderRadius:3}]
         },
         options:{indexAxis:"y",responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const t=tdata[ctx.dataIndex];return ctx.raw+"% ("+t.done+"/"+t.active+" days)";} }}},
           scales:{x:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},y:{ticks:{color:cssVar("--text2"),font:{size:9}},grid:{display:false}}}}
@@ -1556,6 +1779,175 @@ function renderAnalytics(){
     });
   }
 
+  // ── MOMENTUM FLOW (month/year only) ───────────────────────────────────────
+  if(reportPeriod==="month"||reportPeriod==="year"){
+    const mCanvas=document.getElementById("momentum-chart");
+    if(mCanvas){
+      destroyChart("momentum");
+      const mCtx=mCanvas.getContext("2d");
+      // Build gradient fill using accent color
+      const accentHex=cssVar("--accent")||"#4ade80";
+      const gradFill=mCtx.createLinearGradient(0,0,0,130);
+      gradFill.addColorStop(0,accentHex+"55");
+      gradFill.addColorStop(1,accentHex+"00");
+      // Rolling 3-point avg for smooth momentum line
+      const smoothed=data.scores.map((s,i,arr)=>{
+        const w=arr.slice(Math.max(0,i-2),i+3).filter(x=>x!==null);
+        return w.length?Math.round(w.reduce((a,b)=>a+b,0)/w.length):null;
+      });
+      chartInstances["momentum"]=new Chart(mCtx,{
+        type:"line",
+        data:{
+          labels:data.labels,
+          datasets:[
+            // Raw scores as subtle scatter dots
+            {type:"scatter",data:data.scores.map((s,i)=>s!==null?{x:i,y:s}:null).filter(Boolean),
+             pointRadius:2.5,pointBackgroundColor:data.scores.map(s=>s!==null?clr(s)+"cc":"transparent"),
+             pointBorderWidth:0,showLine:false,order:2},
+            // Smoothed momentum area
+            {data:smoothed,borderColor:accentHex,borderWidth:2.5,
+             backgroundColor:gradFill,fill:true,tension:0.5,
+             pointRadius:0,spanGaps:true,order:1,label:"Momentum"}
+          ]
+        },
+        options:{responsive:true,
+          plugins:{legend:{display:false},
+            tooltip:{callbacks:{label:ctx=>ctx.raw!==null?Math.round(ctx.raw)+"%":"—"}}},
+          scales:{
+            y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%",stepSize:25},
+               grid:{color:cssVar("--glass-border")}},
+            x:{ticks:{color:cssVar("--text3"),font:{size:8},maxTicksLimit:reportPeriod==="month"?8:12,maxRotation:0},
+               grid:{display:false}}
+          }
+        }
+      });
+    }
+
+    // ── CONSISTENCY RINGS (SVG radial arcs, Linear/Raycast style) ─────────────
+    const ringsWrap=document.getElementById("rings-canvas-wrap");
+    if(ringsWrap){
+      // Segment data: weeks for month, months for year
+      let segments=[];
+      if(reportPeriod==="month"){
+        // group data.scores into ISO weeks of 7
+        const weekSize=7;
+        for(let i=0;i<data.scores.length;i+=weekSize){
+          const chunk=data.scores.slice(i,i+weekSize).filter(s=>s!==null);
+          const avg2=chunk.length?Math.round(chunk.reduce((a,b)=>a+b,0)/chunk.length):null;
+          const label=data.labels[i]+(data.labels[Math.min(i+weekSize-1,data.labels.length-1)]?
+            "–"+data.labels[Math.min(i+weekSize-1,data.labels.length-1)]:"");
+          segments.push({label:"W"+(Math.floor(i/weekSize)+1),avg:avg2,days:chunk.length});
+        }
+      } else {
+        // year: each month
+        data.labels.forEach((lbl,i)=>{
+          const s=data.scores[i];
+          segments.push({label:lbl.slice(0,3),avg:s,days:1});
+        });
+      }
+
+      const R=36,STROKE=8,SZ=96,GAP=10;
+      const totalW=segments.length*(SZ+GAP)-GAP+20;
+      const accentHex2=cssVar("--accent")||"#4ade80";
+      const text3=cssVar("--text3")||"rgba(255,255,255,0.2)";
+      const text2=cssVar("--text2")||"rgba(255,255,255,0.35)";
+      const textC=cssVar("--text")||"#f0f0f0";
+      const glassB=cssVar("--glass-border")||"rgba(255,255,255,0.08)";
+
+      function ringColor(avg){ return avg===null?"transparent":avg>=80?"#4ade80":avg>=50?"#facc15":"#f87171"; }
+      function arcD(pct,r){
+        const angle=(pct/100)*2*Math.PI;
+        const x=SZ/2+r*Math.sin(angle);
+        const y=SZ/2-r*Math.cos(angle);
+        const large=angle>Math.PI?1:0;
+        if(pct>=100) return `M ${SZ/2} ${SZ/2-r} A ${r} ${r} 0 1 1 ${SZ/2-0.001} ${SZ/2-r} Z`;
+        return `M ${SZ/2} ${SZ/2-r} A ${r} ${r} 0 ${large} 1 ${x} ${y}`;
+      }
+
+      let svgContent="";
+      segments.forEach((seg,i)=>{
+        const ox=10+i*(SZ+GAP);
+        const pct=seg.avg!==null?seg.avg:0;
+        const col=ringColor(seg.avg);
+        // Track ring (background circle)
+        svgContent+=`<circle cx="${SZ/2+ox}" cy="${SZ/2+8}" r="${R}" fill="none" stroke="${glassB}" stroke-width="${STROKE}"/>`;
+        // Progress arc
+        if(seg.avg!==null&&pct>0){
+          svgContent+=`<path d="${arcD(Math.min(pct,99.9),R)}" fill="none" stroke="${col}" stroke-width="${STROKE}" stroke-linecap="round" transform="translate(${ox},8)"/>`;
+        }
+        // Center value
+        const valStr=seg.avg!==null?seg.avg+"%":"—";
+        const valCol=seg.avg!==null?col:text3;
+        svgContent+=`<text x="${SZ/2+ox}" y="${SZ/2+12}" text-anchor="middle" font-size="13" font-weight="600" fill="${valCol}" font-family="Inter,-apple-system,sans-serif">${valStr}</text>`;
+        // Label below ring
+        svgContent+=`<text x="${SZ/2+ox}" y="${SZ+14}" text-anchor="middle" font-size="9" fill="${text3}" letter-spacing="0.5" font-family="Inter,-apple-system,sans-serif">${seg.label}</text>`;
+      });
+
+      ringsWrap.innerHTML=`<div style="overflow-x:auto;padding:6px 0 4px">
+        <svg width="${Math.max(totalW,280)}" height="${SZ+24}" style="display:block">
+          ${svgContent}
+        </svg>
+      </div>`;
+    }
+
+    // ── STREAK DENSITY (micro-bar strip with gradient coloring) ───────────────
+    const sdWrap=document.getElementById("streak-density-wrap");
+    if(sdWrap){
+      const scores=data.scores;
+      const labels=data.labels;
+      const n=scores.length;
+      if(n>0){
+        const BAR_GAP=2;
+        // Dynamically size bars to fill container width (~340px usable)
+        const containerW=Math.min(window.innerWidth-64,400);
+        const barW=Math.max(3,Math.floor((containerW-(n-1)*BAR_GAP)/n));
+        const totalSvgW=(barW+BAR_GAP)*n-BAR_GAP;
+        const maxH=60;
+
+        // Calculate run lengths (streak context for each bar)
+        const runLen=new Array(n).fill(1);
+        for(let i=1;i<n;i++){
+          if(scores[i]!==null&&scores[i]>0&&scores[i-1]!==null&&scores[i-1]>0){
+            runLen[i]=runLen[i-1]+1;
+          }
+        }
+        const maxRun=Math.max(...runLen,1);
+
+        let bars="";
+        scores.forEach((s,i)=>{
+          const x=i*(barW+BAR_GAP);
+          if(s===null){
+            bars+=`<rect x="${x}" y="${maxH-4}" width="${barW}" height="4" rx="1" fill="${cssVar("--glass-border")||"rgba(255,255,255,0.06)"}" opacity="0.3"/>`;
+            return;
+          }
+          if(s===0){
+            bars+=`<rect x="${x}" y="${maxH-3}" width="${barW}" height="3" rx="1" fill="#f87171" opacity="0.2"/>`;
+            return;
+          }
+          // Height based on score, intensity based on run length
+          const h=Math.max(6,Math.round((s/100)*maxH));
+          const intensity=0.45+0.55*(runLen[i]/maxRun);
+          const col=s>=80?"#4ade80":s>=50?"#facc15":"#f87171";
+          bars+=`<rect x="${x}" y="${maxH-h}" width="${barW}" height="${h}" rx="${Math.min(2,barW/2)}" fill="${col}" opacity="${intensity.toFixed(2)}"/>`;
+        });
+
+        // X-axis label ticks (every ~5 or every month)
+        let ticks="";
+        const step=Math.max(1,Math.floor(n/8));
+        for(let i=0;i<n;i+=step){
+          const x=i*(barW+BAR_GAP)+barW/2;
+          ticks+=`<text x="${x}" y="${maxH+14}" text-anchor="middle" font-size="8" fill="${cssVar("--text3")||"rgba(255,255,255,0.2)"}" font-family="Inter,-apple-system,sans-serif">${labels[i]}</text>`;
+        }
+
+        sdWrap.innerHTML=`<svg width="${totalSvgW}" height="${maxH+20}" style="display:block;max-width:100%">
+          ${bars}${ticks}
+        </svg>`;
+      } else {
+        sdWrap.innerHTML=`<div style="text-align:center;color:var(--text3);font-size:11px;padding:20px 0">No data yet</div>`;
+      }
+    }
+  }
+
   // Summary text
   document.getElementById("summary-text").innerHTML=`
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
@@ -1666,61 +2058,15 @@ function renderSettings(){
           </div>`;
         }
         return `
-        ${tog('pref-week-start','Week starts on Monday','Default is Sunday',weekStartsMonday)}
         ${tog('pref-compact','Compact Mode','Smaller task rows, tighter spacing',compactMode)}
-        ${tog('pref-week-nums','Show Week Numbers','Display ISO week numbers in month view',showWeekNumbers)}
-        ${tog('pref-auto-collapse','Auto-collapse Groups','Groups start collapsed when opening app',autoCollapseGroups)}
-        <div style="padding:10px 0;border-bottom:1px solid var(--glass-border)">
-          <div style="font-size:11px;color:var(--text);margin-bottom:6px">Clock Font</div>
-          <div style="font-size:9px;color:var(--text3);margin-bottom:10px">Welcome screen time display</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-            ${[
-              ['cormorant','Cormorant','Cormorant Garamond'],
-              ['bodoni','Bodoni','Bodoni Moda'],
-              ['playfair','Playfair','Playfair Display'],
-              ['dm','DM Serif','DM Serif Display'],
-              ['system','System','Inter']
-            ].map(([key,label,family])=>`
-              <button data-clock-font="${key}" style="padding:10px 8px;border-radius:8px;border:1px solid ${clockFont===key?'var(--accent)':'var(--glass-border)'};background:${clockFont===key?'var(--glass)':'transparent'};cursor:pointer;text-align:center">
-                <div style="font-size:18px;font-weight:300;color:${clockFont===key?'var(--accent)':'var(--text2)'};font-family:'${family}',serif;letter-spacing:2px;margin-bottom:3px">12:00</div>
-                <div style="font-size:8px;color:var(--text3);letter-spacing:1px;text-transform:uppercase">${label}</div>
-              </button>
-            `).join('')}
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--glass-border)">
-          <div><div style="font-size:11px;color:var(--text)">Score Format</div><div style="font-size:9px;color:var(--text3);margin-top:2px">How scores display in headers and views</div></div>
-          <div style="display:flex;gap:4px">
-            <button id="fmt-pct" style="padding:4px 10px;font-size:9px;border-radius:4px;border:1px solid var(--glass-border);cursor:pointer;background:${scoreFormat==='pct'?'var(--accent)':'var(--glass)'};color:${scoreFormat==='pct'?'var(--bg)':'var(--text2)'}">84%</button>
-            <button id="fmt-frac" style="padding:4px 10px;font-size:9px;border-radius:4px;border:1px solid var(--glass-border);cursor:pointer;background:${scoreFormat==='fraction'?'var(--accent)':'var(--glass)'};color:${scoreFormat==='fraction'?'var(--bg)':'var(--text2)'}">17/20</button>
-          </div>
-        </div>`;
+        ${tog('pref-auto-collapse','Auto-collapse Groups','Groups start collapsed when opening app',autoCollapseGroups)}`;
       })()}
 
-      <div style="padding:10px 0;border-bottom:1px solid var(--glass-border)">
-        <div style="font-size:11px;color:var(--text);margin-bottom:6px">Daily Intention</div>
-        <div style="font-size:9px;color:var(--text3);margin-bottom:8px">Shows on the welcome screen</div>
-        <div style="display:flex;gap:8px">
-          <input id="intention-inp" class="inp" style="margin:0;flex:1;font-size:11px" placeholder="e.g. Stay focused, stay consistent" value="${dailyIntention.replace(/"/g,'&quot;')}">
-          <button id="intention-save" class="btn-ok" style="flex-shrink:0">Save</button>
-        </div>
-      </div>
 
-      <div style="padding:10px 0;border-bottom:1px solid var(--glass-border)">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-          <div><div style="font-size:11px;color:var(--text)">Daily Reminder</div><div style="font-size:9px;color:var(--text3);margin-top:2px">Browser notification at set time</div></div>
-          <button id="pref-reminder" style="width:40px;height:24px;border-radius:12px;border:none;cursor:pointer;position:relative;flex-shrink:0;transition:background 0.2s;background:${reminderEnabled?'var(--accent)':'rgba(255,255,255,0.08)'}">
-            <span style="position:absolute;top:3px;left:${reminderEnabled?'19px':'3px'};width:18px;height:18px;border-radius:50%;background:white;transition:left 0.2s;display:block;box-shadow:0 1px 3px rgba(0,0,0,0.4)"></span>
-          </button>
-        </div>
-        ${reminderEnabled?`<input type="time" id="reminder-time-inp" value="${reminderTime||'20:00'}" style="background:var(--bg2);border:1px solid var(--glass-border);color:var(--text);padding:8px 12px;border-radius:8px;font-size:12px;width:100%;box-sizing:border-box;">`:''}
-      </div>
 
-      <div style="padding:10px 0">
-        <div style="font-size:11px;color:var(--text);margin-bottom:4px">Backup Data (JSON)</div>
-        <div style="font-size:9px;color:var(--text3);margin-bottom:8px">Copy all your data as JSON — paste it somewhere safe</div>
-        <button id="backup-json-btn" class="export-btn" style="margin:0">Copy JSON to Clipboard</button>
-      </div>
+
+
+
     </div>
 
     <div class="card" style="margin-bottom:16px;border:1px solid var(--glass-border)">
@@ -3236,36 +3582,15 @@ function setupListeners(){
         renderSettings(); return true;
       }
     }
-    if(handleToggle('pref-week-start',()=>weekStartsMonday,(v)=>{weekStartsMonday=v;},'rm_week_start')) return;
     if(handleToggle('pref-compact',()=>compactMode,(v)=>{compactMode=v;document.body.classList.toggle("compact",v);},'rm_compact')) return;
-    if(handleToggle('pref-week-nums',()=>showWeekNumbers,(v)=>{showWeekNumbers=v;},'rm_week_nums')) return;
     if(handleToggle('pref-auto-collapse',()=>autoCollapseGroups,(v)=>{autoCollapseGroups=v;},'rm_auto_collapse')) return;
-    if(handleToggle('pref-reminder',()=>reminderEnabled,(v)=>{
-      reminderEnabled=v;
-      if(v&&'Notification' in window) Notification.requestPermission();
-    },'rm_reminder_on')) return;
+
     // Score format
-    if(e.target.id==="fmt-pct"){ scoreFormat="pct"; sv("rm_score_fmt","pct"); renderSettings(); return; }
-    if(e.target.id==="fmt-frac"){ scoreFormat="fraction"; sv("rm_score_fmt","fraction"); renderSettings(); return; }
-    // Intention save
-    if(e.target.id==="intention-save"){
-      const inp=document.getElementById("intention-inp");
-      if(inp){ dailyIntention=inp.value.trim(); sv("rm_intention",dailyIntention); showImportStatus("Intention saved","#4ade80"); } return;
-    }
-    // JSON backup
-    if(e.target.id==="backup-json-btn"){
-      const payload=JSON.stringify({tasks,logs,groups,macros,userName,appName,trackingSince},null,2);
-      navigator.clipboard.writeText(payload).then(()=>showImportStatus("Copied to clipboard","#4ade80")).catch(()=>showImportStatus("Copy failed — try a different browser","#f87171"));
-      return;
-    }
+
   });
 
   document.getElementById("view-settings").addEventListener("change",e=>{
-    if(e.target.id==="reminder-time-inp"){
-      reminderTime=e.target.value;
-      sv("rm_reminder_time",reminderTime);
-      scheduleReminder();
-    }
+
     // file imports handled by global document change listener
   });
 
@@ -3656,36 +3981,26 @@ document.getElementById("view-macros").addEventListener("click",function(e){
   var MONS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
   // Clock tick
-  function tickClock(){
-    var now=new Date();
-    var clk=document.getElementById("splash-clock");
-    if(clk){
-      clk.textContent=formatClockTime(now);
-      clk.style.fontFamily=clockFontFamily();
-      clk.style.fontWeight=clockFontWeight();
-      var sc=clockStyleCSS();
-      clk.style.letterSpacing=sc.letterSpacing||"6px";
-      clk.style.opacity=sc.opacity||"0.95";
+  function renderSplashClock(){
+    var wrap=document.getElementById("splash-clock-wrap");
+    if(!wrap) return;
+    renderClockInto(wrap, new Date(), {preview:false});
+    // Also update panel preview if open
+    var panel=document.getElementById("clock-settings-panel");
+    if(panel&&panel.style.display!=="none"){
+      var prev=document.getElementById("clock-preview");
+      if(prev) renderClockInto(prev, new Date(), {preview:true});
     }
-    // Update preview if panel open
-    var prev=document.getElementById("clock-preview-time");
-    if(prev){
-      prev.textContent=formatClockTime(now);
-      prev.style.fontFamily=clockFontFamily();
-      prev.style.fontWeight=clockFontWeight();
-      var sc2=clockStyleCSS();
-      prev.style.letterSpacing=sc2.letterSpacing||"6px";
-      prev.style.opacity=sc2.opacity||"0.95";
-    }
-    // Landscape mode
+    // Landscape
     var splash=document.getElementById("splash");
     if(splash){
       if(clockLandscape&&window.innerWidth>window.innerHeight) splash.classList.add("landscape-clock-mode");
       else splash.classList.remove("landscape-clock-mode");
     }
   }
-  tickClock();
-  var _clockInterval=setInterval(tickClock,1000);
+  function tickClock(){ renderSplashClock(); }
+  renderSplashClock();
+  var _clockInterval=setInterval(renderSplashClock,1000);
 
   // Date
   var now=new Date();
@@ -3696,7 +4011,7 @@ document.getElementById("view-macros").addEventListener("click",function(e){
 
   // Greeting, name, quote or intention
   document.getElementById("splash-greeting").textContent=getGreeting();
-  document.getElementById("splash-quote").textContent=dailyIntention||q;
+  document.getElementById("splash-quote").textContent=q;
   document.getElementById("splash-name").textContent=userName?userName:"Welcome";
   if(userName) document.getElementById("header-username").textContent=userName;
   const modeLabel=document.getElementById("app-mode-label");
@@ -3823,30 +4138,169 @@ const _origNav=window.navigateTo;
 window.navigateTo=function(v,o){_origNav(v,o);setTimeout(applyHeaderOffset,50);};
 
 // ── CLOCK SETTINGS PANEL ──────────────────────────────────────────────────────
-function renderClockPanel(){
-  var fontGrid=document.getElementById("clock-font-grid");
-  if(fontGrid){
-    fontGrid.innerHTML=Object.entries(CLOCK_FONTS).map(function(e){
-      var key=e[0],val=e[1],active=clockFont===key;
-      return '<button data-cp-font="'+key+'" style="padding:12px 6px;border-radius:10px;border:1px solid '+(active?"rgba(255,255,255,0.6)":"rgba(255,255,255,0.08)")+';background:'+(active?"rgba(255,255,255,0.1)":"rgba(255,255,255,0.02)")+';cursor:pointer;text-align:center;transition:all 0.2s">'+
-        '<div style="font-size:22px;font-weight:'+val.weight+';color:'+(active?"rgba(255,255,255,0.95)":"rgba(255,255,255,0.35)")+';font-family:'+val.family+';letter-spacing:2px;margin-bottom:4px">12:00</div>'+
-        '<div style="font-size:7px;color:rgba(255,255,255,0.3);letter-spacing:1.5px;text-transform:uppercase">'+key+'</div></button>';
-    }).join("");
+// ── CLOCK RENDER ENGINE ───────────────────────────────────────────────────────
+// Single source of truth: renders face into any container element
+function renderClockInto(container, now, opts){
+  opts=opts||{};
+  var isPreview=opts.preview||false;
+  var cf=CLOCK_FONTS[clockFont]||CLOCK_FONTS.cormorant;
+  var sc=clockStyleCSS();
+  var timeStr=formatClockTime(now);
+  var h=clockFormat==="24"?String(now.getHours()).padStart(2,"0"):String(now.getHours()%12||12);
+  var mn=String(now.getMinutes()).padStart(2,"0");
+  var hasSeconds=clockSeconds&&clockFace!=="analog"&&clockFace!=="stacked";
+  var fs=isPreview?(hasSeconds?"38px":"48px"):(hasSeconds?"48px":"62px");
+  var analogSize=isPreview?140:180;
+
+  // Reset container fully
+  container.innerHTML="";
+  container.removeAttribute("style");
+  container.style.display="flex";
+  container.style.alignItems="center";
+  container.style.justifyContent="center";
+  container.style.position="relative";
+  container.style.minHeight=isPreview?"130px":"90px";
+
+  function textDiv(size,weight,family,ls,opacity,color,shadow){
+    var d=document.createElement("div");
+    d.style.fontSize=size||fs;
+    d.style.fontWeight=weight||cf.weight;
+    d.style.fontFamily=family||cf.family;
+    d.style.letterSpacing=ls||sc.letterSpacing;
+    d.style.opacity=opacity||sc.opacity;
+    d.style.color=color||"var(--text)";
+    d.style.lineHeight="1";
+    if(shadow) d.style.textShadow=shadow;
+    return d;
   }
-  var styleGrid=document.getElementById("clock-style-grid");
-  if(styleGrid){
-    var styleLabels={default:"Default",thin:"Thin",spaced:"Wide",minimal:"Minimal",digital:"Tabular"};
-    styleGrid.innerHTML=Object.entries(CLOCK_STYLE_CSS).map(function(e){
-      var key=e[0],val=e[1],active=clockStyle===key;
-      return '<button data-cp-style="'+key+'" style="padding:12px;border-radius:10px;border:1px solid '+(active?"rgba(255,255,255,0.6)":"rgba(255,255,255,0.08)")+';background:'+(active?"rgba(255,255,255,0.1)":"rgba(255,255,255,0.02)")+';cursor:pointer;text-align:center;transition:all 0.2s">'+
-        '<div style="font-size:20px;font-weight:'+clockFontWeight()+';color:'+(active?"rgba(255,255,255,0.9)":"rgba(255,255,255,0.3)")+';font-family:'+clockFontFamily()+';letter-spacing:'+(val.letterSpacing||"6px")+';opacity:'+(val.opacity||0.9)+';margin-bottom:4px">12:00</div>'+
-        '<div style="font-size:7px;color:rgba(255,255,255,0.3);letter-spacing:1.5px;text-transform:uppercase">'+styleLabels[key]+"</div></button>";
-    }).join("");
+
+  if(clockFace==="plain"){
+    var d=textDiv(); d.style.whiteSpace="nowrap"; d.textContent=timeStr; container.appendChild(d);
+
+  } else if(clockFace==="analog"){
+    container.style.minHeight=analogSize+"px";
+    container.style.minWidth=analogSize+"px";
+    container.style.width=analogSize+"px";
+    container.style.margin="0 auto";
+    container.innerHTML=buildAnalogSVG(now,"ring",analogSize);
+
+  } else if(clockFace==="neon"){
+    // Neon: glowing border box, text respects font/style settings
+    container.style.border="1px solid var(--glass-border)";
+    container.style.padding=isPreview?"12px 28px":"16px 36px";
+    container.style.borderRadius="10px";
+    container.style.boxShadow="0 0 18px var(--glass),0 0 50px var(--glass),inset 0 0 14px var(--glass)";
+    var d=textDiv(fs,cf.weight,cf.family,sc.letterSpacing,sc.opacity,"var(--text)");
+    d.style.whiteSpace="nowrap"; d.textContent=timeStr; container.appendChild(d);
+
+  } else if(clockFace==="outline"){
+    // Letterpress: large text, stroke only, no fill
+    var sz=isPreview?"62px":"80px";
+    var d=document.createElement("div");
+    d.style.cssText="font-size:"+sz+";font-weight:"+cf.weight+";font-family:"+cf.family+";letter-spacing:"+sc.letterSpacing+";line-height:1;-webkit-text-stroke:1px var(--text);color:transparent;text-stroke:1px rgba(255,255,255,0.5);";
+    d.style.whiteSpace="nowrap"; d.textContent=timeStr; container.appendChild(d);
+
+  } else if(clockFace==="fade"){
+    // Huge ghosted — letter-spacing and opacity from style setting
+    var sz=isPreview?"72px":"100px";
+    var d=textDiv(sz,cf.weight,cf.family,sc.letterSpacing,"0.18","var(--text)");
+    // clamp size so seconds don't overflow
+    d.style.whiteSpace="nowrap";
+    d.style.maxWidth="100%";
+    d.style.overflow="hidden";
+    d.style.transform="scale(1)";
+    d.style.transformOrigin="center";
+    d.textContent=timeStr; container.appendChild(d);
+
+  } else if(clockFace==="stacked"){
+    // Centred column — hours over separator over minutes
+    container.style.flexDirection="column";
+    container.style.alignItems="center";
+    container.style.justifyContent="center";
+    container.style.minHeight=isPreview?"140px":"150px";
+    container.style.width="100%";
+    var hDiv=textDiv(isPreview?"48px":"66px",cf.weight,cf.family,sc.letterSpacing,sc.opacity,"var(--text)");
+    hDiv.style.whiteSpace="nowrap";
+    hDiv.textContent=h;
+    var sep=document.createElement("div");
+    sep.style.cssText="width:28px;height:1px;background:var(--glass-border);margin:5px auto;";
+    var mDiv=textDiv(isPreview?"30px":"42px",cf.weight,cf.family,sc.letterSpacing,"0.4","var(--text2)");
+    mDiv.style.whiteSpace="nowrap";
+    mDiv.textContent=mn;
+    container.appendChild(hDiv); container.appendChild(sep); container.appendChild(mDiv);
   }
-  document.querySelectorAll("[data-clock-fmt]").forEach(function(b){b.classList.toggle("active",b.dataset.clockFmt===clockFormat);});
-  var secB=document.querySelector("[data-clock-sec]"); if(secB) secB.classList.toggle("active",clockSeconds);
-  var lsB=document.querySelector("[data-clock-landscape]"); if(lsB) lsB.classList.toggle("active",clockLandscape);
 }
+
+// Builds a full analog SVG clock
+function buildAnalogSVG(now,style,size){
+  size=size||180; var cx=size/2,cy=size/2,r=size*0.42;
+  var h=now.getHours()%12,m=now.getMinutes(),s=now.getSeconds();
+  var hA=((h*60+m)/720)*360-90;
+  var mA=(m/60)*360-90;
+  var sA=(s/60)*360-90;
+  function pt(angle,len){
+    var rad=angle*Math.PI/180;
+    return {x:cx+Math.cos(rad)*len,y:cy+Math.sin(rad)*len};
+  }
+  var ticks="";
+  for(var i=0;i<60;i++){
+    var a=(i/60)*360*Math.PI/180;
+    var isMaj=i%5===0;
+    var r1=isMaj?r*0.82:r*0.89; var r2=r*0.96;
+    ticks+='<line x1="'+(cx+Math.cos(a)*r1)+'" y1="'+(cy+Math.sin(a)*r1)+'" x2="'+(cx+Math.cos(a)*r2)+'" y2="'+(cy+Math.sin(a)*r2)+'" stroke="currentColor" stroke-opacity="'+(isMaj?0.45:0.18)+'" stroke-width="'+(isMaj?1.5:0.6)+'" stroke-linecap="round"/>';
+  }
+  var isWall=style==="wall";
+  var pH=pt(hA,r*0.52),pM=pt(mA,r*0.72),pS=pt(sA,r*0.78);
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'">'+
+    (isWall?'<circle cx="'+cx+'" cy="'+cy+'" r="'+(r+6)+'" fill="rgba(255,255,255,0.03)" stroke="var(--text2)" stroke-width="1.5"/>':'')+
+    '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="currentColor" stroke-width="1" opacity="0.1"/>'+
+    ticks+
+    '<line x1="'+cx+'" y1="'+cy+'" x2="'+pH.x+'" y2="'+pH.y+'" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>'+
+    '<line x1="'+cx+'" y1="'+cy+'" x2="'+pM.x+'" y2="'+pM.y+'" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/>'+
+    (clockSeconds?'<line x1="'+cx+'" y1="'+cy+'" x2="'+pS.x+'" y2="'+pS.y+'" stroke="#4ade80" stroke-width="1" stroke-linecap="round"/>':'')+
+    '<circle cx="'+cx+'" cy="'+cy+'" r="3" fill="var(--text)"/>'+
+    '<circle cx="'+cx+'" cy="'+cy+'" r="1.5" fill="rgba(255,255,255,0.4)"/>'+
+  '</svg>';
+}
+
+function renderClockPanel(){
+  var dd=document.getElementById("clock-font-dropdown");
+  if(dd) dd.value=clockFont;
+
+  // Live preview — render current face into preview container
+  var preview=document.getElementById("clock-preview");
+  if(preview) renderClockInto(preview,new Date(),{preview:true});
+
+  // Style grid
+  var sg=document.getElementById("clock-style-grid");
+  if(sg){
+    var sl={default:"Default",thin:"Thin",wide:"Wide",minimal:"Faded",tabular:"Tabular"};
+    sg.innerHTML=Object.keys(CLOCK_STYLE_CSS).map(function(key){
+      var val=CLOCK_STYLE_CSS[key],active=clockStyle===key;
+      var cf=CLOCK_FONTS[clockFont]||CLOCK_FONTS.cormorant;
+      return '<button data-cp-style="'+key+'" style="padding:10px 4px;border-radius:8px;border:1px solid '+(active?"rgba(255,255,255,0.5)":"rgba(255,255,255,0.07)")+';background:'+(active?"rgba(255,255,255,0.08)":"transparent")+';cursor:pointer;text-align:center;">'+
+        '<div style="font-size:15px;font-weight:'+cf.weight+';font-family:'+cf.family+';letter-spacing:'+val.letterSpacing+';opacity:'+val.opacity+';color:var(--text);line-height:1;margin-bottom:4px">12:00</div>'+
+        '<div style="font-size:7px;color:rgba(255,255,255,0.25);letter-spacing:1px;text-transform:uppercase">'+sl[key]+'</div></button>';
+    }).join("");
+  }
+
+  // Face grid — each shows a mini preview of that face
+  var fg=document.getElementById("clock-face-grid");
+  if(fg){
+    fg.innerHTML=Object.keys(CLOCK_FACES).map(function(key){
+      var val=CLOCK_FACES[key],active=clockFace===key;
+      return '<button data-cp-face="'+key+'" style="padding:12px 8px;border-radius:10px;border:1px solid '+(active?"rgba(255,255,255,0.5)":"rgba(255,255,255,0.07)")+';background:'+(active?"rgba(255,255,255,0.07)":"transparent")+';cursor:pointer;text-align:center;min-height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">'+
+        '<div style="font-size:10px;color:'+(active?"var(--text)":"rgba(255,255,255,0.35)")+';letter-spacing:1px;font-weight:'+(active?"600":"400")+';text-transform:uppercase">'+val.label+'</div>'+
+        '<div style="font-size:8px;color:rgba(255,255,255,0.18);line-height:1.4">'+val.desc+'</div>'+
+      '</button>';
+    }).join("");
+  }
+
+  document.querySelectorAll("[data-clock-fmt]").forEach(function(b){b.classList.toggle("active",b.dataset.clockFmt===clockFormat);});
+  var sb=document.querySelector("[data-clock-sec]"); if(sb) sb.classList.toggle("active",clockSeconds);
+  var lb=document.querySelector("[data-clock-landscape]"); if(lb) lb.classList.toggle("active",clockLandscape);
+}
+
 function openClockPanel(){ var p=document.getElementById("clock-settings-panel"); if(!p) return; renderClockPanel(); p.style.display="block"; }
 function closeClockPanel(){ var p=document.getElementById("clock-settings-panel"); if(p) p.style.display="none"; }
 
@@ -3854,15 +4308,18 @@ document.getElementById("clock-settings-btn").addEventListener("click",function(
 document.getElementById("clock-settings-close").addEventListener("click",closeClockPanel);
 document.getElementById("clock-settings-panel").addEventListener("click",function(e){
   var t=e.target;
-  var cfB=t.closest("[data-cp-font]"); if(cfB){ clockFont=cfB.dataset.cpFont; sv("rm_clock_font",clockFont); renderClockPanel(); tickClock(); return; }
-  var csB=t.closest("[data-cp-style]"); if(csB){ clockStyle=csB.dataset.cpStyle; sv("rm_clock_style",clockStyle); renderClockPanel(); tickClock(); return; }
-  if(t.dataset.clockFmt){ clockFormat=t.dataset.clockFmt; sv("rm_clock_format",clockFormat); renderClockPanel(); tickClock(); return; }
-  if(t.dataset.clockSec){ clockSeconds=!clockSeconds; sv("rm_clock_seconds",clockSeconds); renderClockPanel(); tickClock(); return; }
-  if(t.dataset.clockLandscape){ clockLandscape=!clockLandscape; sv("rm_clock_landscape",clockLandscape); renderClockPanel(); tickClock(); return; }
+  var csB=t.closest("[data-cp-style]"); if(csB){ clockStyle=csB.dataset.cpStyle; sv("rm_clock_style",clockStyle); renderClockPanel(); renderSplashClock(); return; }
+  var cfaceB=t.closest("[data-cp-face]"); if(cfaceB){ clockFace=cfaceB.dataset.cpFace; sv("rm_clock_face",clockFace); renderClockPanel(); renderSplashClock(); return; }
+  if(t.dataset.clockFmt){ clockFormat=t.dataset.clockFmt; sv("rm_clock_format",clockFormat); renderClockPanel(); renderSplashClock(); return; }
+  if(t.dataset.clockSec){ clockSeconds=!clockSeconds; sv("rm_clock_seconds",clockSeconds); renderClockPanel(); renderSplashClock(); return; }
+  if(t.dataset.clockLandscape){ clockLandscape=!clockLandscape; sv("rm_clock_landscape",clockLandscape); renderClockPanel(); renderSplashClock(); return; }
   if(t.id==="clock-settings-panel") closeClockPanel();
 });
-window.addEventListener("orientationchange",function(){ setTimeout(tickClock,100); });
-window.addEventListener("resize",function(){ var s=document.getElementById("splash"); if(s&&s.style.display!=="none") tickClock(); });
+document.getElementById("clock-font-dropdown").addEventListener("change",function(){
+  clockFont=this.value; sv("rm_clock_font",clockFont); renderClockPanel(); renderSplashClock();
+});
+window.addEventListener("orientationchange",function(){ setTimeout(renderSplashClock,100); });
+window.addEventListener("resize",function(){ var s=document.getElementById("splash"); if(s&&s.style.display!=="none") renderSplashClock(); });
 
 document.getElementById("splash-btn").addEventListener("click",function(){
   dismiss();
@@ -4135,21 +4592,7 @@ document.addEventListener("click",function(e){
 });
 
 // ── DAILY REMINDER ───────────────────────────────────────────────────────────
-var _reminderTimer=null;
-function scheduleReminder(){
-  if(_reminderTimer){clearTimeout(_reminderTimer);_reminderTimer=null;}
-  if(!reminderEnabled||!reminderTime||!('Notification' in window)||Notification.permission!=='granted') return;
-  var now=new Date();
-  var parts=reminderTime.split(':');
-  var target=new Date(now.getFullYear(),now.getMonth(),now.getDate(),parseInt(parts[0]),parseInt(parts[1]),0);
-  if(target<=now) target.setDate(target.getDate()+1);
-  var ms=target-now;
-  _reminderTimer=setTimeout(function(){
-    new Notification("Tracker Z",{body:"Time to log your tasks for today.",icon:""});
-    scheduleReminder(); // reschedule for tomorrow
-  },ms);
-}
-scheduleReminder();
+
 
 // ── LONG-PRESS QUICK STATS ───────────────────────────────────────────────────
 (function(){
