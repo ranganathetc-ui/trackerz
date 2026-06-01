@@ -1,0 +1,27 @@
+{
+  "name": "Tracker CCC",
+  "short_name": "Tracker",
+  "description": "Personal daily habit & recovery tracker",
+  "start_url": "./Tracker_CCC.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d0d0d",
+  "theme_color": "#0d0d0d",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%230d0d0d'/%3E%3Cpolygon points='96,36 126,76 96,116 66,76' fill='none' stroke='%234ade80' stroke-width='6'/%3E%3Cpolygon points='96,56 116,82 96,108 76,82' fill='none' stroke='%234ade80' stroke-width='4' opacity='0.6'/%3E%3Ccircle cx='96' cy='82' r='7' fill='%234ade80'/%3E%3Crect x='70' y='128' width='52' height='5' rx='2.5' fill='%234ade80' opacity='0.4'/%3E%3Crect x='80' y='140' width='32' height='5' rx='2.5' fill='%234ade80' opacity='0.25'/%3E%3Crect x='88' y='152' width='16' height='5' rx='2.5' fill='%234ade80' opacity='0.15'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230d0d0d'/%3E%3Cpolygon points='256,80 336,192 256,304 176,192' fill='none' stroke='%234ade80' stroke-width='14'/%3E%3Cpolygon points='256,136 306,200 256,264 206,200' fill='none' stroke='%234ade80' stroke-width='10' opacity='0.6'/%3E%3Ccircle cx='256' cy='200' r='20' fill='%234ade80'/%3E%3Crect x='180' y='340' width='152' height='14' rx='7' fill='%234ade80' opacity='0.4'/%3E%3Crect x='208' y='368' width='96' height='14' rx='7' fill='%234ade80' opacity='0.25'/%3E%3Crect x='228' y='396' width='56' height='14' rx='7' fill='%234ade80' opacity='0.15'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "lifestyle", "productivity"],
+  "prefer_related_applications": false
+}
