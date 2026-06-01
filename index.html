@@ -67,6 +67,9 @@
   .splash-greeting{font-size:9px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;margin-bottom:5px;text-align:center;font-weight:300;}
   .splash-name{font-size:17px;font-weight:300;color:var(--text);margin-bottom:10px;letter-spacing:2px;text-align:center;}
   .splash-quote{font-size:10px;color:var(--text3);text-align:center;line-height:2;max-width:210px;margin-bottom:20px;font-weight:300;font-style:italic;opacity:0.7;}
+  .splash-quote::after{content:'|';opacity:0;animation:none;margin-left:1px;font-style:normal;}
+  .splash-quote.typing::after{opacity:1;animation:blink-cursor 0.7s step-end infinite;}
+  @keyframes blink-cursor{0%,100%{opacity:1;}50%{opacity:0;}}
   .splash-stats{display:flex;gap:32px;margin-bottom:26px;align-items:center;}
   .splash-stat{font-size:8px;color:var(--text3);letter-spacing:2px;text-align:center;text-transform:uppercase;font-weight:300;}
   .splash-stat span{display:block;font-size:17px;font-weight:300;color:var(--accent);letter-spacing:0;margin-bottom:3px;}
@@ -1269,7 +1272,7 @@ function getPieData(){
 }
 
 function destroyChart(id){ if(chartInstances[id]){ chartInstances[id].destroy(); delete chartInstances[id]; } }
-function destroyAllCharts(){ ["bar","pie","tasks","radar","hist","dow","hdow","hmom","hhist","momentum"].forEach(destroyChart); }
+function destroyAllCharts(){ ["bar","pie","tasks","radar","hist","dow","hdow","hmom","hhist","momentum","cumulative"].forEach(destroyChart); }
 
 function reportTitle(){const d=getReportData();return(d&&d.title)||getToday().getFullYear()+"";}
 
@@ -1319,7 +1322,6 @@ function renderAnalytics(){
   const el=document.getElementById("view-analytics");
   const isTimePeriod=["day","week","month","year"].includes(reportPeriod);
 
-  // ── HTML shell ─────────────────────────────────────────────────────────────
   el.innerHTML=`
     <div class="lbl" style="margin-bottom:14px">Analytics</div>
     <div class="report-tabs" style="display:grid;grid-template-columns:repeat(6,1fr);gap:3px;margin-bottom:14px">
@@ -1327,11 +1329,15 @@ function renderAnalytics(){
         <button class="rtab ${reportPeriod===p?'active':''}" id="rtab-${p}" style="font-size:9px;padding:5px 2px">${p==="heat"?"Heat":p.charAt(0).toUpperCase()+p.slice(1)}</button>
       `).join('')}
     </div>
+
     ${isTimePeriod?`
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-        <button id="report-prev" class="nav-arrow">&#8249;</button>
-        <span style="font-size:12px;color:var(--text2);font-weight:500">${reportTitle()}</span>
-        <button id="report-next" class="nav-arrow" style="opacity:${getReportData().canNext?1:0.25}">&#8250;</button>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;padding:6px 10px">
+        <button id="report-prev" style="background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;padding:0 4px;line-height:1;flex-shrink:0">&#8249;</button>
+        <div style="flex:1;text-align:center">
+          <div style="font-size:12px;color:var(--text);font-weight:600">${reportTitle()}</div>
+          <div style="font-size:9px;color:var(--text3);letter-spacing:1px;margin-top:1px">${reportOffset===0?"CURRENT":reportOffset===-1?"PREVIOUS":Math.abs(reportOffset)+" BACK"}</div>
+        </div>
+        <button id="report-next" style="background:none;border:none;font-size:22px;cursor:pointer;padding:0 4px;line-height:1;flex-shrink:0;color:${getReportData().canNext?"var(--text2)":"var(--glass-border)"};${getReportData().canNext?"":"pointer-events:none"}">&#8250;</button>
       </div>` : ''}
 
     ${reportPeriod==="heat"?`
@@ -1339,44 +1345,68 @@ function renderAnalytics(){
     `:reportPeriod==="tasks"?`
       <div id="tasks-chart-wrap" class="chart-wrap"></div>
     `:`
-      <!-- Consistency stat cards -->
       <div id="consistency-cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px"></div>
-      <!-- Bar + Trend line -->
+
+      <div class="chart-wrap" style="text-align:center">
+        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Pace Gauge</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">avg vs personal best</span></div>
+        <div id="pace-gauge-wrap"></div>
+      </div>
+
       <div class="chart-wrap">
         <div class="chart-title">${reportPeriod==="day"?"Task Completion":"Score + Trend"}</div>
-        <canvas id="bar-chart" height="160"></canvas>
+        <canvas id="bar-chart" height="150"></canvas>
       </div>
-      <!-- Doughnut breakdown -->
+
+      ${reportPeriod!=="day"?`<div class="chart-wrap">
+        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Cumulative Strong Days</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">vs total days tracked</span></div>
+        <canvas id="cumulative-chart" height="110"></canvas>
+      </div>`:''}
+
+      ${(reportPeriod==="month"||reportPeriod==="year")?`<div class="chart-wrap">
+        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Score Volatility</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">high · avg · low${reportPeriod==="month"?" per week":" per month"}</span></div>
+        <div id="volatility-wrap"></div>
+      </div>`:''}
+
       <div class="chart-wrap">
-        <div class="chart-title">Breakdown</div>
-        <canvas id="pie-chart" height="160"></canvas>
+        <div class="chart-title">Quality Breakdown</div>
+        <canvas id="pie-chart" height="150"></canvas>
       </div>
-      <!-- Score Distribution Histogram -->
+
+      ${reportPeriod!=="day"?`<div class="chart-wrap">
+        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>PR Timeline</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">personal records flagged</span></div>
+        <div id="pr-timeline-wrap"></div>
+      </div>`:''}
+
       ${reportPeriod!=="day"?`<div class="chart-wrap">
         <div class="chart-title">Score Distribution</div>
-        <canvas id="hist-chart" height="120"></canvas>
+        <canvas id="hist-chart" height="110"></canvas>
       </div>`:''}
-      <!-- Day-of-Week Analysis -->
+
       ${reportPeriod!=="day"?`<div class="chart-wrap">
         <div class="chart-title">Best Day of Week</div>
-        <canvas id="dow-chart" height="120"></canvas>
+        <canvas id="dow-chart" height="110"></canvas>
       </div>`:''}
-      <!-- Momentum Flow -->
+
       ${(reportPeriod==="month"||reportPeriod==="year")?`<div class="chart-wrap">
-        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Momentum Flow</span><span style="font-size:8px;font-weight:400;opacity:0.45;letter-spacing:0">Rolling avg \u00b7 gradient fill</span></div>
-        <canvas id="momentum-chart" height="130"></canvas>
+        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Momentum Flow</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">rolling avg · gradient fill</span></div>
+        <canvas id="momentum-chart" height="110"></canvas>
       </div>`:''}
-      <!-- Consistency Rings -->
+
       ${(reportPeriod==="month"||reportPeriod==="year")?`<div class="chart-wrap">
-        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Consistency Rings</span><span style="font-size:8px;font-weight:400;opacity:0.45;letter-spacing:0">${reportPeriod==="month"?"Per week":"Per month"}</span></div>
+        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Consistency Rings</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">${reportPeriod==="month"?"per week":"per month"}</span></div>
         <div id="rings-canvas-wrap" style="overflow-x:auto;overflow-y:hidden;padding-bottom:4px"></div>
       </div>`:''}
-      <!-- Streak Density -->
+
       ${(reportPeriod==="month"||reportPeriod==="year")?`<div class="chart-wrap">
-        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Streak Density</span><span style="font-size:8px;font-weight:400;opacity:0.45;letter-spacing:0">Run lengths \u00b7 day by day</span></div>
-        <div id="streak-density-wrap" style="width:100%;overflow:hidden;border-radius:6px"></div>
+        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Streak Density</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">run length intensity</span></div>
+        <div id="streak-density-wrap" style="width:100%;overflow:hidden"></div>
       </div>`:''}
-      <!-- Summary -->
+
+      ${reportPeriod!=="day"?`<div class="chart-wrap">
+        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Task Leaderboard</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">completion rate this period</span></div>
+        <div id="leaderboard-wrap"></div>
+      </div>`:''}
+
       <div class="chart-wrap">
         <div class="chart-title">Summary</div>
         <div id="summary-text"></div>
@@ -1385,6 +1415,7 @@ function renderAnalytics(){
     <button class="export-btn" id="export-img-btn" style="margin-top:8px">Export as Image</button>
     <button class="export-btn" id="export-csv-btn" style="margin-top:6px">Export as CSV</button>
   `;
+
 
   // ── HEAT MAP ───────────────────────────────────────────────────────────────
   if(reportPeriod==="heat"){
@@ -1407,8 +1438,11 @@ function renderAnalytics(){
     const isCurrentYear=heatYear===today.getFullYear();
 
     // ── Vertical grid: 12 month rows × 31 day columns ────────────────────────
-    const C=Math.max(9,Math.min(13,Math.floor((window.innerWidth-60)/33)));
+    // Label col=28px, 31 cells each (C+GAP), minus last GAP
+    // Solve: 28 + 31*C + 30*GAP <= availW  =>  C = floor((availW - 28 - 30*GAP) / 31)
     const GAP=2;
+    const heatAvailW=Math.min(window.innerWidth, 480) - 32; // 16px padding each side
+    const C=Math.max(7, Math.floor((heatAvailW - 28 - 30*GAP) / 31));
 
     let monthRows='';
     for(let mo=0;mo<12;mo++){
@@ -1464,7 +1498,7 @@ function renderAnalytics(){
         </div>
       </div>
 
-      <div id="heat-grid">
+      <div id="heat-grid" style="overflow-x:auto;overflow-y:hidden">
         ${dayHeader}
         ${monthRows}
       </div>
@@ -1739,213 +1773,316 @@ function renderAnalytics(){
     options:{responsive:true,plugins:{legend:{display:true,position:"bottom",labels:{color:cssVar("--text2"),font:{size:9},padding:8,boxWidth:10}},tooltip:{callbacks:{label:ctx=>ctx.label+": "+ctx.raw+" days"}}}}
   });
 
-  if(reportPeriod!=="day"){
-    // Score Distribution Histogram (10 buckets 0-9%, 10-19%...90-100%)
-    const buckets=Array(10).fill(0);
-    valid.forEach(s=>{ buckets[Math.min(9,Math.floor(s/10))]++; });
-    const histCtx=document.getElementById("hist-chart").getContext("2d");
-    destroyChart("hist");
-    chartInstances["hist"]=new Chart(histCtx,{
-      type:"bar",
-      data:{
-        labels:["0-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80-89","90-100"],
-        datasets:[{data:buckets,backgroundColor:["#f87171","#f87171","#f87171","#f87171","#f87171","#facc15","#facc15","#facc15","#4ade80","#4ade80"].map(c=>c+"88"),borderColor:["#f87171","#f87171","#f87171","#f87171","#f87171","#facc15","#facc15","#facc15","#4ade80","#4ade80"],borderWidth:1,borderRadius:3}]
-      },
-      options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+" days"}}},
-        scales:{y:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:8}},grid:{display:false}}}}
+  // ── PACE GAUGE ─────────────────────────────────────────────────────────────
+  (function(){
+    const pgEl=document.getElementById("pace-gauge-wrap");
+    if(!pgEl) return;
+    const allKg=Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)&&k<=getTodayKey());
+    const allSg=allKg.map(k=>scoreOf(logs[k],k)).filter(s=>s>0);
+    const pgPB=allSg.length?Math.max(...allSg):100;
+    const pgNeedle=Math.min(avg/100,1), pgPBpct=Math.min(pgPB/100,1);
+    const pgW=220,pgH=120,pgCx=pgW/2,pgCy=pgH-10,pgR=88,pgSW=11;
+    function pgArc(pct,r){const a=Math.PI+pct*Math.PI;return{x:pgCx+r*Math.cos(a),y:pgCy+r*Math.sin(a)};}
+    let pgSvg="";
+    [[0,0.5,"#f8717133"],[0.5,0.8,"#facc1533"],[0.8,1,"#4ade8033"]].forEach(([fr,to,cl])=>{
+      const s=pgArc(fr,pgR),e=pgArc(to,pgR);
+      pgSvg+=`<path d="M ${s.x} ${s.y} A ${pgR} ${pgR} 0 ${(to-fr)>0.5?1:0} 1 ${e.x} ${e.y}" fill="none" stroke="${cl}" stroke-width="${pgSW+6}" stroke-linecap="butt"/>`;
     });
+    pgSvg+=`<path d="M ${pgCx-pgR} ${pgCy} A ${pgR} ${pgR} 0 0 1 ${pgCx+pgR} ${pgCy}" fill="none" stroke="${cssVar("--glass-border")}" stroke-width="${pgSW}" stroke-linecap="round"/>`;
+    if(pgNeedle>0){
+      const ep=pgArc(pgNeedle,pgR);
+      const pgC=avg>=80?"#4ade80":avg>=50?"#facc15":"#f87171";
+      pgSvg+=`<path d="M ${pgCx-pgR} ${pgCy} A ${pgR} ${pgR} 0 ${pgNeedle>0.5?1:0} 1 ${ep.x} ${ep.y}" fill="none" stroke="${pgC}" stroke-width="${pgSW}" stroke-linecap="round"/>`;
+    }
+    if(pgPBpct>0&&pgPBpct<=1){
+      const pm=pgArc(pgPBpct,pgR),pm2=pgArc(pgPBpct,pgR-pgSW-8);
+      pgSvg+=`<line x1="${pm.x.toFixed(1)}" y1="${pm.y.toFixed(1)}" x2="${pm2.x.toFixed(1)}" y2="${pm2.y.toFixed(1)}" stroke="${cssVar("--text2")}" stroke-width="2.5" stroke-linecap="round"/>`;
+      pgSvg+=`<text x="${pm2.x.toFixed(1)}" y="${(pm2.y-5).toFixed(1)}" text-anchor="middle" font-size="7" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">PB ${pgPB}%</text>`;
+    }
+    const pgNp=pgArc(pgNeedle,pgR-pgSW/2-3);
+    pgSvg+=`<line x1="${pgCx}" y1="${pgCy}" x2="${pgNp.x.toFixed(1)}" y2="${pgNp.y.toFixed(1)}" stroke="${cssVar("--text")}" stroke-width="2.5" stroke-linecap="round"/>`;
+    pgSvg+=`<circle cx="${pgCx}" cy="${pgCy}" r="5" fill="${cssVar("--text")}"/>`;
+    const pgCol2=avg>=80?"#4ade80":avg>=50?"#facc15":"#f87171";
+    pgSvg+=`<text x="${pgCx}" y="${pgCy-20}" text-anchor="middle" font-size="28" font-weight="700" fill="${pgCol2}" font-family="Inter,sans-serif">${avg}%</text>`;
+    pgSvg+=`<text x="${pgCx}" y="${pgCy-7}" text-anchor="middle" font-size="8" fill="${cssVar("--text3")}" letter-spacing="1.5" font-family="Inter,sans-serif">AVG SCORE</text>`;
+    pgSvg+=`<text x="${pgCx-pgR-2}" y="${pgCy+14}" text-anchor="end" font-size="8" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">0</text>`;
+    pgSvg+=`<text x="${pgCx+pgR+2}" y="${pgCy+14}" text-anchor="start" font-size="8" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">100</text>`;
+    pgEl.innerHTML=`<svg width="${pgW}" height="${pgH}" style="display:block;margin:0 auto;overflow:visible">${pgSvg}</svg>`;
+  })();
 
-    // Day-of-week analysis
-    const todayK=getTodayKey();
-    const dowTotals=Array(7).fill(0), dowCounts=Array(7).fill(0);
-    Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)&&k<=todayK).forEach(k=>{
-      const [y,m,d]=k.split("-").map(Number);
-      const dow=new Date(y,m-1,d).getDay();
-      const sc=scoreOf(logs[k],k);
-      if(sc>0){ dowTotals[dow]+=sc; dowCounts[dow]++; }
-    });
-    const dowAvg=dowTotals.map((t,i)=>dowCounts[i]?Math.round(t/dowCounts[i]):0);
-    const bestDow=dowAvg.indexOf(Math.max(...dowAvg));
-    const dowCtx=document.getElementById("dow-chart").getContext("2d");
-    destroyChart("dow");
-    chartInstances["dow"]=new Chart(dowCtx,{
-      type:"bar",
-      data:{
-        labels:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
-        datasets:[{data:dowAvg,backgroundColor:dowAvg.map((s,i)=>i===bestDow?clr(s)+"cc":clr(s)+"55"),borderColor:dowAvg.map(s=>clr(s)),borderWidth:1,borderRadius:3}]
-      },
-      options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+"%"}}},
-        scales:{y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{display:false}}}}
-    });
+  if(reportPeriod!=="day"){
+    // ── CUMULATIVE PROGRESS CURVE ───────────────────────────────────────────
+    (function(){
+      const cumEl2=document.getElementById("cumulative-chart");
+      if(!cumEl2) return;
+      destroyChart("cumulative");
+      let cumS=0,cumT=0;
+      const cumStrongArr=[],cumTotalArr=[];
+      data.scores.forEach(s=>{
+        if(s!==null){cumT++;if(s>=80)cumS++;}
+        cumStrongArr.push(cumS); cumTotalArr.push(cumT);
+      });
+      const cumGrad=cumEl2.getContext("2d").createLinearGradient(0,0,0,110);
+      cumGrad.addColorStop(0,"#4ade8055"); cumGrad.addColorStop(1,"#4ade8000");
+      chartInstances["cumulative"]=new Chart(cumEl2.getContext("2d"),{
+        type:"line",
+        data:{labels:data.labels,datasets:[
+          {data:cumStrongArr,label:"Strong",borderColor:"#4ade80",backgroundColor:cumGrad,fill:true,tension:0.4,borderWidth:2,pointRadius:0,spanGaps:true},
+          {data:cumTotalArr,label:"Total",borderColor:cssVar("--text3"),backgroundColor:"transparent",fill:false,tension:0,borderWidth:1.5,pointRadius:0,borderDash:[4,3],spanGaps:true}
+        ]},
+        options:{responsive:true,plugins:{legend:{display:true,labels:{color:cssVar("--text2"),font:{size:9},boxWidth:8,padding:10}}},
+          scales:{y:{min:0,ticks:{color:cssVar("--text3"),font:{size:9}},grid:{color:cssVar("--glass-border")}},
+            x:{ticks:{color:cssVar("--text3"),font:{size:8},maxTicksLimit:reportPeriod==="month"?8:12,maxRotation:0},grid:{display:false}}}}
+      });
+    })();
+
+    // ── SCORE DISTRIBUTION HISTOGRAM ────────────────────────────────────────
+    (function(){
+      const histEl=document.getElementById("hist-chart");
+      if(!histEl) return;
+      const histBuckets=Array(10).fill(0);
+      valid.forEach(s=>{ histBuckets[Math.min(9,Math.floor(s/10))]++; });
+      destroyChart("hist");
+      chartInstances["hist"]=new Chart(histEl.getContext("2d"),{
+        type:"bar",
+        data:{labels:["0-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80-89","90-100"],
+          datasets:[{data:histBuckets,backgroundColor:["#f87171","#f87171","#f87171","#f87171","#f87171","#facc15","#facc15","#facc15","#4ade80","#4ade80"].map(c=>c+"88"),borderColor:["#f87171","#f87171","#f87171","#f87171","#f87171","#facc15","#facc15","#facc15","#4ade80","#4ade80"],borderWidth:1,borderRadius:3}]},
+        options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+" days"}}},
+          scales:{y:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:8}},grid:{display:false}}}}
+      });
+    })();
+
+    // ── DAY OF WEEK ─────────────────────────────────────────────────────────
+    (function(){
+      const dowEl=document.getElementById("dow-chart");
+      if(!dowEl) return;
+      const dowTotArr=Array(7).fill(0), dowCntArr=Array(7).fill(0);
+      const dowTodayK=getTodayKey();
+      Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)&&k<=dowTodayK).forEach(k=>{
+        const[dy,dm,dd]=k.split("-").map(Number);
+        const dowDay=new Date(dy,dm-1,dd).getDay();
+        const dowSc=scoreOf(logs[k],k);
+        if(dowSc>0){dowTotArr[dowDay]+=dowSc; dowCntArr[dowDay]++;}
+      });
+      const dowAvgArr=dowTotArr.map((t,i)=>dowCntArr[i]?Math.round(t/dowCntArr[i]):0);
+      const dowBest=dowAvgArr.indexOf(Math.max(...dowAvgArr));
+      destroyChart("dow");
+      chartInstances["dow"]=new Chart(dowEl.getContext("2d"),{
+        type:"bar",
+        data:{labels:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+          datasets:[{data:dowAvgArr,backgroundColor:dowAvgArr.map((s,i)=>i===dowBest?clr(s)+"cc":clr(s)+"44"),borderColor:dowAvgArr.map(s=>clr(s)),borderWidth:1,borderRadius:4}]},
+        options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+"%"}}},
+          scales:{y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{display:false}}}}
+      });
+    })();
+
+    // ── PR TIMELINE ─────────────────────────────────────────────────────────
+    (function(){
+      const prEl=document.getElementById("pr-timeline-wrap");
+      if(!prEl) return;
+      const prScores=data.scores, prLabels=data.labels, prN=prScores.length;
+      const prW=Math.min(window.innerWidth-64,400), prH=96;
+      const prPT=24,prPB=18,prPH=6,priW=prW-prPH*2,priH=prH-prPT-prPB;
+      let prBestVal=0;
+      const prIsPR=prScores.map(s=>{if(s!==null&&s>prBestVal){prBestVal=s;return true;}return false;});
+      const prXof=i=>prPH+i/Math.max(prN-1,1)*priW;
+      const prYof=s=>s===null?null:prPT+priH-(s/100)*priH;
+      const prPts=prScores.map((s,i)=>s!==null?`${prXof(i).toFixed(1)},${prYof(s).toFixed(1)}`:null).filter(Boolean);
+      const prFv=prScores.findIndex(s=>s!==null);
+      const prLv=prN-1-[...prScores].reverse().findIndex(s=>s!==null);
+      const prAcH=cssVar("--accent")||"#4ade80";
+      const prGid="prg"+Math.random().toString(36).slice(2,7);
+      let prAreaPath="";
+      if(prFv>=0&&prLv>=0){
+        prAreaPath=`M ${prXof(prFv).toFixed(1)} ${prPT+priH} `+prScores.map((s,i)=>s!==null?`L ${prXof(i).toFixed(1)} ${prYof(s).toFixed(1)}`:"").filter(Boolean).join(" ")+` L ${prXof(prLv).toFixed(1)} ${prPT+priH} Z`;
+      }
+      let prFlagsSvg="";
+      prScores.forEach((s,i)=>{
+        if(!prIsPR[i]||s===null) return;
+        const prFx=prXof(i), prFy=prYof(s);
+        const prFc=s>=80?"#4ade80":s>=50?"#facc15":"#f87171";
+        prFlagsSvg+=`<line x1="${prFx.toFixed(1)}" y1="${prFy.toFixed(1)}" x2="${prFx.toFixed(1)}" y2="${(prFy-16).toFixed(1)}" stroke="${prFc}" stroke-width="1.5"/>`;
+        prFlagsSvg+=`<polygon points="${prFx.toFixed(1)},${(prFy-16).toFixed(1)} ${(prFx+9).toFixed(1)},${(prFy-13).toFixed(1)} ${prFx.toFixed(1)},${(prFy-9).toFixed(1)}" fill="${prFc}" opacity="0.9"/>`;
+        prFlagsSvg+=`<text x="${(prFx+11).toFixed(1)}" y="${(prFy-9).toFixed(1)}" font-size="7" fill="${prFc}" font-weight="700" font-family="Inter,sans-serif">${s}</text>`;
+      });
+      let prTicksSvg="";
+      const prStep=Math.max(1,Math.floor(prN/7));
+      for(let i=0;i<prN;i+=prStep) prTicksSvg+=`<text x="${prXof(i).toFixed(1)}" y="${prH-2}" text-anchor="middle" font-size="7" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">${prLabels[i]}</text>`;
+      prEl.innerHTML=`<svg width="${prW}" height="${prH}" style="display:block;max-width:100%;overflow:visible">
+        <defs><linearGradient id="${prGid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${prAcH}" stop-opacity="0.3"/><stop offset="100%" stop-color="${prAcH}" stop-opacity="0"/></linearGradient></defs>
+        ${prAreaPath?`<path d="${prAreaPath}" fill="url(#${prGid})"/>`:""}
+        ${prPts.length>1?`<polyline points="${prPts.join(" ")}" fill="none" stroke="${prAcH}" stroke-width="1.8" stroke-linejoin="round"/>`:""}
+        ${prFlagsSvg}${prTicksSvg}
+      </svg>`;
+    })();
+
+    // ── TASK LEADERBOARD ────────────────────────────────────────────────────
+    (function(){
+      const lbEl=document.getElementById("leaderboard-wrap");
+      if(!lbEl) return;
+      const lbTodayK=getTodayKey();
+      let lbKeys=[];
+      if(reportPeriod==="month"){
+        const lbBase=new Date(getToday().getFullYear(),getToday().getMonth()+reportOffset,1);
+        const lbDIM=new Date(lbBase.getFullYear(),lbBase.getMonth()+1,0).getDate();
+        for(let i=1;i<=lbDIM;i++) lbKeys.push(toKey(new Date(lbBase.getFullYear(),lbBase.getMonth(),i)));
+      } else if(reportPeriod==="week"){
+        const lbBase2=new Date(getToday());
+        lbBase2.setDate(lbBase2.getDate()+reportOffset*7);
+        for(let i=0;i<7;i++){const ld=new Date(lbBase2);ld.setDate(lbBase2.getDate()-lbBase2.getDay()+i);lbKeys.push(toKey(ld));}
+      } else if(reportPeriod==="year"){
+        const lbYr=getToday().getFullYear()+reportOffset;
+        lbKeys=Object.keys(logs).filter(k=>k.startsWith(lbYr+"")&&k<=lbTodayK);
+      }
+      lbKeys=lbKeys.filter(k=>k<=lbTodayK);
+      const lbRates=tasks.map(t=>{
+        let lbA=0,lbD=0;
+        lbKeys.forEach(k=>{
+          const lg=logs[k];if(!lg||!lg.__taskIds)return;
+          const lbH=lg.__hiddenIds||[];
+          if(!lg.__taskIds.includes(t.id)||lbH.includes(t.id))return;
+          if(t.deletedAt&&k>=t.deletedAt)return;
+          lbA++;if(lg[t.id])lbD++;
+        });
+        return{name:t.name,rate:lbA>0?Math.round(lbD/lbA*100):null,active:lbA};
+      }).filter(t=>t.active>0).sort((a,b)=>(b.rate||0)-(a.rate||0)).slice(0,8);
+      if(!lbRates.length){
+        lbEl.innerHTML=`<div style="color:var(--text3);font-size:11px;padding:10px 0;text-align:center">No task data this period</div>`;
+        return;
+      }
+      const lbMax=Math.max(...lbRates.map(t=>t.rate||0),1);
+      const medals=["🥇","🥈","🥉"];
+      lbEl.innerHTML=lbRates.map((t,i)=>{
+        const lbC=t.rate>=80?"#4ade80":t.rate>=50?"#facc15":"#f87171";
+        return `<div style="margin-bottom:9px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px"><div style="font-size:10px;color:var(--text);display:flex;align-items:center;gap:5px;min-width:0"><span style="flex-shrink:0">${medals[i]||i+1}</span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.name}</span></div><div style="font-size:10px;font-weight:700;color:${lbC};flex-shrink:0;margin-left:8px">${t.rate}%</div></div><div style="height:5px;background:var(--glass-border);border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.round((t.rate||0)/lbMax*100)}%;background:${lbC};border-radius:3px"></div></div></div>`;
+      }).join('');
+    })();
   }
 
-  // ── MOMENTUM FLOW (month/year only) ───────────────────────────────────────
   if(reportPeriod==="month"||reportPeriod==="year"){
-    const mCanvas=document.getElementById("momentum-chart");
-    if(mCanvas){
+    // ── SCORE VOLATILITY ────────────────────────────────────────────────────
+    (function(){
+      const vEl=document.getElementById("volatility-wrap");
+      if(!vEl) return;
+      const vW=Math.min(window.innerWidth-64,400),vH=110,vPT=10,vPB=20,viH=vH-vPT-vPB;
+      const vChunkSz=reportPeriod==="month"?7:1;
+      const vChunks=[];
+      for(let i=0;i<data.scores.length;i+=vChunkSz){
+        const vc=data.scores.slice(i,i+vChunkSz).filter(s=>s!==null);
+        if(vc.length) vChunks.push({min:Math.min(...vc),max:Math.max(...vc),avg:Math.round(vc.reduce((a,b)=>a+b,0)/vc.length),label:data.labels[i]});
+      }
+      const vNC=vChunks.length;
+      const vCW=Math.max(8,Math.floor((vW-20)/Math.max(vNC,1)));
+      const vCGap=Math.max(2,Math.floor(vCW*0.35));
+      const vBW=Math.max(4,vCW-vCGap);
+      let vSvg="",vTx="";
+      [0,50,100].forEach(vv=>{
+        const vGy=(vPT+viH-(vv/100)*viH).toFixed(1);
+        vSvg+=`<line x1="8" y1="${vGy}" x2="${vW-4}" y2="${vGy}" stroke="${cssVar("--glass-border")}" stroke-width="0.5"/>`;
+        vSvg+=`<text x="6" y="${vGy}" dominant-baseline="middle" font-size="7" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">${vv}</text>`;
+      });
+      const vStep=Math.max(1,Math.floor(vNC/8));
+      vChunks.forEach((vc2,i)=>{
+        const vx=12+i*vCW+vCGap/2;
+        const vyH=(vPT+viH-(vc2.max/100)*viH).toFixed(1);
+        const vyL=(vPT+viH-(vc2.min/100)*viH).toFixed(1);
+        const vyA=(vPT+viH-(vc2.avg/100)*viH).toFixed(1);
+        const vCol=vc2.avg>=80?"#4ade80":vc2.avg>=50?"#facc15":"#f87171";
+        const vBH=Math.max(2,parseFloat(vyL)-parseFloat(vyH));
+        vSvg+=`<line x1="${(vx+vBW/2).toFixed(1)}" y1="${vyH}" x2="${(vx+vBW/2).toFixed(1)}" y2="${vyL}" stroke="${vCol}" stroke-width="1.5" opacity="0.4"/>`;
+        vSvg+=`<rect x="${vx.toFixed(1)}" y="${vyH}" width="${vBW}" height="${vBH.toFixed(1)}" rx="2" fill="${vCol}" opacity="0.18"/>`;
+        vSvg+=`<line x1="${vx.toFixed(1)}" y1="${vyA}" x2="${(vx+vBW).toFixed(1)}" y2="${vyA}" stroke="${vCol}" stroke-width="2.5" stroke-linecap="round"/>`;
+        if(i%vStep===0) vTx+=`<text x="${(vx+vBW/2).toFixed(1)}" y="${vH-4}" text-anchor="middle" font-size="7" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">${vc2.label}</text>`;
+      });
+      vEl.innerHTML=`<svg width="${vW}" height="${vH}" style="display:block;max-width:100%">${vSvg}${vTx}</svg>`;
+    })();
+
+    // ── MOMENTUM FLOW ────────────────────────────────────────────────────────
+    (function(){
+      const mfEl=document.getElementById("momentum-chart");
+      if(!mfEl) return;
       destroyChart("momentum");
-      const mCtx=mCanvas.getContext("2d");
-      // Build gradient fill using accent color
-      const accentHex=cssVar("--accent")||"#4ade80";
-      const gradFill=mCtx.createLinearGradient(0,0,0,130);
-      gradFill.addColorStop(0,accentHex+"55");
-      gradFill.addColorStop(1,accentHex+"00");
-      // Rolling 3-point avg for smooth momentum line
-      const smoothed=data.scores.map((s,i,arr)=>{
-        const w=arr.slice(Math.max(0,i-2),i+3).filter(x=>x!==null);
-        return w.length?Math.round(w.reduce((a,b)=>a+b,0)/w.length):null;
+      const mfCtx=mfEl.getContext("2d");
+      const mfAcH=cssVar("--accent")||"#4ade80";
+      const mfGrad=mfCtx.createLinearGradient(0,0,0,110);
+      mfGrad.addColorStop(0,mfAcH+"44"); mfGrad.addColorStop(1,mfAcH+"00");
+      const mfSmoothed=data.scores.map((s,i,arr)=>{
+        const mfw=arr.slice(Math.max(0,i-2),i+3).filter(x=>x!==null);
+        return mfw.length?Math.round(mfw.reduce((a,b)=>a+b,0)/mfw.length):null;
       });
-      chartInstances["momentum"]=new Chart(mCtx,{
+      chartInstances["momentum"]=new Chart(mfCtx,{
         type:"line",
-        data:{
-          labels:data.labels,
-          datasets:[
-            // Raw scores as subtle scatter dots
-            {type:"scatter",data:data.scores.map((s,i)=>s!==null?{x:i,y:s}:null).filter(Boolean),
-             pointRadius:2.5,pointBackgroundColor:data.scores.map(s=>s!==null?clr(s)+"cc":"transparent"),
-             pointBorderWidth:0,showLine:false,order:2},
-            // Smoothed momentum area
-            {data:smoothed,borderColor:accentHex,borderWidth:2.5,
-             backgroundColor:gradFill,fill:true,tension:0.5,
-             pointRadius:0,spanGaps:true,order:1,label:"Momentum"}
-          ]
-        },
-        options:{responsive:true,
-          plugins:{legend:{display:false},
-            tooltip:{callbacks:{label:ctx=>ctx.raw!==null?Math.round(ctx.raw)+"%":"—"}}},
-          scales:{
-            y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%",stepSize:25},
-               grid:{color:cssVar("--glass-border")}},
-            x:{ticks:{color:cssVar("--text3"),font:{size:8},maxTicksLimit:reportPeriod==="month"?8:12,maxRotation:0},
-               grid:{display:false}}
-          }
-        }
+        data:{labels:data.labels,datasets:[
+          {type:"scatter",data:data.scores.map((s,i)=>s!==null?{x:i,y:s}:null).filter(Boolean),
+           pointRadius:2,pointBackgroundColor:data.scores.map(s=>s!==null?clr(s)+"bb":"transparent"),pointBorderWidth:0,showLine:false,order:2},
+          {data:mfSmoothed,borderColor:mfAcH,borderWidth:2,backgroundColor:mfGrad,fill:true,tension:0.45,pointRadius:0,spanGaps:true,order:1}
+        ]},
+        options:{responsive:true,plugins:{legend:{display:false}},
+          scales:{y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%",stepSize:25},grid:{color:cssVar("--glass-border")}},
+            x:{ticks:{color:cssVar("--text3"),font:{size:8},maxTicksLimit:reportPeriod==="month"?8:12,maxRotation:0},grid:{display:false}}}}
       });
-    }
+    })();
 
-    // ── CONSISTENCY RINGS (SVG radial arcs, Linear/Raycast style) ─────────────
-    const ringsWrap=document.getElementById("rings-canvas-wrap");
-    if(ringsWrap){
-      // Segment data: weeks for month, months for year
-      let segments=[];
+    // ── CONSISTENCY RINGS ────────────────────────────────────────────────────
+    (function(){
+      const crEl=document.getElementById("rings-canvas-wrap");
+      if(!crEl) return;
+      let crSegs=[];
       if(reportPeriod==="month"){
-        // group data.scores into ISO weeks of 7
-        const weekSize=7;
-        for(let i=0;i<data.scores.length;i+=weekSize){
-          const chunk=data.scores.slice(i,i+weekSize).filter(s=>s!==null);
-          const avg2=chunk.length?Math.round(chunk.reduce((a,b)=>a+b,0)/chunk.length):null;
-          const label=data.labels[i]+(data.labels[Math.min(i+weekSize-1,data.labels.length-1)]?
-            "–"+data.labels[Math.min(i+weekSize-1,data.labels.length-1)]:"");
-          segments.push({label:"W"+(Math.floor(i/weekSize)+1),avg:avg2,days:chunk.length});
+        for(let i=0;i<data.scores.length;i+=7){
+          const crCh=data.scores.slice(i,i+7).filter(s=>s!==null);
+          crSegs.push({label:"W"+(Math.floor(i/7)+1),avg:crCh.length?Math.round(crCh.reduce((a,b)=>a+b,0)/crCh.length):null});
         }
       } else {
-        // year: each month
-        data.labels.forEach((lbl,i)=>{
-          const s=data.scores[i];
-          segments.push({label:lbl.slice(0,3),avg:s,days:1});
-        });
+        data.labels.forEach((lbl,i)=>crSegs.push({label:lbl.slice(0,3),avg:data.scores[i]}));
       }
-
-      const R=36,STROKE=8,SZ=96,GAP=10;
-      const totalW=segments.length*(SZ+GAP)-GAP+20;
-      const accentHex2=cssVar("--accent")||"#4ade80";
-      const text3=cssVar("--text3")||"rgba(255,255,255,0.2)";
-      const text2=cssVar("--text2")||"rgba(255,255,255,0.35)";
-      const textC=cssVar("--text")||"#f0f0f0";
-      const glassB=cssVar("--glass-border")||"rgba(255,255,255,0.08)";
-
-      function ringColor(avg){ return avg===null?"transparent":avg>=80?"#4ade80":avg>=50?"#facc15":"#f87171"; }
-      function arcD(pct,r){
-        const angle=(pct/100)*2*Math.PI;
-        const x=SZ/2+r*Math.sin(angle);
-        const y=SZ/2-r*Math.cos(angle);
-        const large=angle>Math.PI?1:0;
-        if(pct>=100) return `M ${SZ/2} ${SZ/2-r} A ${r} ${r} 0 1 1 ${SZ/2-0.001} ${SZ/2-r} Z`;
-        return `M ${SZ/2} ${SZ/2-r} A ${r} ${r} 0 ${large} 1 ${x} ${y}`;
+      const crR=34,crSW=8,crSZ=90,crGap=8;
+      const crTW=crSegs.length*(crSZ+crGap)-crGap+16;
+      const crGB=cssVar("--glass-border")||"rgba(255,255,255,0.08)";
+      const crT3=cssVar("--text3")||"rgba(255,255,255,0.2)";
+      function crCol(a){return a===null?"transparent":a>=80?"#4ade80":a>=50?"#facc15":"#f87171";}
+      function crArc(pct,r,sz){
+        const a=(pct/100)*2*Math.PI,x=sz/2+r*Math.sin(a),y=sz/2-r*Math.cos(a),lg=a>Math.PI?1:0;
+        if(pct>=100)return `M ${sz/2} ${sz/2-r} A ${r} ${r} 0 1 1 ${sz/2-0.001} ${sz/2-r} Z`;
+        return `M ${sz/2} ${sz/2-r} A ${r} ${r} 0 ${lg} 1 ${x} ${y}`;
       }
-
-      let svgContent="";
-      segments.forEach((seg,i)=>{
-        const ox=10+i*(SZ+GAP);
-        const pct=seg.avg!==null?seg.avg:0;
-        const col=ringColor(seg.avg);
-        // Track ring (background circle)
-        svgContent+=`<circle cx="${SZ/2+ox}" cy="${SZ/2+8}" r="${R}" fill="none" stroke="${glassB}" stroke-width="${STROKE}"/>`;
-        // Progress arc
-        if(seg.avg!==null&&pct>0){
-          svgContent+=`<path d="${arcD(Math.min(pct,99.9),R)}" fill="none" stroke="${col}" stroke-width="${STROKE}" stroke-linecap="round" transform="translate(${ox},8)"/>`;
-        }
-        // Center value
-        const valStr=seg.avg!==null?seg.avg+"%":"—";
-        const valCol=seg.avg!==null?col:text3;
-        svgContent+=`<text x="${SZ/2+ox}" y="${SZ/2+12}" text-anchor="middle" font-size="13" font-weight="600" fill="${valCol}" font-family="Inter,-apple-system,sans-serif">${valStr}</text>`;
-        // Label below ring
-        svgContent+=`<text x="${SZ/2+ox}" y="${SZ+14}" text-anchor="middle" font-size="9" fill="${text3}" letter-spacing="0.5" font-family="Inter,-apple-system,sans-serif">${seg.label}</text>`;
+      let crSvg="";
+      crSegs.forEach((seg,i)=>{
+        const ox=8+i*(crSZ+crGap),pct=seg.avg!==null?seg.avg:0,c=crCol(seg.avg);
+        crSvg+=`<circle cx="${crSZ/2+ox}" cy="${crSZ/2+6}" r="${crR}" fill="none" stroke="${crGB}" stroke-width="${crSW}"/>`;
+        if(seg.avg!==null&&pct>0) crSvg+=`<path d="${crArc(Math.min(pct,99.9),crR,crSZ)}" fill="none" stroke="${c}" stroke-width="${crSW}" stroke-linecap="round" transform="translate(${ox},6)"/>`;
+        crSvg+=`<text x="${crSZ/2+ox}" y="${crSZ/2+10}" text-anchor="middle" font-size="12" font-weight="700" fill="${seg.avg!==null?c:crT3}" font-family="Inter,sans-serif">${seg.avg!==null?seg.avg+"%":"—"}</text>`;
+        crSvg+=`<text x="${crSZ/2+ox}" y="${crSZ+14}" text-anchor="middle" font-size="8" fill="${crT3}" font-family="Inter,sans-serif">${seg.label}</text>`;
       });
+      crEl.innerHTML=`<div style="overflow-x:auto;padding:4px 0"><svg width="${Math.max(crTW,260)}" height="${crSZ+20}" style="display:block">${crSvg}</svg></div>`;
+    })();
 
-      ringsWrap.innerHTML=`<div style="overflow-x:auto;padding:6px 0 4px">
-        <svg width="${Math.max(totalW,280)}" height="${SZ+24}" style="display:block">
-          ${svgContent}
-        </svg>
-      </div>`;
-    }
-
-    // ── STREAK DENSITY (micro-bar strip with gradient coloring) ───────────────
-    const sdWrap=document.getElementById("streak-density-wrap");
-    if(sdWrap){
-      const scores=data.scores;
-      const labels=data.labels;
-      const n=scores.length;
-      if(n>0){
-        const BAR_GAP=2;
-        // Dynamically size bars to fill container width (~340px usable)
-        const containerW=Math.min(window.innerWidth-64,400);
-        const barW=Math.max(3,Math.floor((containerW-(n-1)*BAR_GAP)/n));
-        const totalSvgW=(barW+BAR_GAP)*n-BAR_GAP;
-        const maxH=60;
-
-        // Calculate run lengths (streak context for each bar)
-        const runLen=new Array(n).fill(1);
-        for(let i=1;i<n;i++){
-          if(scores[i]!==null&&scores[i]>0&&scores[i-1]!==null&&scores[i-1]>0){
-            runLen[i]=runLen[i-1]+1;
-          }
-        }
-        const maxRun=Math.max(...runLen,1);
-
-        let bars="";
-        scores.forEach((s,i)=>{
-          const x=i*(barW+BAR_GAP);
-          if(s===null){
-            bars+=`<rect x="${x}" y="${maxH-4}" width="${barW}" height="4" rx="1" fill="${cssVar("--glass-border")||"rgba(255,255,255,0.06)"}" opacity="0.3"/>`;
-            return;
-          }
-          if(s===0){
-            bars+=`<rect x="${x}" y="${maxH-3}" width="${barW}" height="3" rx="1" fill="#f87171" opacity="0.2"/>`;
-            return;
-          }
-          // Height based on score, intensity based on run length
-          const h=Math.max(6,Math.round((s/100)*maxH));
-          const intensity=0.45+0.55*(runLen[i]/maxRun);
-          const col=s>=80?"#4ade80":s>=50?"#facc15":"#f87171";
-          bars+=`<rect x="${x}" y="${maxH-h}" width="${barW}" height="${h}" rx="${Math.min(2,barW/2)}" fill="${col}" opacity="${intensity.toFixed(2)}"/>`;
-        });
-
-        // X-axis label ticks (every ~5 or every month)
-        let ticks="";
-        const step=Math.max(1,Math.floor(n/8));
-        for(let i=0;i<n;i+=step){
-          const x=i*(barW+BAR_GAP)+barW/2;
-          ticks+=`<text x="${x}" y="${maxH+14}" text-anchor="middle" font-size="8" fill="${cssVar("--text3")||"rgba(255,255,255,0.2)"}" font-family="Inter,-apple-system,sans-serif">${labels[i]}</text>`;
-        }
-
-        sdWrap.innerHTML=`<svg width="${totalSvgW}" height="${maxH+20}" style="display:block;max-width:100%">
-          ${bars}${ticks}
-        </svg>`;
-      } else {
-        sdWrap.innerHTML=`<div style="text-align:center;color:var(--text3);font-size:11px;padding:20px 0">No data yet</div>`;
-      }
-    }
+    // ── STREAK DENSITY ───────────────────────────────────────────────────────
+    (function(){
+      const sdEl2=document.getElementById("streak-density-wrap");
+      if(!sdEl2) return;
+      const sdS=data.scores,sdLb=data.labels,sdN=sdS.length;
+      if(!sdN) return;
+      const sdGap=2,sdCW=Math.min(window.innerWidth-64,400);
+      const sdBW=Math.max(3,Math.floor((sdCW-(sdN-1)*sdGap)/sdN));
+      const sdTW=(sdBW+sdGap)*sdN-sdGap,sdMH=56;
+      const sdRL=new Array(sdN).fill(1);
+      for(let i=1;i<sdN;i++){if(sdS[i]!==null&&sdS[i]>0&&sdS[i-1]!==null&&sdS[i-1]>0)sdRL[i]=sdRL[i-1]+1;}
+      const sdMaxR=Math.max(...sdRL,1);
+      let sdBars="",sdTicks="";
+      sdS.forEach((s,i)=>{
+        const sx=i*(sdBW+sdGap);
+        if(s===null){sdBars+=`<rect x="${sx}" y="${sdMH-3}" width="${sdBW}" height="3" rx="1" fill="${cssVar("--glass-border")}" opacity="0.3"/>`;return;}
+        if(s===0){sdBars+=`<rect x="${sx}" y="${sdMH-3}" width="${sdBW}" height="3" rx="1" fill="#f87171" opacity="0.18"/>`;return;}
+        const sdH=Math.max(5,Math.round((s/100)*sdMH));
+        const sdOp=(0.4+0.6*(sdRL[i]/sdMaxR)).toFixed(2);
+        const sdC=s>=80?"#4ade80":s>=50?"#facc15":"#f87171";
+        sdBars+=`<rect x="${sx}" y="${sdMH-sdH}" width="${sdBW}" height="${sdH}" rx="${Math.min(2,Math.floor(sdBW/2))}" fill="${sdC}" opacity="${sdOp}"/>`;
+      });
+      const sdStep=Math.max(1,Math.floor(sdN/8));
+      for(let i=0;i<sdN;i+=sdStep) sdTicks+=`<text x="${i*(sdBW+sdGap)+sdBW/2}" y="${sdMH+13}" text-anchor="middle" font-size="7" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">${sdLb[i]}</text>`;
+      sdEl2.innerHTML=`<svg width="${sdTW}" height="${sdMH+16}" style="display:block;max-width:100%">${sdBars}${sdTicks}</svg>`;
+    })();
   }
 
   // Summary text
@@ -1958,7 +2095,6 @@ function renderAnalytics(){
     </div>
   `;
 }
-
 function renderSettings(){
   const el=document.getElementById("view-settings");
   el.innerHTML=`
@@ -4011,7 +4147,18 @@ document.getElementById("view-macros").addEventListener("click",function(e){
 
   // Greeting, name, quote or intention
   document.getElementById("splash-greeting").textContent=getGreeting();
-  document.getElementById("splash-quote").textContent=q;
+  (function(){
+    var qEl=document.getElementById("splash-quote");
+    if(!qEl) return;
+    qEl.textContent="";
+    qEl.classList.add("typing");
+    var i=0, delay=38; // ms per character — slow enough to read, fast enough to feel snappy
+    function typeNext(){
+      if(i<q.length){ qEl.textContent+=q[i++]; setTimeout(typeNext,delay+(q[i-1]==="."||q[i-1]===","?120:0)); }
+      else { setTimeout(function(){ qEl.classList.remove("typing"); },800); } // cursor blinks then fades
+    }
+    setTimeout(typeNext, 320); // short pause after clock renders before typing starts
+  })();
   document.getElementById("splash-name").textContent=userName?userName:"Welcome";
   if(userName) document.getElementById("header-username").textContent=userName;
   const modeLabel=document.getElementById("app-mode-label");
