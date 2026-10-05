@@ -8,127 +8,125 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@200;300&family=Bodoni+Moda:opsz,wght@6..96,200&family=Cinzel:wght@300&family=Josefin+Sans:wght@100&family=Rajdhani:wght@300&family=Orbitron:wght@400;500&family=Share+Tech+Mono&family=Syne:wght@200&family=Unbounded:wght@200&family=Italiana&family=Poiret+One&family=Exo+2:wght@100;200&family=Saira+Condensed:wght@200;300&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-  :root{--bg:#0d0d0d;--bg2:rgba(255,255,255,0.03);--bg3:rgba(255,255,255,0.06);--bg4:rgba(255,255,255,0.09);--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--text:#f0f0f0;--text2:rgba(255,255,255,0.35);--text3:rgba(255,255,255,0.2);--green:#4ade80;--yellow:#fbbf24;--red:#f87171;--radius:14px;--bg-card:#111111;--bg-cell:#141414;--bg-lift:#1a1a1a;}
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  :root{--bg:#f5f5f7;--bg2:rgba(0,0,0,0.045);--bg3:rgba(0,0,0,0.06);--bg4:rgba(0,0,0,0.08);--glass:rgba(0,0,0,0.035);--glass-border:rgba(0,0,0,0.09);--text:#1d1d1f;--text2:rgba(29,29,31,0.55);--text3:rgba(29,29,31,0.35);--green:#30d158;--yellow:#ff9f0a;--red:#ff3b30;--accent:#0071e3;--accent-glow:rgba(0,113,227,0.22);--radius:20px;--radius-sm:12px;--radius-pill:980px;--bg-card:#ffffff;--bg-cell:#f4f4f6;--bg-lift:#ececef;--shadow-xs:0 1px 2px rgba(0,0,0,0.04);--shadow-sm:0 2px 10px rgba(0,0,0,0.05);--shadow-md:0 8px 24px rgba(0,0,0,0.07);--shadow-lg:0 16px 40px rgba(0,0,0,0.10);}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-  body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;min-height:100vh;overflow-x:hidden;}
-  #app{max-width:480px;margin:0 auto;padding-bottom:100px;}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Inter',"Helvetica Neue",Arial,sans-serif;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+  #app{max-width:480px;margin:0 auto;padding-bottom:40px;}
   /* SPLASH */
-  #splash{position:fixed;inset:0;z-index:100;background:#0d0d0d;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:56px 36px 44px;}
+  #splash{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:56px 36px 44px;}
   @keyframes orbit-spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-  @keyframes logo-pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
-  @keyframes logo-glow{0%,100%{box-shadow:0 0 18px 4px rgba(255,255,255,0.06);}50%{box-shadow:0 0 32px 10px rgba(255,255,255,0.13);}}
+  @keyframes logo-pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.04);}}
+  @keyframes logo-glow{0%,100%{box-shadow:0 4px 16px rgba(0,0,0,0.08);}50%{box-shadow:0 6px 24px rgba(0,0,0,0.14);}}
   @keyframes sp-twinkle{0%,100%{opacity:0;transform:scale(0.4);}50%{opacity:1;transform:scale(1);}}
   #splash.hide{display:none!important;}
   .splash-top{display:flex;flex-direction:column;align-items:center;width:100%;}
   .splash-logo{margin-bottom:28px;}
-  .splash-clock{font-size:54px;font-weight:300;letter-spacing:6px;color:var(--text);line-height:1;margin-bottom:10px;text-align:center;opacity:0.95;transition:font-family 0.3s ease,letter-spacing 0.3s ease,font-weight 0.3s ease;}
+  .splash-clock{font-size:56px;font-weight:600;letter-spacing:-1px;color:var(--text);line-height:1;margin-bottom:10px;text-align:center;transition:font-family 0.3s ease,letter-spacing 0.3s ease,font-weight 0.3s ease;}
   #clock-settings-btn{color:var(--text);}
   #splash-clock-wrap{transition:all 0.4s ease;width:100%;max-width:100%;box-sizing:border-box;overflow:hidden;}
   /* Ring face */
-  #splash-clock-wrap.face-ring::before{content:'';position:absolute;width:140px;height:140px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
-  #splash-clock-wrap.face-ring::after{content:'';position:absolute;width:160px;height:160px;border-radius:50%;border:1px solid rgba(255,255,255,0.05);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
-  #splash-clock-wrap.face-ring .splash-clock{font-size:44px;letter-spacing:4px;}
+  #splash-clock-wrap.face-ring::before{content:'';position:absolute;width:140px;height:140px;border-radius:50%;border:1px solid var(--glass-border);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+  #splash-clock-wrap.face-ring::after{content:'';position:absolute;width:160px;height:160px;border-radius:50%;border:1px solid rgba(0,0,0,0.04);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+  #splash-clock-wrap.face-ring .splash-clock{font-size:44px;letter-spacing:-0.5px;}
   /* Rectangle face */
-  #splash-clock-wrap.face-rectangle{border:1px solid rgba(255,255,255,0.15);padding:16px 28px;border-radius:4px;}
+  #splash-clock-wrap.face-rectangle{border:1px solid var(--glass-border);padding:16px 28px;border-radius:var(--radius-sm);}
   /* Digital face */
-  #splash-clock-wrap.face-digital{background:rgba(0,255,120,0.04);border:1px solid rgba(0,255,120,0.15);padding:12px 24px;border-radius:6px;}
-  #splash-clock-wrap.face-digital .splash-clock{color:#00ff78!important;font-family:'Share Tech Mono',monospace!important;font-weight:400!important;letter-spacing:6px;text-shadow:0 0 12px rgba(0,255,120,0.5);}
+  #splash-clock-wrap.face-digital{background:rgba(48,209,88,0.06);border:1px solid rgba(48,209,88,0.18);padding:12px 24px;border-radius:var(--radius-sm);}
+  #splash-clock-wrap.face-digital .splash-clock{color:#248a3d!important;font-family:'Share Tech Mono',monospace!important;font-weight:400!important;letter-spacing:4px;}
   /* Arc face */
   #splash-clock-wrap.face-arc{padding-top:16px;}
-  #splash-clock-wrap.face-arc::before{content:'';position:absolute;width:200px;height:100px;border-radius:100px 100px 0 0;border:1px solid rgba(255,255,255,0.12);border-bottom:none;top:0;left:50%;transform:translateX(-50%);pointer-events:none;}
+  #splash-clock-wrap.face-arc::before{content:'';position:absolute;width:200px;height:100px;border-radius:100px 100px 0 0;border:1px solid var(--glass-border);border-bottom:none;top:0;left:50%;transform:translateX(-50%);pointer-events:none;}
   /* Pill face */
-  #splash-clock-wrap.face-pill{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);padding:14px 36px;border-radius:60px;}
+  #splash-clock-wrap.face-pill{background:var(--glass);border:1px solid var(--glass-border);padding:14px 36px;border-radius:var(--radius-pill);}
   /* Split face */
   #splash-clock-wrap.face-split .splash-clock{letter-spacing:0;font-size:48px;}
-  /* Neon face */
-  #splash-clock-wrap.face-neon{border:1px solid rgba(255,255,255,0.3);padding:12px 28px;border-radius:8px;box-shadow:0 0 20px rgba(255,255,255,0.08),inset 0 0 20px rgba(255,255,255,0.02);}
-  #splash-clock-wrap.face-neon .splash-clock{text-shadow:0 0 16px rgba(255,255,255,0.4);}
+  /* Neon face -> refined outline face */
+  #splash-clock-wrap.face-neon{border:1px solid var(--glass-border);padding:12px 28px;border-radius:var(--radius-sm);box-shadow:var(--shadow-sm);}
+  #splash-clock-wrap.face-neon .splash-clock{color:var(--accent);}
   /* Font dropdown */
-  #clock-font-dropdown{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);padding:10px 14px;font-size:13px;border-radius:10px;font-family:inherit;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
-  #clock-font-dropdown option{background:#1a1a1a;color:#e0e0e0;}
-  .clock-opt-btn{border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.5);cursor:pointer;font-family:inherit;text-transform:uppercase;letter-spacing:1px;transition:all 0.2s;}
-  .clock-opt-btn.active{border-color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.1);color:var(--text);}
+  #clock-font-dropdown{width:100%;background:var(--bg2);border:1px solid var(--glass-border);color:var(--text);padding:10px 14px;font-size:13px;border-radius:var(--radius-sm);font-family:inherit;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(0,0,0,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+  #clock-font-dropdown option{background:#ffffff;color:#1d1d1f;}
+  .clock-opt-btn{border:1px solid var(--glass-border);background:var(--glass);color:var(--text2);cursor:pointer;font-family:inherit;text-transform:uppercase;letter-spacing:0.5px;transition:all 0.2s;border-radius:var(--radius-sm);}
+  .clock-opt-btn.active{border-color:var(--accent);background:var(--accent-glow);color:var(--accent);}
   #clock-settings-panel{color:var(--text);}
   /* Landscape fullscreen clock */
   @media (orientation:landscape){
     #splash.landscape-clock-mode .splash-top{flex:1;display:flex;align-items:center;justify-content:center;}
-    #splash.landscape-clock-mode .splash-clock{font-size:18vw;letter-spacing:2vw;}
+    #splash.landscape-clock-mode .splash-clock{font-size:18vw;letter-spacing:-0.5vw;}
     #splash.landscape-clock-mode .splash-logo,
     #splash.landscape-clock-mode .splash-day,
     #splash.landscape-clock-mode .splash-date{display:none;}
     #splash.landscape-clock-mode .splash-bottom{display:none;}
     #splash.landscape-clock-mode{justify-content:center;}
   }
-  .splash-day{font-size:9px;color:var(--text3);letter-spacing:5px;text-transform:uppercase;text-align:center;margin-bottom:3px;font-weight:300;}
-  .splash-date{font-size:11px;color:var(--text2);letter-spacing:2px;text-align:center;font-weight:300;}
+  .splash-day{font-size:11px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;text-align:center;margin-bottom:4px;font-weight:600;}
+  .splash-date{font-size:13px;color:var(--text2);letter-spacing:0.2px;text-align:center;font-weight:500;}
   .splash-bottom{display:flex;flex-direction:column;align-items:center;width:100%;}
-  .splash-divider{width:20px;height:1px;background:var(--glass-border);margin:0 auto 20px;}
-  .splash-greeting{font-size:9px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;margin-bottom:5px;text-align:center;font-weight:300;}
-  .splash-name{font-size:17px;font-weight:300;color:var(--text);margin-bottom:10px;letter-spacing:2px;text-align:center;}
-  .splash-quote{font-size:10px;color:var(--text3);text-align:center;line-height:2;max-width:210px;margin-bottom:20px;font-weight:300;font-style:italic;opacity:0.7;}
-  .splash-quote::after{content:'|';opacity:0;animation:none;margin-left:1px;font-style:normal;}
-  .splash-quote.typing::after{opacity:1;animation:blink-cursor 0.7s step-end infinite;}
-  @keyframes blink-cursor{0%,100%{opacity:1;}50%{opacity:0;}}
-  .splash-stats{display:flex;gap:32px;margin-bottom:26px;align-items:center;}
-  .splash-stat{font-size:8px;color:var(--text3);letter-spacing:2px;text-align:center;text-transform:uppercase;font-weight:300;}
-  .splash-stat span{display:block;font-size:17px;font-weight:300;color:var(--accent);letter-spacing:0;margin-bottom:3px;}
-  .splash-stat-sep{width:1px;height:22px;background:var(--glass-border);opacity:0.4;}
-  .splash-btn{background:var(--text);border:none;color:#0d0d0d;padding:12px 48px;font-size:10px;font-weight:500;letter-spacing:3px;border-radius:50px;cursor:pointer;font-family:inherit;text-transform:uppercase;}
-  .splash-sub{font-size:8px;color:var(--text3);margin-top:10px;letter-spacing:3px;text-transform:uppercase;font-weight:300;opacity:0.35;}
+  .splash-divider{width:32px;height:1px;background:var(--glass-border);margin:0 auto 20px;}
+  .splash-greeting{font-size:11px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;text-align:center;font-weight:600;}
+  .splash-name{font-size:19px;font-weight:600;color:var(--text);margin-bottom:12px;letter-spacing:-0.2px;text-align:center;}
+  .splash-quote{font-size:12px;color:var(--text3);text-align:center;line-height:1.7;max-width:230px;margin-bottom:22px;font-weight:400;font-style:normal;opacity:0.85;}
+  .splash-stats{display:flex;gap:32px;margin-bottom:28px;align-items:center;}
+  .splash-stat{font-size:9px;color:var(--text3);letter-spacing:1px;text-align:center;text-transform:uppercase;font-weight:600;}
+  .splash-stat span{display:block;font-size:19px;font-weight:700;color:var(--accent);letter-spacing:-0.3px;margin-bottom:4px;}
+  .splash-stat-sep{width:1px;height:22px;background:var(--glass-border);opacity:0.7;}
+  .splash-btn{background:var(--accent);border:none;color:#ffffff;padding:14px 48px;font-size:14px;font-weight:600;letter-spacing:0;border-radius:var(--radius-pill);cursor:pointer;font-family:inherit;text-transform:none;box-shadow:var(--shadow-sm);}
+  .splash-btn:active{opacity:0.85;}
+  .splash-sub{font-size:9px;color:var(--text3);margin-top:12px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;opacity:0.55;}
   /* HEADER */
-
-
-
-
-
-
-
-  /* HEADER */
-  #header{padding:20px 20px 14px;border-bottom:1px solid var(--glass-border);position:fixed;top:0;left:0;right:0;background:rgba(13,13,13,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:9;transition:transform 0.46s cubic-bezier(0.32,0.72,0,1),opacity 0.32s ease;}
+  #header{padding:18px 20px 16px;border-bottom:1px solid var(--glass-border);position:fixed;top:0;left:0;right:0;background:rgba(245,245,247,0.82);backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6);z-index:9;transition:transform 0.46s cubic-bezier(0.32,0.72,0,1),opacity 0.32s ease;}
   #header.collapsed{transform:translateY(-100%);opacity:0;pointer-events:none;}
   /* Swipe indicator pill — shows briefly when header revealed/hidden */
   #header-indicator{
     position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:12;
     width:36px;height:4px;border-radius:2px;
-    background:rgba(255,255,255,0.25);
+    background:rgba(0,0,0,0.18);
     pointer-events:none;
     opacity:0;transition:opacity 0.3s ease;
   }
   #header-indicator.show{opacity:1;}
   #header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
-  .header-user{font-size:11px;color:var(--text3);letter-spacing:1px;text-align:right;}
-  #jump-today-btn{display:none;background:none;border:1px solid var(--glass-border);color:var(--text2);padding:4px 12px;font-size:10px;letter-spacing:1px;border-radius:20px;cursor:pointer;font-family:inherit;}
-  .lbl{font-size:10px;color:var(--text3);letter-spacing:3px;margin-bottom:4px;text-transform:uppercase;}
-  #date-title{font-size:22px;font-weight:700;letter-spacing:-0.5px;}
-  #progress-bar-wrap{height:2px;background:var(--glass-border);border-radius:2px;margin-top:14px;overflow:hidden;}
-  #progress-bar{height:100%;width:0%;border-radius:2px;transition:width 0.5s ease;}
-  #progress-meta{display:flex;justify-content:space-between;margin-top:7px;font-size:10px;color:var(--text3);}
-  /* NAV */
-  #nav{display:flex;border-bottom:1px solid var(--glass-border);overflow-x:auto;background:rgba(13,13,13,0.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);scrollbar-width:none;position:fixed;top:var(--header-h,110px);left:0;right:0;z-index:8;}
+  .header-user{font-size:12px;color:var(--text3);letter-spacing:0.2px;text-align:right;font-weight:500;}
+  #jump-today-btn{display:none;background:var(--glass);border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:11px;font-weight:600;letter-spacing:0.2px;border-radius:var(--radius-pill);cursor:pointer;font-family:inherit;}
+  .lbl{font-size:11px;color:var(--text3);letter-spacing:1px;margin-bottom:5px;text-transform:uppercase;font-weight:600;}
+  #date-title{font-size:24px;font-weight:700;letter-spacing:-0.6px;}
+  #progress-bar-wrap{height:6px;background:var(--glass-border);border-radius:6px;margin-top:14px;overflow:hidden;}
+  #progress-bar{height:100%;width:0%;border-radius:6px;transition:width 0.5s ease;background:var(--accent);}
+  #progress-meta{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--text3);font-weight:500;}
+  /* NAV — segmented control style */
+  #nav-wrap{position:fixed;left:0;right:0;z-index:9;padding:0 14px;pointer-events:none;transition:top 0.46s cubic-bezier(0.32,0.72,0,1),opacity 0.32s ease;}
+  #nav{display:flex;gap:2px;pointer-events:auto;background:var(--bg-card);border:1px solid var(--glass-border);border-radius:20px;box-shadow:var(--shadow-md);padding:5px;margin:10px auto 0;max-width:452px;}
   #nav::-webkit-scrollbar{display:none;}
-  .nav-btn{flex:1;min-width:48px;padding:13px 2px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text3);font-size:9px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;font-family:inherit;white-space:nowrap;}
-  .nav-btn.active{border-bottom:2px solid var(--text);color:var(--text);}
-  #sub-nav{display:none;border-bottom:1px solid var(--glass-border);background:rgba(13,13,13,0.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:0 12px;position:fixed;top:var(--subnav-top,152px);left:0;right:0;z-index:7;}
+  .nav-btn{flex:1;min-width:0;position:relative;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:5px;padding:9px 4px;background:none;border:none;border-radius:15px;color:var(--text3);font-size:10px;font-weight:600;letter-spacing:0.1px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:color 0.2s,transform 0.15s,flex 0.25s ease;z-index:1;}
+  .nav-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.9;transition:transform 0.2s;flex-shrink:0;}
+  .nav-btn span{display:none;font-size:11px;font-weight:600;}
+  .nav-btn.active{color:#fff;flex:1.5;}
+  .nav-btn.active span{display:inline;}
+  .nav-btn.active::before{content:'';position:absolute;inset:0;background:var(--accent);border-radius:15px;z-index:-1;box-shadow:0 2px 8px var(--accent-glow);animation:navPillIn 0.3s cubic-bezier(0.34,1.4,0.64,1);}
+  @keyframes navPillIn{0%{transform:scale(0.85);opacity:0.5;}100%{transform:scale(1);opacity:1;}}
+  .nav-btn.active svg{transform:scale(1.06);}
+  .nav-btn:active{transform:scale(0.93);}
+  #sub-nav{display:none;border-bottom:1px solid var(--glass-border);background:rgba(245,245,247,0.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:0 12px;position:fixed;top:var(--subnav-top,152px);left:0;right:0;z-index:7;}
   #sub-nav.visible{display:flex;gap:4px;}
-  .sub-btn{flex:1;padding:7px 4px;text-align:center;background:none;border:none;border-radius:20px;color:var(--text3);font-size:8px;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;font-family:inherit;margin:6px 0;transition:background 0.15s,color 0.15s;}
-  .sub-btn.active{background:rgba(255,255,255,0.08);color:var(--text);border-radius:20px;}
+  .sub-btn{flex:1;padding:7px 4px;text-align:center;background:none;border:none;border-radius:var(--radius-pill);color:var(--text3);font-size:9px;font-weight:600;letter-spacing:0.6px;cursor:pointer;text-transform:uppercase;font-family:inherit;margin:7px 0;transition:background 0.15s,color 0.15s;}
+  .sub-btn.active{background:var(--bg-card);color:var(--text);box-shadow:var(--shadow-xs);}
   /* BODY */
   .body{padding:16px;padding-top:8px;}
   .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
   /* TASK ROWS */
   .task-row{display:flex;align-items:center;padding:14px 0;gap:14px;border-bottom:1px solid var(--glass-border);animation:fadeRow 0.2s ease;}
   .task-row-tappable{cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity 0.1s;}
-  .task-row-tappable:active{opacity:0.6;}
+  .task-row-tappable:active{opacity:0.55;}
   body.compact .task-row{padding:8px 0;}
   body.compact .task-name{font-size:13px;}
   body.compact .check-circle{width:22px;height:22px;}
   body.compact .card{padding:12px;}
   @keyframes fadeRow{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
-  .check-circle{width:26px;height:26px;border-radius:50%;flex-shrink:0;cursor:pointer;border:1.5px solid rgba(255,255,255,0.12);background:none;display:flex;align-items:center;justify-content:center;transition:border-color 0.2s ease,background 0.2s ease,transform 0.2s ease;position:relative;}
+  .check-circle{width:27px;height:27px;border-radius:50%;flex-shrink:0;cursor:pointer;border:1.5px solid rgba(0,0,0,0.18);background:none;display:flex;align-items:center;justify-content:center;transition:border-color 0.2s ease,background 0.2s ease,transform 0.2s ease;position:relative;}
   .check-circle:active{transform:scale(0.88);}
   .check-circle svg{opacity:0;transform:scale(0.4) rotate(-20deg);transition:opacity 0.22s cubic-bezier(0.34,1.56,0.64,1),transform 0.22s cubic-bezier(0.34,1.56,0.64,1);}
-  .check-circle.done{border-color:transparent;background:linear-gradient(135deg,#4ade80,#22c55e);box-shadow:0 0 12px rgba(74,222,128,0.35);}
+  .check-circle.done{border-color:transparent;background:linear-gradient(135deg,#30d158,#28b84c);box-shadow:0 2px 8px rgba(48,209,88,0.35);}
   .check-circle.done svg{opacity:1;transform:scale(1) rotate(0deg);}
   .check-circle.just-checked{animation:checkBounce 0.32s cubic-bezier(0.34,1.56,0.64,1);}
 
@@ -140,73 +138,108 @@
 }
 
   .task-info{flex:1;min-width:0;}
-  .task-name{font-size:14px;color:var(--text);word-break:break-word;}
+  .task-name{font-size:15px;color:var(--text);word-break:break-word;font-weight:500;}
   .task-name.done{color:var(--text3);text-decoration:line-through;}
-  .task-time{font-size:11px;color:var(--text3);margin-top:3px;}
+  .task-time{font-size:12px;color:var(--text3);margin-top:3px;}
   .task-actions{display:flex;gap:6px;flex-shrink:0;}
   .edit-row{display:flex;flex-direction:column;gap:6px;flex:1;min-width:0;}
   .edit-bottom{display:flex;gap:6px;align-items:center;}
   /* BUTTONS */
-  .btn-edit{background:none;border:1px solid var(--glass-border);color:var(--text2);padding:4px 10px;font-size:10px;border-radius:8px;cursor:pointer;font-family:inherit;}
-  .btn-edit.active{background:var(--text);color:var(--bg);border-color:transparent;}
-  .btn-del{background:none;border:1px solid rgba(248,113,113,0.3);color:#f87171;padding:4px 9px;font-size:11px;border-radius:8px;cursor:pointer;font-family:inherit;}
-  .btn-move{background:none;border:1px solid var(--glass-border);color:var(--text2);padding:4px 8px;font-size:12px;border-radius:8px;cursor:pointer;font-family:inherit;}
-  .btn-ok{background:var(--text);border:none;color:#0d0d0d;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:11px;font-family:inherit;white-space:nowrap;flex-shrink:0;font-weight:600;}
-  .btn-add{width:100%;background:var(--text);border:none;color:#0d0d0d;padding:12px;font-size:12px;letter-spacing:2px;border-radius:10px;cursor:pointer;font-family:inherit;font-weight:600;}
+  .btn-edit{background:var(--glass);border:1px solid var(--glass-border);color:var(--text2);padding:5px 12px;font-size:11px;font-weight:600;border-radius:var(--radius-pill);cursor:pointer;font-family:inherit;}
+  .btn-edit.active{background:var(--accent);color:#fff;border-color:transparent;}
+  .btn-del{background:rgba(255,59,48,0.08);border:1px solid rgba(255,59,48,0.18);color:#ff3b30;padding:5px 11px;font-size:12px;font-weight:600;border-radius:var(--radius-pill);cursor:pointer;font-family:inherit;}
+  .btn-move{background:var(--glass);border:1px solid var(--glass-border);color:var(--text2);padding:5px 9px;font-size:12px;border-radius:var(--radius-pill);cursor:pointer;font-family:inherit;}
+  .btn-ok{background:var(--accent);border:none;color:#fff;padding:8px 16px;border-radius:var(--radius-pill);cursor:pointer;font-size:12px;font-family:inherit;white-space:nowrap;flex-shrink:0;font-weight:600;}
+  .btn-add{width:100%;background:var(--accent);border:none;color:#fff;padding:14px;font-size:14px;letter-spacing:0;border-radius:var(--radius-pill);cursor:pointer;font-family:inherit;font-weight:600;box-shadow:var(--shadow-sm);}
+  .btn-add:active,.btn-ok:active{opacity:0.85;}
   /* INPUTS */
-  .card{margin-top:16px;padding:16px;background:var(--glass);border-radius:var(--radius);border:1px solid var(--glass-border);}
-  .inp{width:100%;background:var(--bg2);border:1px solid var(--glass-border);color:var(--text);padding:10px 13px;font-size:13px;border-radius:10px;font-family:inherit;margin-bottom:8px;display:block;}
-  .inp:focus{outline:none;border-color:var(--glass-border);}
-  .inp-time{width:90px;flex-shrink:0;margin-bottom:0;}
+  .card{margin-top:16px;padding:18px;background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--glass-border);box-shadow:var(--shadow-xs);}
+  .list-card{margin-top:12px;padding:0 16px;background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--glass-border);box-shadow:var(--shadow-xs);}
+  .list-card .task-row:last-child,.list-card .week-row:last-child,.list-card .year-row:last-child{border-bottom:none;}
+  /* PAGE TITLE */
+  .page-title{font-size:26px;font-weight:700;letter-spacing:-0.6px;margin-bottom:18px;}
+  /* SETTINGS COMPONENTS */
+  .settings-section{margin-bottom:16px;}
+  .settings-section-title{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:12px;}
+  .settings-field{padding:12px 0;}
+  .settings-field:first-of-type{padding-top:0;}
+  .settings-field+.settings-field{border-top:1px solid var(--glass-border);}
+  .settings-field-label{font-size:11px;color:var(--text3);margin-bottom:8px;font-weight:600;letter-spacing:0.3px;text-transform:uppercase;}
+  .settings-field-hint{font-size:11px;color:var(--text3);margin-top:7px;line-height:1.5;}
+  .settings-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;gap:12px;}
+  .settings-row+.settings-row{border-top:1px solid var(--glass-border);}
+  .settings-row-label{font-size:15px;color:var(--text);font-weight:500;}
+  .settings-row-desc{font-size:12px;color:var(--text3);margin-top:2px;}
+  .toggle{width:46px;height:27px;border-radius:var(--radius-pill);border:none;cursor:pointer;position:relative;flex-shrink:0;transition:background 0.2s;background:var(--glass-border);padding:0;}
+  .toggle.on{background:var(--green);}
+  .toggle-knob{position:absolute;top:2px;left:2px;width:23px;height:23px;border-radius:50%;background:#fff;transition:left 0.2s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 1px 3px rgba(0,0,0,0.25);}
+  .toggle.on .toggle-knob{left:21px;}
+  .theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .theme-swatch{cursor:pointer;border-radius:16px;overflow:hidden;border:2px solid transparent;transition:border-color 0.2s;position:relative;background:var(--bg-cell);}
+  .theme-swatch.selected{border-color:var(--accent);}
+  .theme-swatch-preview{height:46px;display:flex;align-items:flex-end;padding:6px;gap:3px;}
+  .theme-swatch-label{padding:6px 7px;font-size:10px;font-weight:600;}
+  .theme-check{position:absolute;top:5px;right:5px;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700;}
+  .stat-tile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .stat-tile{padding:16px 10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-sm);text-align:center;}
+  .stat-tile-num{font-size:22px;font-weight:700;color:var(--accent);letter-spacing:-0.4px;}
+  .stat-tile-lbl{font-size:10px;color:var(--text3);letter-spacing:0.4px;margin-top:4px;text-transform:uppercase;font-weight:600;}
+  .data-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--glass);border:1px solid var(--glass-border);color:var(--text);padding:13px;font-size:14px;font-weight:600;border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;text-align:center;box-sizing:border-box;text-decoration:none;}
+  .data-btn.accent{background:var(--accent-glow);border-color:transparent;color:var(--accent);}
+  .data-btn.violet{background:rgba(94,92,230,0.1);border-color:transparent;color:#5e5ce6;}
+  .danger-btn{display:block;width:100%;background:rgba(255,59,48,0.08);border:1px solid rgba(255,59,48,0.22);color:#ff3b30;padding:13px;font-size:14px;font-weight:600;border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;text-align:center;}
+  .inp{width:100%;background:var(--bg2);border:1px solid var(--glass-border);color:var(--text);padding:11px 14px;font-size:14px;border-radius:var(--radius-sm);font-family:inherit;margin-bottom:8px;display:block;}
+  .inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+  .inp-time{width:96px;flex-shrink:0;margin-bottom:0;}
   /* WEEK */
-  .week-row{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--glass-border);border-radius:6px;transition:background 0.15s;}
-  .week-row[data-daykey]:active{background:rgba(255,255,255,0.05);}
+  .week-row{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--glass-border);border-radius:8px;transition:background 0.15s;}
+  .week-row[data-daykey]:active{background:var(--glass);}
   .week-day{width:38px;text-align:center;}
-  .week-day-name{font-size:10px;color:var(--text3);}
-  .week-day-num{font-size:18px;color:var(--text3);font-weight:300;}
-  .week-day-num.today{font-weight:700;color:var(--text);}
-  .bar-wrap{flex:1;height:3px;background:var(--glass-border);border-radius:3px;overflow:hidden;}
-  .bar-fill{height:100%;border-radius:3px;transition:width 0.4s ease;}
-  .score-text{font-size:12px;width:34px;text-align:right;font-weight:500;}
+  .week-day-name{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;}
+  .week-day-num{font-size:18px;color:var(--text2);font-weight:500;}
+  .week-day-num.today{font-weight:700;color:var(--accent);}
+  .bar-wrap{flex:1;height:6px;background:var(--glass-border);border-radius:6px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:6px;transition:width 0.4s ease;}
+  .score-text{font-size:12px;width:34px;text-align:right;font-weight:600;}
   /* MONTH */
-  .month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
-  .month-day-header{font-size:9px;color:var(--text3);text-align:center;padding-bottom:10px;letter-spacing:0.5px;}
-  .month-cell{aspect-ratio:1;border-radius:7px;background:var(--bg2);border:1px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:filter 0.15s;}
-  .month-cell[data-daykey]:active{filter:brightness(1.5);}
-  .month-cell.today{border-color:var(--text2);}
-  .month-cell.future{opacity:0.2;}
-  .month-cell-num{font-size:10px;color:var(--text3);}
-  .month-cell-num.today{color:var(--text);}
+  .month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+  .month-day-header{font-size:10px;color:var(--text3);text-align:center;padding-bottom:10px;letter-spacing:0.4px;font-weight:600;text-transform:uppercase;}
+  .month-cell{aspect-ratio:1;border-radius:9px;background:var(--bg2);border:1px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:filter 0.15s;}
+  .month-cell[data-daykey]:active{filter:brightness(0.94);}
+  .month-cell.today{border-color:var(--accent);}
+  .month-cell.future{opacity:0.35;}
+  .month-cell-num{font-size:11px;color:var(--text3);font-weight:500;}
+  .month-cell-num.today{color:var(--accent);font-weight:700;}
   .month-cell-pct{font-size:8px;}
   /* YEAR */
-  .year-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--glass-border);border-radius:6px;transition:background 0.15s;}
-  .year-row[data-monthkey]:active{background:rgba(255,255,255,0.05);}
-  .year-month{width:28px;font-size:11px;color:var(--text3);}
+  .year-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--glass-border);border-radius:8px;transition:background 0.15s;}
+  .year-row[data-monthkey]:active{background:var(--glass);}
+  .year-month{width:32px;font-size:12px;color:var(--text2);font-weight:600;}
   /* STAT */
-  .stat-card{margin-top:14px;padding:18px;background:var(--glass);border-radius:var(--radius);border:1px solid var(--glass-border);}
-  .stat-avg{font-size:34px;font-weight:700;margin-top:6px;}
-  .stat-sub{font-size:11px;color:var(--text2);margin-top:5px;}
+  .stat-card{margin-top:14px;padding:20px;background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--glass-border);box-shadow:var(--shadow-xs);}
+  .stat-avg{font-size:36px;font-weight:700;margin-top:6px;letter-spacing:-0.8px;}
+  .stat-sub{font-size:12px;color:var(--text2);margin-top:5px;}
   /* REPORTS */
-  .report-tabs{display:flex;gap:5px;margin-bottom:16px;}
-  .rtab{flex:1;padding:8px 2px;background:var(--glass);border:1px solid var(--glass-border);color:var(--text3);font-size:9px;letter-spacing:1px;border-radius:10px;cursor:pointer;font-family:inherit;text-transform:uppercase;}
-  .rtab.active{background:var(--bg4);border-color:var(--text2);color:var(--text);}
-  .chart-wrap{background:var(--glass);border-radius:var(--radius);border:1px solid var(--glass-border);padding:16px;margin-bottom:12px;}
-  .chart-title{font-size:10px;color:var(--text3);letter-spacing:2px;margin-bottom:12px;text-transform:uppercase;}
+  .report-tabs{display:flex;gap:6px;margin-bottom:16px;background:var(--glass);padding:4px;border-radius:var(--radius-pill);}
+  .rtab{flex:1;padding:8px 2px;background:none;border:none;color:var(--text3);font-size:10px;font-weight:600;letter-spacing:0.3px;border-radius:var(--radius-pill);cursor:pointer;font-family:inherit;text-transform:uppercase;}
+  .rtab.active{background:var(--bg-card);color:var(--text);box-shadow:var(--shadow-xs);}
+  .chart-wrap{background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--glass-border);padding:18px;margin-bottom:12px;box-shadow:var(--shadow-xs);}
+  .chart-title{font-size:11px;color:var(--text3);letter-spacing:0.6px;margin-bottom:12px;text-transform:uppercase;font-weight:600;}
   canvas{width:100% !important;}
-  .export-btn{width:100%;background:var(--glass);border:1px solid var(--glass-border);color:var(--text2);padding:12px;font-size:11px;letter-spacing:1px;border-radius:10px;cursor:pointer;font-family:inherit;text-transform:uppercase;margin-top:8px;}
+  .export-btn{width:100%;background:var(--glass);border:1px solid var(--glass-border);color:var(--text2);padding:12px;font-size:12px;font-weight:600;letter-spacing:0.2px;border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;text-transform:none;margin-top:8px;}
   .export-btn:active{background:var(--bg3);}
   /* STREAK */
   .hidden{display:none;}
   .streak-wrap{display:flex;gap:10px;margin-bottom:18px;}
-  .streak-box{flex:1;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:18px 10px 14px;text-align:center;position:relative;overflow:hidden;}
-  .streak-num{font-size:28px;font-weight:700;line-height:1;}
-  .streak-lbl{font-size:8px;color:var(--text3);letter-spacing:2px;margin-top:6px;text-transform:uppercase;line-height:1.5;}
+  .streak-box{flex:1;background:var(--bg-card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:20px 10px 16px;text-align:center;position:relative;overflow:hidden;box-shadow:var(--shadow-xs);}
+  .streak-num{font-size:28px;font-weight:700;line-height:1;letter-spacing:-0.5px;}
+  .streak-lbl{font-size:9px;color:var(--text3);letter-spacing:1px;margin-top:6px;text-transform:uppercase;line-height:1.5;font-weight:600;}
   .streak-icon{width:48px;height:48px;margin:0 auto 8px;position:relative;display:flex;align-items:center;justify-content:center;}
 
   /* ── FLAME ── */
   @keyframes flicker{0%,100%{transform:scaleY(1) scaleX(1);}25%{transform:scaleY(1.07) scaleX(0.95);}50%{transform:scaleY(0.94) scaleX(1.05);}75%{transform:scaleY(1.05) scaleX(0.97);}}
   @keyframes flicker-inner{0%,100%{transform:scaleY(1);}40%{transform:scaleY(1.12);}70%{transform:scaleY(0.88);}}
-  @keyframes flame-glow{0%,100%{filter:drop-shadow(0 0 6px #f97316aa) drop-shadow(0 0 14px #f9731655);}50%{filter:drop-shadow(0 0 10px #fb923ccc) drop-shadow(0 0 22px #f9731688);}}
+  @keyframes flame-glow{0%,100%{filter:drop-shadow(0 1px 3px rgba(249,115,22,0.3));}50%{filter:drop-shadow(0 2px 6px rgba(249,115,22,0.45));}}
   @keyframes spark1{0%{opacity:0;transform:translate(0,0) scale(0);}20%{opacity:1;transform:translate(-7px,-10px) scale(1);}100%{opacity:0;transform:translate(-12px,-20px) scale(0.3);}}
   @keyframes spark2{0%{opacity:0;transform:translate(0,0) scale(0);}30%{opacity:1;transform:translate(6px,-12px) scale(1);}100%{opacity:0;transform:translate(10px,-22px) scale(0.2);}}
   @keyframes spark3{0%{opacity:0;transform:translate(0,0) scale(0);}25%{opacity:1;transform:translate(0px,-8px) scale(0.8);}100%{opacity:0;transform:translate(3px,-18px) scale(0);}}
@@ -222,11 +255,11 @@
 
   /* ── TROPHY ── */
   @keyframes trophy-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
-  @keyframes trophy-glow{0%,100%{filter:drop-shadow(0 0 5px #facc15aa) drop-shadow(0 0 10px #facc1544);}50%{filter:drop-shadow(0 0 9px #fde047cc) drop-shadow(0 0 18px #facc1566);}}
+  @keyframes trophy-glow{0%,100%{filter:drop-shadow(0 1px 3px rgba(250,204,21,0.3));}50%{filter:drop-shadow(0 2px 6px rgba(250,204,21,0.45));}}
   @keyframes star-twinkle{0%,100%{opacity:0;transform:scale(0.3);}50%{opacity:1;transform:scale(1);}}
   .s-trophy-wrap{animation:trophy-float 2.2s ease-in-out infinite;}
   .s-trophy{width:32px;height:32px;animation:trophy-glow 2.2s ease-in-out infinite;}
-  .s-trophy .t-cup{fill:#facc15;}
+  .s-trophy .t-cup{fill:#ff9f0a;}
   .s-trophy .t-shine{fill:#fef08a;opacity:0.55;}
   .s-trophy .t-base{fill:#a16207;}
   .t-star{position:absolute;font-size:7px;line-height:1;animation:star-twinkle 1.8s ease-in-out infinite;}
@@ -235,9 +268,9 @@
   .t-star3{top:-2px;left:14px;animation-delay:1.1s;color:#fef9c3;}
 
   /* ── SCORE BOLT ── */
-  @keyframes bolt-glow-g{0%,100%{filter:drop-shadow(0 0 5px #4ade80bb) drop-shadow(0 0 12px #4ade8044);}50%{filter:drop-shadow(0 0 10px #4ade80ff) drop-shadow(0 0 22px #4ade8077);}}
-  @keyframes bolt-glow-y{0%,100%{filter:drop-shadow(0 0 5px #facc15bb) drop-shadow(0 0 12px #facc1544);}50%{filter:drop-shadow(0 0 10px #facc15ff) drop-shadow(0 0 22px #facc1577);}}
-  @keyframes bolt-glow-r{0%,100%{filter:drop-shadow(0 0 5px #f87171bb) drop-shadow(0 0 12px #f8717144);}50%{filter:drop-shadow(0 0 10px #f87171ff) drop-shadow(0 0 22px #f8717177);}}
+  @keyframes bolt-glow-g{0%,100%{filter:drop-shadow(0 1px 3px rgba(48,209,88,0.35));}50%{filter:drop-shadow(0 2px 7px rgba(48,209,88,0.5));}}
+  @keyframes bolt-glow-y{0%,100%{filter:drop-shadow(0 1px 3px rgba(255,159,10,0.35));}50%{filter:drop-shadow(0 2px 7px rgba(255,159,10,0.5));}}
+  @keyframes bolt-glow-r{0%,100%{filter:drop-shadow(0 1px 3px rgba(255,59,48,0.35));}50%{filter:drop-shadow(0 2px 7px rgba(255,59,48,0.5));}}
   @keyframes bolt-float{0%,100%{transform:translateY(0) scaleY(1);}40%{transform:translateY(-3px) scaleY(1.04);}70%{transform:translateY(1px) scaleY(0.97);}}
   @keyframes bolt-spark-a{0%{opacity:0;transform:translate(0,0) scale(0);}30%{opacity:1;}100%{opacity:0;transform:translate(-9px,-12px) scale(0.4);}}
   @keyframes bolt-spark-b{0%{opacity:0;transform:translate(0,0) scale(0);}35%{opacity:1;}100%{opacity:0;transform:translate(9px,-10px) scale(0.3);}}
@@ -248,84 +281,86 @@
   .b-spark-b{top:2px;right:4px;animation:bolt-spark-b 1.5s ease-out infinite 0.55s;}
   .b-spark-c{top:0;left:50%;animation:bolt-spark-c 1.5s ease-out infinite 1s;}
   .cal-row{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px;}
-  .cal-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
-  .nav-arrow{background:var(--glass);border:1px solid var(--glass-border);color:var(--text2);padding:6px 14px;font-size:14px;border-radius:10px;cursor:pointer;font-family:inherit;}
+  .cal-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+  .nav-arrow{background:var(--glass);border:1px solid var(--glass-border);color:var(--text2);padding:7px 15px;font-size:14px;border-radius:var(--radius-pill);cursor:pointer;font-family:inherit;}
   ::-webkit-scrollbar{width:0;}
   /* TASK DETAIL OVERLAY */
-  #view-task-detail{position:fixed;inset:0;z-index:50;background:#0d0d0d;overflow-y:auto;display:none;padding-bottom:100px;}
+  #view-task-detail{position:fixed;inset:0;z-index:50;background:var(--bg);overflow-y:auto;display:none;padding-bottom:100px;}
   #view-task-detail.open{display:block;}
-  .td-header{padding:16px 16px 14px;display:flex;align-items:center;gap:12px;position:sticky;top:0;background:rgba(13,13,13,0.95);backdrop-filter:blur(16px);z-index:2;border-bottom:1px solid var(--glass-border);}
-  .td-back{background:none;border:1px solid var(--glass-border);color:var(--text2);padding:6px 14px;font-size:12px;border-radius:8px;cursor:pointer;font-family:inherit;flex-shrink:0;}
-  .td-title{font-size:15px;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .td-header{padding:16px 16px 14px;display:flex;align-items:center;gap:12px;position:sticky;top:0;background:rgba(245,245,247,0.85);backdrop-filter:blur(16px);z-index:2;border-bottom:1px solid var(--glass-border);}
+  .td-back{background:var(--glass);border:1px solid var(--glass-border);color:var(--text2);padding:6px 14px;font-size:12px;font-weight:600;border-radius:var(--radius-pill);cursor:pointer;font-family:inherit;flex-shrink:0;}
+  .td-title{font-size:16px;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:-0.2px;}
   .td-body{padding:16px;}
 
   /* ── COMPLETION POPUP ── */
   #completion-popup{
     display:none;position:fixed;inset:0;z-index:999;
-    background:rgba(0,0,0,0.55);
-    backdrop-filter:blur(32px) saturate(1.4);
-    -webkit-backdrop-filter:blur(32px) saturate(1.4);
+    background:rgba(0,0,0,0.35);
+    backdrop-filter:blur(24px) saturate(1.5);
+    -webkit-backdrop-filter:blur(24px) saturate(1.5);
     align-items:center;justify-content:center;flex-direction:column;
     padding:0;
   }
-  #completion-popup.show{display:flex;animation:cp-bg-in 0.6s ease forwards;}
+  #completion-popup.show{display:flex;animation:cp-bg-in 0.5s ease forwards;}
   @keyframes cp-bg-in{from{opacity:0;}to{opacity:1;}}
 
-  /* Full-screen content — no card box, pure floating elements */
+  /* Full-screen content — floating card, Apple modal feel */
   #completion-card{
     position:relative;text-align:center;
-    width:100%;padding:0 40px;
-    animation:popup-in 0.7s cubic-bezier(0.34,1.4,0.64,1) forwards;
+    width:calc(100% - 48px);max-width:380px;padding:48px 32px 40px;
+    background:var(--bg-card);border-radius:28px;box-shadow:var(--shadow-lg);
+    animation:popup-in 0.55s cubic-bezier(0.34,1.2,0.64,1) forwards;
   }
   @keyframes popup-in{
-    0%{opacity:0;transform:translateY(32px) scale(0.92);}
+    0%{opacity:0;transform:translateY(24px) scale(0.95);}
     100%{opacity:1;transform:translateY(0) scale(1);}
   }
 
   /* Close pill — top centre, iOS style */
   .cp-close{
     position:fixed;top:52px;left:50%;transform:translateX(-50%);
-    background:rgba(255,255,255,0.15);
-    border:none;color:rgba(255,255,255,0.8);
-    padding:8px 20px;border-radius:20px;
-    font-size:11px;letter-spacing:2px;text-transform:uppercase;
+    background:rgba(255,255,255,0.85);
+    border:none;color:rgba(29,29,31,0.7);
+    padding:8px 20px;border-radius:var(--radius-pill);
+    font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;
     cursor:pointer;font-family:inherit;
     backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-    transition:background 0.2s;
+    box-shadow:var(--shadow-sm);
+    transition:opacity 0.2s;
   }
-  .cp-close:active{background:rgba(255,255,255,0.25);}
+  .cp-close:active{opacity:0.7;}
 
   #cp-icon{
-    width:100px;height:100px;margin:0 auto 40px;
-    filter:drop-shadow(0 0 30px rgba(74,222,128,0.4));
+    width:88px;height:88px;margin:0 auto 32px;
+    filter:drop-shadow(0 4px 14px rgba(48,209,88,0.35));
     animation:cp-icon-breathe 2.5s ease-in-out infinite;
   }
   @keyframes cp-icon-breathe{
-    0%,100%{filter:drop-shadow(0 0 24px rgba(74,222,128,0.35));}
-    50%{filter:drop-shadow(0 0 48px rgba(74,222,128,0.65));}
+    0%,100%{filter:drop-shadow(0 4px 12px rgba(48,209,88,0.3));}
+    50%{filter:drop-shadow(0 6px 20px rgba(48,209,88,0.5));}
   }
 
   #cp-title{
-    font-size:36px;font-weight:200;color:#ffffff;
-    letter-spacing:6px;text-transform:uppercase;
-    margin-bottom:16px;line-height:1;
+    font-size:26px;font-weight:700;color:var(--text);
+    letter-spacing:-0.5px;
+    margin-bottom:12px;line-height:1.2;
   }
   #cp-sub{
-    font-size:12px;color:var(--text2);
-    line-height:2;letter-spacing:2px;
-    text-transform:uppercase;margin-bottom:60px;
+    font-size:13px;color:var(--text2);
+    line-height:1.6;letter-spacing:0.1px;
+    text-transform:none;margin-bottom:32px;
   }
   #cp-dismiss{
-    background:rgba(255,255,255,0.12);
-    border:1px solid rgba(255,255,255,0.25);
-    color:var(--text);
-    padding:16px 48px;font-size:11px;letter-spacing:3px;
-    border-radius:40px;cursor:pointer;
-    font-family:inherit;text-transform:uppercase;
-    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-    transition:background 0.2s,border-color 0.2s;
+    background:var(--accent);
+    border:none;
+    color:#ffffff;
+    padding:14px 44px;font-size:14px;font-weight:600;letter-spacing:0;
+    border-radius:var(--radius-pill);cursor:pointer;
+    font-family:inherit;text-transform:none;
+    box-shadow:var(--shadow-sm);
+    transition:opacity 0.2s;
   }
-  #cp-dismiss:active{background:rgba(255,255,255,0.22);border-color:rgba(255,255,255,0.4);}
+  #cp-dismiss:active{opacity:0.85;}
   .cp-particle{position:fixed;pointer-events:none;z-index:998;border-radius:50%;}
   @keyframes particle-rise{0%{transform:translate(0,0) scale(1);opacity:1;}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0;}}
 </style>
@@ -455,13 +490,28 @@
     <div id="progress-meta"><span id="done-count">0/0 done</span><span id="score-pct">0%</span></div>
   </div>
   <div id="header-indicator"></div>
-  <div id="nav">
-    <button class="nav-btn active" data-view="tasks">Tasks</button>
-    <button class="nav-btn" data-view="streak">Streak</button>
-    <button class="nav-btn" data-view="macros">Macros</button>
-    <button class="nav-btn" data-view="analytics">Analytics</button>
-    <button class="nav-btn" data-view="settings">Settings</button>
-  </div>
+  <div id="nav-wrap"><div id="nav">
+    <button class="nav-btn active" data-view="tasks">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 2.5h6v3H9z"/><path d="M8.5 12.5l2 2 4-4.3"/><path d="M8.5 17h7"/></svg>
+      <span>Tasks</span>
+    </button>
+    <button class="nav-btn" data-view="streak">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c1 3 4 4.3 4 8.2a4 4 0 0 1-8 0c0-1 .3-1.8.8-2.6.4.9 1.3 1.3 1.9.7-.6-1.4-.2-3.2 1.3-6.3z"/><path d="M9.3 14.5a2.7 2.7 0 0 0 5.4 0c0-1-.5-1.7-1.1-2.4"/></svg>
+      <span>Streak</span>
+    </button>
+    <button class="nav-btn" data-view="macros">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg>
+      <span>Macros</span>
+    </button>
+    <button class="nav-btn" data-view="analytics">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/><path d="M3 20h18"/></svg>
+      <span>Analytics</span>
+    </button>
+    <button class="nav-btn" data-view="settings">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 13.6a1.8 1.8 0 0 0 .36 1.98l.07.07a2.1 2.1 0 1 1-3 3l-.07-.07a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.1 1.65V20a2.1 2.1 0 1 1-4.2 0v-.1a1.8 1.8 0 0 0-1.18-1.66 1.8 1.8 0 0 0-1.98.36l-.07.07a2.1 2.1 0 1 1-3-3l.07-.07a1.8 1.8 0 0 0 .36-1.98 1.8 1.8 0 0 0-1.65-1.1H2.5a2.1 2.1 0 1 1 0-4.2h.1a1.8 1.8 0 0 0 1.66-1.18 1.8 1.8 0 0 0-.36-1.98l-.07-.07a2.1 2.1 0 1 1 3-3l.07.07a1.8 1.8 0 0 0 1.98.36H8.9a1.8 1.8 0 0 0 1.1-1.65V2.5a2.1 2.1 0 1 1 4.2 0v.1a1.8 1.8 0 0 0 1.1 1.65 1.8 1.8 0 0 0 1.98-.36l.07-.07a2.1 2.1 0 1 1 3 3l-.07.07a1.8 1.8 0 0 0-.36 1.98v.08a1.8 1.8 0 0 0 1.65 1.1h.1a2.1 2.1 0 1 1 0 4.2h-.1a1.8 1.8 0 0 0-1.65 1.1z"/></svg>
+      <span>Settings</span>
+    </button>
+  </div></div>
   <div id="view-today" class="body"></div>
   <div id="view-week" class="body hidden"></div>
   <div id="view-month" class="body hidden"></div>
@@ -486,7 +536,7 @@
         <svg viewBox="0 0 100 100" width="100" height="100" style="overflow:visible">
           <defs>
             <linearGradient id="cpRingGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#4ade80"/>
+              <stop offset="0%" stop-color="#30d158"/>
               <stop offset="100%" stop-color="#86efac" stop-opacity="0.3"/>
             </linearGradient>
           </defs>
@@ -501,14 +551,14 @@
             stroke-dasharray="12 214" stroke-linecap="round"
             style="animation:orbit-spin 5s linear infinite reverse"/>
           <!-- Core check — just lines, no circle -->
-          <polyline points="32,50 44,63 68,36" fill="none" stroke="#4ade80" stroke-width="2"
+          <polyline points="32,50 44,63 68,36" fill="none" stroke="#30d158" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round"/>
           <!-- Tiny orbit dots -->
-          <circle cx="50" cy="4" r="1.5" fill="#4ade80" style="animation:sp-twinkle 2s ease-in-out infinite 0s"/>
+          <circle cx="50" cy="4" r="1.5" fill="#30d158" style="animation:sp-twinkle 2s ease-in-out infinite 0s"/>
           <circle cx="90" cy="25" r="1" fill="#86efac" style="animation:sp-twinkle 2s ease-in-out infinite 0.5s"/>
-          <circle cx="90" cy="75" r="1.2" fill="#4ade80" style="animation:sp-twinkle 2s ease-in-out infinite 1s"/>
+          <circle cx="90" cy="75" r="1.2" fill="#30d158" style="animation:sp-twinkle 2s ease-in-out infinite 1s"/>
           <circle cx="50" cy="96" r="1.5" fill="#86efac" style="animation:sp-twinkle 2s ease-in-out infinite 1.5s"/>
-          <circle cx="10" cy="75" r="1" fill="#4ade80" style="animation:sp-twinkle 2s ease-in-out infinite 0.8s"/>
+          <circle cx="10" cy="75" r="1" fill="#30d158" style="animation:sp-twinkle 2s ease-in-out infinite 0.8s"/>
           <circle cx="10" cy="25" r="1.2" fill="#86efac" style="animation:sp-twinkle 2s ease-in-out infinite 1.3s"/>
         </svg>
       </div>
@@ -526,7 +576,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 const THEMES = {
-  obsidian:{name:"Obsidian",desc:"Pure black — default",bgCard:"#111111",bgCell:"#141414",bgLift:"#1a1a1a",bg:"#0d0d0d",nav:"rgba(13,13,13,0.92)",navBorder:"rgba(255,255,255,0.07)",glass:"rgba(255,255,255,0.04)",glassBorder:"rgba(255,255,255,0.08)",bg2:"rgba(255,255,255,0.03)",text:"#f0f0f0",text2:"rgba(255,255,255,0.35)",text3:"rgba(255,255,255,0.2)",accent:"#4ade80",accentGlow:"rgba(74,222,128,0.3)",preview:["#0d0d0d","#1a1a1a","#4ade80"]},
+  apple:{name:"Apple",desc:"Clean SaaS light — default",bgCard:"#ffffff",bgCell:"#f4f4f6",bgLift:"#ececef",bg:"#f5f5f7",nav:"rgba(245,245,247,0.82)",navBorder:"rgba(0,0,0,0.06)",glass:"rgba(0,0,0,0.035)",glassBorder:"rgba(0,0,0,0.09)",bg2:"rgba(0,0,0,0.045)",text:"#1d1d1f",text2:"rgba(29,29,31,0.55)",text3:"rgba(29,29,31,0.35)",accent:"#0071e3",accentGlow:"rgba(0,113,227,0.22)",preview:["#f5f5f7","#ffffff","#0071e3"]},
+  obsidian:{name:"Obsidian",desc:"Pure black",bgCard:"#111111",bgCell:"#141414",bgLift:"#1a1a1a",bg:"#0d0d0d",nav:"rgba(13,13,13,0.92)",navBorder:"rgba(255,255,255,0.07)",glass:"rgba(255,255,255,0.04)",glassBorder:"rgba(255,255,255,0.08)",bg2:"rgba(255,255,255,0.03)",text:"#f0f0f0",text2:"rgba(255,255,255,0.35)",text3:"var(--glass-border)",accent:"#4ade80",accentGlow:"rgba(74,222,128,0.3)",preview:["#0d0d0d","#1a1a1a","#4ade80"]},
   midnight:{name:"Midnight",desc:"Deep navy blue",bgCard:"#0a1628",bgCell:"#0c1e38",bgLift:"#0f2040",bg:"#060d1a",nav:"rgba(6,13,26,0.94)",navBorder:"rgba(99,179,237,0.1)",glass:"rgba(99,179,237,0.05)",glassBorder:"rgba(99,179,237,0.12)",bg2:"rgba(99,179,237,0.04)",text:"#e8f4ff",text2:"rgba(200,230,255,0.4)",text3:"rgba(200,230,255,0.22)",accent:"#63b3ed",accentGlow:"rgba(99,179,237,0.35)",preview:["#060d1a","#0d1f38","#63b3ed"]},
   aurora:{name:"Aurora",desc:"Northern lights green",bgCard:"#091a10",bgCell:"#0c2016",bgLift:"#0f2a1c",bg:"#050f0a",nav:"rgba(5,15,10,0.94)",navBorder:"rgba(52,211,153,0.1)",glass:"rgba(52,211,153,0.05)",glassBorder:"rgba(52,211,153,0.12)",bg2:"rgba(52,211,153,0.04)",text:"#e8fff4",text2:"rgba(200,255,230,0.4)",text3:"rgba(200,255,230,0.22)",accent:"#34d399",accentGlow:"rgba(52,211,153,0.35)",preview:["#050f0a","#0a2018","#34d399"]},
   crimson:{name:"Crimson",desc:"Deep red focus",bgCard:"#1a080c",bgCell:"#200912",bgLift:"#2a0c16",bg:"#0f0608",nav:"rgba(15,6,8,0.94)",navBorder:"rgba(251,113,133,0.1)",glass:"rgba(251,113,133,0.05)",glassBorder:"rgba(251,113,133,0.12)",bg2:"rgba(251,113,133,0.04)",text:"#fff0f2",text2:"rgba(255,210,216,0.4)",text3:"rgba(255,210,216,0.22)",accent:"#fb7185",accentGlow:"rgba(251,113,133,0.35)",preview:["#0f0608","#2a0810","#fb7185"]},
@@ -580,7 +631,7 @@ function buildCustomTheme(bg, accent, text, text2hex, text3hex){
   };
 }
 
-let currentTheme = (function(){try{return localStorage.getItem('rm_theme')||'obsidian';}catch(e){return'obsidian';}})();
+let currentTheme = (function(){try{return localStorage.getItem('rm_theme')||'apple';}catch(e){return'apple';}})();
 
 function applyTheme(key){
   const t=THEMES[key]||THEMES.obsidian;
@@ -627,13 +678,13 @@ function applyTheme(key){
   if(!s){s=document.createElement('style');s.id='theme-style';document.head.appendChild(s);}
   s.textContent=[
     'body,#splash{background:'+t.bg+'!important;color:'+t.text+'!important;}',
-    '#header,#nav,#sub-nav{background:'+t.nav+'!important;border-color:'+t.navBorder+'!important;}',
+    '#header,#sub-nav{background:'+t.nav+'!important;border-color:'+t.navBorder+'!important;}',
     '.splash-btn,.btn-ok,.btn-add{background:'+t.accent+'!important;color:'+(t.accent==='#ffffff'?'#000000':'#fff')+'!important;border-color:transparent!important;}',
     '.btn-edit{color:'+t.text2+'!important;border-color:'+t.glassBorder+'!important;}',
-    '.btn-edit.active{background:'+t.text+'!important;color:'+t.bg+'!important;}',
+    '.btn-edit.active{background:'+t.accent+'!important;color:#ffffff!important;border-color:transparent!important;}',
     '.btn-del{color:'+t.text3+'!important;border-color:'+t.glassBorder+'!important;}',
     '.nav-btn{color:'+t.text3+'!important;}',
-    '.nav-btn.active{border-bottom-color:'+t.accent+'!important;color:'+t.text+'!important;}',
+    '.nav-btn.active{color:'+t.accent+'!important;}',
     '.sub-btn{color:'+t.text3+'!important;}',
     '.sub-btn.active{color:'+t.text+'!important;background:'+t.glass+'!important;}',
     '.check-circle{border-color:'+t.glassBorder+'!important;}',
@@ -660,14 +711,14 @@ function applyTheme(key){
     '.week-day-num{color:'+t.text3+'!important;}',
     '.week-day-num.today{color:'+t.text+'!important;}',
     '.bar-wrap{background:'+t.glassBorder+'!important;}',
-    '.card,.stat-card,.chart-wrap,.streak-card{background:'+t.glass+'!important;border-color:'+t.glassBorder+'!important;}',
+    '.card,.stat-card,.chart-wrap,.streak-card,.streak-box,.list-card{background:'+(t.bgCard||t.glass)+'!important;border-color:'+t.glassBorder+'!important;}',
     '.task-row{border-color:'+t.glassBorder+'!important;}',
     '.year-row{border-color:'+t.glassBorder+'!important;}',
     '.inp{color:'+t.text+'!important;background:'+t.bg2+'!important;border-color:'+t.glassBorder+'!important;}',
     '.inp::placeholder{color:'+t.text3+'!important;}',
     '.export-btn{color:'+t.text2+'!important;border-color:'+t.glassBorder+'!important;background:'+t.glass+'!important;}',
     '.rtab{color:'+t.text3+'!important;border-color:'+t.glassBorder+'!important;}',
-    '.rtab.active{background:'+t.text+'!important;color:'+t.bg+'!important;}',
+    '.rtab.active{background:'+(t.bgCard||t.bgLift)+'!important;color:'+t.text+'!important;box-shadow:0 1px 3px rgba(0,0,0,0.12)!important;}',
     '.report-tab{color:'+t.text3+'!important;}',
     '.report-tab.active{color:'+t.text+'!important;border-bottom-color:'+t.accent+'!important;}',
     '.nav-arrow{color:'+t.text3+'!important;border-color:'+t.glassBorder+'!important;}',
@@ -682,7 +733,7 @@ function applyTheme(key){
     if(isLight){
       lo.textContent=`
         body, #app { background: ${t.bg} !important; ${t.bgImage?'background-image:'+t.bgImage+'!important;background-size:'+(t.bgSize||'24px 24px')+'!important;':''} }
-        #header, #nav, #sub-nav { background: ${t.nav} !important; border-color: ${t.navBorder} !important; }
+        #header, #sub-nav { background: ${t.nav} !important; border-color: ${t.navBorder} !important; }
         #splash { background: ${t.bg} !important; ${t.bgImage?'background-image:'+t.bgImage+'!important;background-size:'+(t.bgSize||'24px 24px')+'!important;':''} }
         #view-task-detail, .td-header { background: ${t.bg} !important; ${t.bgImage?'background-image:'+t.bgImage+'!important;background-size:'+(t.bgSize||'24px 24px')+'!important;':''} }
 
@@ -694,19 +745,19 @@ function applyTheme(key){
 
         /* Specific weights */
         .nav-btn { color: #555555 !important; }
-        .nav-btn.active { color: #000000 !important; border-bottom-color: ${t.accent} !important; }
+        .nav-btn.active { color: ${t.accent} !important; }
         .sub-btn { color: #555555 !important; }
         .sub-btn.active { color: #000000 !important; }
         .lbl, .stat-sub, .chart-title, .month-day-header,
         .week-day-name, .task-time { color: #666666 !important; }
 
         /* Buttons */
-        .btn-edit { color: #333333 !important; border-color: rgba(0,0,0,0.2) !important; background: transparent !important; }
-        .btn-edit.active { background: #111111 !important; color: #ffffff !important; }
+        .btn-edit { color: #333333 !important; border-color: rgba(0,0,0,0.12) !important; background: rgba(0,0,0,0.04) !important; }
+        .btn-edit.active { background: ${t.accent} !important; color: #ffffff !important; border-color: transparent !important; }
         .btn-add, .btn-ok, .splash-btn { background: ${t.accent} !important; color: #ffffff !important; }
         .export-btn { color: #222222 !important; background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.12) !important; }
-        .rtab { color: #444444 !important; border-color: rgba(0,0,0,0.15) !important; background: transparent !important; }
-        .rtab.active { background: #111111 !important; color: #ffffff !important; }
+        .rtab { color: #444444 !important; border-color: transparent !important; background: transparent !important; }
+        .rtab.active { background: #ffffff !important; color: #111111 !important; box-shadow: 0 1px 4px rgba(0,0,0,0.08) !important; }
         .nav-arrow { color: #333333 !important; border-color: rgba(0,0,0,0.18) !important; }
         .td-back { color: #333333 !important; border-color: rgba(0,0,0,0.18) !important; }
 
@@ -730,11 +781,12 @@ function applyTheme(key){
         .report-tab.active { color: #000000 !important; border-bottom-color: ${t.accent} !important; }
 
         /* Splash */
-        /* Completion popup always stays dark — it's a full-screen overlay */
-        #completion-popup, #completion-popup * { color: #ffffff !important; }
-        #completion-popup { background: rgba(0,0,0,0.75) !important; }
-        #cp-dismiss { background: rgba(255,255,255,0.12) !important; border-color: rgba(255,255,255,0.25) !important; color: #ffffff !important; }
-        .cp-close { color: rgba(255,255,255,0.8) !important; }
+        /* Completion popup — light card floating over a dimmed scrim */
+        #completion-popup { background: rgba(0,0,0,0.35) !important; }
+        #completion-card, #completion-card * { color: #1d1d1f !important; }
+        #cp-sub { color: rgba(29,29,31,0.6) !important; }
+        #cp-dismiss { background: ${t.accent} !important; border-color: transparent !important; color: #ffffff !important; }
+        .cp-close { background: rgba(255,255,255,0.85) !important; color: rgba(29,29,31,0.7) !important; }
         .splash-greeting, .splash-name, .splash-sub, .splash-quote, .splash-day, .splash-date, .splash-clock { color: #111111 !important; }
         .splash-stat-sep { background: rgba(0,0,0,0.12) !important; }
         @keyframes logo-glow { 0%,100%{box-shadow:0 0 18px 4px rgba(0,0,0,0.08);}50%{box-shadow:0 0 32px 10px rgba(0,0,0,0.15);} }
@@ -801,7 +853,7 @@ let taskDetailView = "month";
 let taskDetailMonthOffset = 0;
 let taskDetailYearOffset = 0;
 
-function clr(s){ return s>=80?"#4ade80":s>=50?"#facc15":s>0?"#f87171":"rgba(255,255,255,0.08)"; }
+function clr(s){ return s>=80?"#30d158":s>=50?"#ff9f0a":s>0?"#ff3b30":"var(--glass-border)"; }
 function scoreOf(log, dayKey){
   if(!log) return 0;
   const key = dayKey || getTodayKey();
@@ -898,7 +950,7 @@ function haptic(type){if(!hapticEnabled)return;if(_isIOS){_iosHaptic(type);retur
 
 function launchConfetti(){
   // Minimal glow particle burst from screen centre
-  const colors=["#4ade80","#86efac","rgba(255,255,255,0.5)","rgba(255,255,255,0.3)"];
+  const colors=["#30d158","#86efac","rgba(255,255,255,0.5)","rgba(255,255,255,0.3)"];
   const cx=window.innerWidth/2;
   const cy=window.innerHeight/2;
   const count=22;
@@ -987,13 +1039,13 @@ function renderToday(){
   }
 
   let html=`
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--bg-card);border-radius:8px;padding:10px 14px;border:1px solid var(--glass-border)">
-    <button id="day-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:4px 12px;font-size:14px;border-radius:4px;cursor:pointer">‹</button>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 14px;border:1px solid var(--glass-border);box-shadow:var(--shadow-xs)">
+    <button id="day-prev" class="nav-arrow" style="padding:6px 13px">‹</button>
     <div style="text-align:center">
-      <div style="font-size:12px;font-weight:700;color:${isLiveToday?'#4ade80':'var(--text)'}">${isLiveToday?"TODAY":activeDate.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"})}</div>
-      ${!isLiveToday?'<div style="font-size:9px;color:var(--text2);letter-spacing:2px;margin-top:2px">EDITING PAST</div>':''}
+      <div style="font-size:13px;font-weight:700;color:${isLiveToday?'var(--accent)':'var(--text)'}">${isLiveToday?"TODAY":activeDate.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"})}</div>
+      ${!isLiveToday?'<div style="font-size:10px;color:var(--text3);letter-spacing:0.5px;margin-top:2px;font-weight:600">EDITING PAST</div>':''}
     </div>
-    <button id="day-next" style="background:none;border:1px solid var(--glass-border);color:${canGoNext?'var(--text2)':'var(--glass-border)'};padding:4px 12px;font-size:14px;border-radius:4px;cursor:pointer;pointer-events:${canGoNext?'auto':'none'}">›</button>
+    <button id="day-next" class="nav-arrow" style="padding:6px 13px;${canGoNext?'':'opacity:0.3;pointer-events:none'}">›</button>
   </div>
   <div class="section-header">
     <div class="lbl">${isLiveToday?"Today's Tasks":"Tasks — "+activeKey}</div>
@@ -1065,7 +1117,7 @@ function renderToday(){
       html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin:14px 0 6px;padding:6px 10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;cursor:pointer" data-grp-toggle="${g.id}">
         <div style="display:flex;align-items:center;gap:8px">
           <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text)">${g.name}</span>
-          <span style="font-size:9px;color:${allDone?'#4ade80':'var(--text2)'};">${gdone}/${gtotal}</span>
+          <span style="font-size:9px;color:${allDone?'#30d158':'var(--text2)'};">${gdone}/${gtotal}</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           ${editMode?`<button class="btn-edit" data-grp-edit="${g.id}" style="font-size:8px;padding:2px 7px">rename</button><button class="btn-del" data-grp-del="${g.id}" style="font-size:9px;padding:2px 7px">✕</button>`:''}
@@ -1075,7 +1127,9 @@ function renderToday(){
     }
 
     if(!collapsed){
+      if(gt.length>0) html+='<div class="list-card">';
       gt.forEach(t=>{ html+=renderTaskRow(t); });
+      if(gt.length>0) html+='</div>';
       if(editMode){
         html+=`<div style="margin:4px 0 8px 0">
           <input class="inp" id="grp-new-name-${g.id}" placeholder="New task in ${g.name}" style="margin-bottom:4px;font-size:12px">
@@ -1097,9 +1151,11 @@ function renderToday(){
         </div>
         <span style="font-size:12px;color:var(--text2);display:inline-block;transform:rotate(${ucollapsed?'0':'180'}deg)">⌄</span>
       </div>`;
-      if(!ucollapsed) ungrouped.forEach(t=>{ html+=renderTaskRow(t); });
+      if(!ucollapsed && ungrouped.length>0){ html+='<div class="list-card">'; ungrouped.forEach(t=>{ html+=renderTaskRow(t); }); html+='</div>'; }
     } else {
+      if(ungrouped.length>0) html+='<div class="list-card">';
       ungrouped.forEach(t=>{ html+=renderTaskRow(t); });
+      if(ungrouped.length>0) html+='</div>';
     }
   }
 
@@ -1134,14 +1190,14 @@ function renderWeek(){
   const weekStart=weekDates[0], weekEnd=weekDates[6];
   const label=weekStart.toLocaleDateString("en-IN",{day:"numeric",month:"short"})+" – "+weekEnd.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
   let total=0,cnt=0;
-  let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-    <button id="week-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
+  let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 14px;border:1px solid var(--glass-border);box-shadow:var(--shadow-xs)">
+    <button id="week-prev" class="nav-arrow" style="padding:6px 13px">‹</button>
     <div style="text-align:center">
-      <div style="font-size:11px;color:var(--text);font-weight:700">${weekOffset===0?"This Week":label}</div>
-      ${weekOffset!==0?"<div style=\"font-size:9px;color:var(--text2);margin-top:2px\">"+label+"</div>":""}
+      <div style="font-size:13px;color:var(--text);font-weight:700">${weekOffset===0?"This Week":label}</div>
+      ${weekOffset!==0?"<div style=\"font-size:10px;color:var(--text3);margin-top:2px;font-weight:500\">"+label+"</div>":""}
     </div>
-    <button id="week-next" style="background:none;border:1px solid var(--glass-border);color:${weekOffset<0?'var(--text2)':'var(--glass-border)'};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${weekOffset<0?'auto':'none'}">›</button>
-  </div>`;
+    <button id="week-next" class="nav-arrow" style="padding:6px 13px;${weekOffset<0?'':'opacity:0.3;pointer-events:none'}">›</button>
+  </div><div class="list-card">`;
   weekDates.forEach(d=>{
     const k=toKey(d); const sc=scoreOf(logs[k],k);
     const isToday=k===getTodayKey(); const future=k>getTodayKey();
@@ -1156,6 +1212,7 @@ function renderWeek(){
       <div class="score-text" style="color:${clr(sc)}">${future?"—":sc+"%"}</div>
     </div>`;
   });
+  html+='</div>';
   const avg=cnt?Math.round(total/cnt):0;
   html+=`<div class="stat-card"><div class="lbl">Week Avg</div><div class="stat-avg" style="color:${clr(avg)}">${avg}%</div></div>`;
 
@@ -1172,20 +1229,20 @@ function renderMonth(){
   const firstDay=new Date(yr,mo,1).getDay();
   const monthDates=Array.from({length:daysInMonth},(_,i)=>new Date(yr,mo,i+1));
   const canNext=monthOffset<0;
-  let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-    <button id="month-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
-    <div style="font-size:13px;color:var(--text);font-weight:700">${MONTHS[mo]} ${yr}</div>
-    <button id="month-next" style="background:none;border:1px solid var(--glass-border);color:${canNext?'var(--text2)':'var(--glass-border)'};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNext?'auto':'none'}">›</button>
-  </div><div class="month-grid">`;
+  let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 14px;border:1px solid var(--glass-border);box-shadow:var(--shadow-xs)">
+    <button id="month-prev" class="nav-arrow" style="padding:6px 13px">‹</button>
+    <div style="font-size:14px;color:var(--text);font-weight:700">${MONTHS[mo]} ${yr}</div>
+    <button id="month-next" class="nav-arrow" style="padding:6px 13px;${canNext?'':'opacity:0.3;pointer-events:none'}">›</button>
+  </div><div class="card" style="padding:16px 14px"><div class="month-grid">`;
   DAYS.forEach(d=>{html+=`<div class="month-day-header">${d}</div>`;});
-  html+='</div><div class="month-grid">';
+  html+='</div><div class="month-grid" style="margin-top:6px">';
   for(let i=0;i<firstDay;i++) html+=`<div></div>`;
   let total=0,cnt=0,strong=0;
   monthDates.forEach(d=>{
     const k=toKey(d); const sc=scoreOf(logs[k],k);
     const isToday=k===getTodayKey(); const future=k>getTodayKey();
     if(!future){total+=sc;cnt++;if(sc>=80)strong++;}
-    const bg=future?"var(--bg-card)":sc===0?"var(--bg-cell)":clr(sc)+"25";
+    const bg=future?"var(--bg-cell)":sc===0?"var(--bg-cell)":clr(sc)+"25";
     const monthCellAttr = future ? "" : 'data-daykey="'+k+'"';
     html+=`<div class="month-cell ${isToday?"today":""} ${future?"future":""}" style="background:${bg};cursor:${future?"default":"pointer"}" ${monthCellAttr}>
       <div class="month-cell-num ${isToday?'today':''}">${d.getDate()}</div>
@@ -1193,7 +1250,7 @@ function renderMonth(){
     </div>`;
   });
   const avg=cnt?Math.round(total/cnt):0;
-  html+=`</div><div class="stat-card"><div class="lbl">Month Avg</div><div class="stat-avg" style="color:${clr(avg)}">${avg}%</div><div class="stat-sub">${strong} strong days</div></div>`;
+  html+=`</div></div><div class="stat-card"><div class="lbl">Month Avg</div><div class="stat-avg" style="color:${clr(avg)}">${avg}%</div><div class="stat-sub">${strong} strong days</div></div>`;
 
   el.innerHTML=html;
 
@@ -1204,11 +1261,11 @@ function renderYear(){
   const el=document.getElementById("view-year");
   const yr=getToday().getFullYear()+yearOffset;
   const canNext=yearOffset<0;
-  let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-    <button id="year-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
-    <div style="font-size:13px;color:var(--text);font-weight:700">${yr}</div>
-    <button id="year-next" style="background:none;border:1px solid var(--glass-border);color:${canNext?'var(--text2)':'var(--glass-border)'};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNext?'auto':'none'}">›</button>
-  </div>`;
+  let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 14px;border:1px solid var(--glass-border);box-shadow:var(--shadow-xs)">
+    <button id="year-prev" class="nav-arrow" style="padding:6px 13px">‹</button>
+    <div style="font-size:14px;color:var(--text);font-weight:700">${yr}</div>
+    <button id="year-next" class="nav-arrow" style="padding:6px 13px;${canNext?'':'opacity:0.3;pointer-events:none'}">›</button>
+  </div><div class="list-card">`;
   let strongTotal=0,trackedTotal=0;
   MONTHS.forEach((m,mi)=>{
     const mDays=new Date(yr,mi+1,0).getDate();
@@ -1225,6 +1282,7 @@ function renderYear(){
       <div class="score-text" style="color:${clr(avg||0)}">${avg===null?"—":avg+"%"}</div>
     </div>`;
   });
+  html+='</div>';
   html+=`<div class="stat-card"><div class="lbl">Year Summary</div><div class="stat-sub" style="margin-top:8px">${strongTotal} strong days in ${yr}</div><div class="stat-sub">${trackedTotal} days tracked</div></div>`;
 
   el.innerHTML=html;
@@ -1272,7 +1330,7 @@ function getPieData(){
 }
 
 function destroyChart(id){ if(chartInstances[id]){ chartInstances[id].destroy(); delete chartInstances[id]; } }
-function destroyAllCharts(){ ["bar","pie","tasks","radar","hist","dow","hdow","hmom","hhist","momentum","cumulative"].forEach(destroyChart); }
+function destroyAllCharts(){ ["bar","pie","tasks","radar","hist","dow","hdow","hmom","hhist"].forEach(destroyChart); }
 
 function reportTitle(){const d=getReportData();return(d&&d.title)||getToday().getFullYear()+"";}
 
@@ -1322,22 +1380,19 @@ function renderAnalytics(){
   const el=document.getElementById("view-analytics");
   const isTimePeriod=["day","week","month","year"].includes(reportPeriod);
 
+  // ── HTML shell ─────────────────────────────────────────────────────────────
   el.innerHTML=`
-    <div class="lbl" style="margin-bottom:14px">Analytics</div>
+    <div class="page-title">Analytics</div>
     <div class="report-tabs" style="display:grid;grid-template-columns:repeat(6,1fr);gap:3px;margin-bottom:14px">
       ${["day","week","month","year","heat","tasks"].map(p=>`
         <button class="rtab ${reportPeriod===p?'active':''}" id="rtab-${p}" style="font-size:9px;padding:5px 2px">${p==="heat"?"Heat":p.charAt(0).toUpperCase()+p.slice(1)}</button>
       `).join('')}
     </div>
-
     ${isTimePeriod?`
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;padding:6px 10px">
-        <button id="report-prev" style="background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;padding:0 4px;line-height:1;flex-shrink:0">&#8249;</button>
-        <div style="flex:1;text-align:center">
-          <div style="font-size:12px;color:var(--text);font-weight:600">${reportTitle()}</div>
-          <div style="font-size:9px;color:var(--text3);letter-spacing:1px;margin-top:1px">${reportOffset===0?"CURRENT":reportOffset===-1?"PREVIOUS":Math.abs(reportOffset)+" BACK"}</div>
-        </div>
-        <button id="report-next" style="background:none;border:none;font-size:22px;cursor:pointer;padding:0 4px;line-height:1;flex-shrink:0;color:${getReportData().canNext?"var(--text2)":"var(--glass-border)"};${getReportData().canNext?"":"pointer-events:none"}">&#8250;</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <button id="report-prev" class="nav-arrow">&#8249;</button>
+        <span style="font-size:12px;color:var(--text2);font-weight:500">${reportTitle()}</span>
+        <button id="report-next" class="nav-arrow" style="opacity:${getReportData().canNext?1:0.25}">&#8250;</button>
       </div>` : ''}
 
     ${reportPeriod==="heat"?`
@@ -1345,68 +1400,29 @@ function renderAnalytics(){
     `:reportPeriod==="tasks"?`
       <div id="tasks-chart-wrap" class="chart-wrap"></div>
     `:`
+      <!-- Consistency stat cards -->
       <div id="consistency-cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px"></div>
-
-      <div class="chart-wrap" style="text-align:center">
-        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Pace Gauge</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">avg vs personal best</span></div>
-        <div id="pace-gauge-wrap"></div>
-      </div>
-
+      <!-- Bar + Trend line -->
       <div class="chart-wrap">
         <div class="chart-title">${reportPeriod==="day"?"Task Completion":"Score + Trend"}</div>
-        <canvas id="bar-chart" height="150"></canvas>
+        <canvas id="bar-chart" height="160"></canvas>
       </div>
-
-      ${reportPeriod!=="day"?`<div class="chart-wrap">
-        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Cumulative Strong Days</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">vs total days tracked</span></div>
-        <canvas id="cumulative-chart" height="110"></canvas>
-      </div>`:''}
-
-      ${(reportPeriod==="month"||reportPeriod==="year")?`<div class="chart-wrap">
-        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Score Volatility</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">high · avg · low${reportPeriod==="month"?" per week":" per month"}</span></div>
-        <div id="volatility-wrap"></div>
-      </div>`:''}
-
+      <!-- Doughnut breakdown -->
       <div class="chart-wrap">
-        <div class="chart-title">Quality Breakdown</div>
-        <canvas id="pie-chart" height="150"></canvas>
+        <div class="chart-title">Breakdown</div>
+        <canvas id="pie-chart" height="160"></canvas>
       </div>
-
-      ${reportPeriod!=="day"?`<div class="chart-wrap">
-        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>PR Timeline</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">personal records flagged</span></div>
-        <div id="pr-timeline-wrap"></div>
-      </div>`:''}
-
+      <!-- Score Distribution Histogram -->
       ${reportPeriod!=="day"?`<div class="chart-wrap">
         <div class="chart-title">Score Distribution</div>
-        <canvas id="hist-chart" height="110"></canvas>
+        <canvas id="hist-chart" height="120"></canvas>
       </div>`:''}
-
+      <!-- Day-of-Week Analysis -->
       ${reportPeriod!=="day"?`<div class="chart-wrap">
         <div class="chart-title">Best Day of Week</div>
-        <canvas id="dow-chart" height="110"></canvas>
+        <canvas id="dow-chart" height="120"></canvas>
       </div>`:''}
-
-      ${(reportPeriod==="month"||reportPeriod==="year")?`<div class="chart-wrap">
-        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Momentum Flow</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">rolling avg · gradient fill</span></div>
-        <canvas id="momentum-chart" height="110"></canvas>
-      </div>`:''}
-
-      ${(reportPeriod==="month"||reportPeriod==="year")?`<div class="chart-wrap">
-        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Consistency Rings</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">${reportPeriod==="month"?"per week":"per month"}</span></div>
-        <div id="rings-canvas-wrap" style="overflow-x:auto;overflow-y:hidden;padding-bottom:4px"></div>
-      </div>`:''}
-
-      ${(reportPeriod==="month"||reportPeriod==="year")?`<div class="chart-wrap">
-        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Streak Density</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">run length intensity</span></div>
-        <div id="streak-density-wrap" style="width:100%;overflow:hidden"></div>
-      </div>`:''}
-
-      ${reportPeriod!=="day"?`<div class="chart-wrap">
-        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between"><span>Task Leaderboard</span><span style="font-size:8px;opacity:0.4;font-weight:400;letter-spacing:0">completion rate this period</span></div>
-        <div id="leaderboard-wrap"></div>
-      </div>`:''}
-
+      <!-- Summary -->
       <div class="chart-wrap">
         <div class="chart-title">Summary</div>
         <div id="summary-text"></div>
@@ -1415,7 +1431,6 @@ function renderAnalytics(){
     <button class="export-btn" id="export-img-btn" style="margin-top:8px">Export as Image</button>
     <button class="export-btn" id="export-csv-btn" style="margin-top:6px">Export as CSV</button>
   `;
-
 
   // ── HEAT MAP ───────────────────────────────────────────────────────────────
   if(reportPeriod==="heat"){
@@ -1438,11 +1453,8 @@ function renderAnalytics(){
     const isCurrentYear=heatYear===today.getFullYear();
 
     // ── Vertical grid: 12 month rows × 31 day columns ────────────────────────
-    // Label col=28px, 31 cells each (C+GAP), minus last GAP
-    // Solve: 28 + 31*C + 30*GAP <= availW  =>  C = floor((availW - 28 - 30*GAP) / 31)
+    const C=Math.max(9,Math.min(13,Math.floor((window.innerWidth-60)/33)));
     const GAP=2;
-    const heatAvailW=Math.min(window.innerWidth, 480) - 32; // 16px padding each side
-    const C=Math.max(7, Math.floor((heatAvailW - 28 - 30*GAP) / 31));
 
     let monthRows='';
     for(let mo=0;mo<12;mo++){
@@ -1453,7 +1465,7 @@ function renderAnalytics(){
         const k=toKey(date);
         const future=k>todayK;
         const sc=future?null:scoreOf(logs[k],k);
-        const bg=future?'var(--glass)':sc===null||sc===0?'var(--bg2)':sc>=80?'#4ade80':sc>=50?'#facc15':'#f87171';
+        const bg=future?'var(--glass)':sc===null||sc===0?'var(--bg2)':sc>=80?'#30d158':sc>=50?'#ff9f0a':'#ff3b30';
         const op=future?0.15:sc===0?0.25:1;
         dayCells+=`<div data-k="${k}" style="width:${C}px;height:${C}px;border-radius:2px;background:${bg};opacity:${op};flex-shrink:0;cursor:${future||sc===null?'default':'pointer'}"></div>`;
       }
@@ -1471,59 +1483,49 @@ function renderAnalytics(){
     dayHeader+='</div></div>';
 
     wrap.innerHTML=`
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px">
-        <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;text-align:center">
-          <div style="font-size:20px;font-weight:600;color:var(--accent)">${hCur}</div>
-          <div style="font-size:7px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Streak</div>
-        </div>
-        <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;text-align:center">
-          <div style="font-size:20px;font-weight:600;color:var(--accent)">${hBest}</div>
-          <div style="font-size:7px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Best</div>
-        </div>
-        <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;text-align:center">
-          <div style="font-size:20px;font-weight:600;color:${clr(allAvg)}">${allAvg}%</div>
-          <div style="font-size:7px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Avg</div>
-        </div>
-        <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;text-align:center">
-          <div style="font-size:20px;font-weight:600;color:${clr(logRate)}">${logRate}%</div>
-          <div style="font-size:7px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Log rate</div>
-        </div>
+      <div class="stat-tile-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px">
+        <div class="stat-tile" style="padding:12px 6px"><div class="stat-tile-num" style="font-size:19px">${hCur}</div><div class="stat-tile-lbl">Streak</div></div>
+        <div class="stat-tile" style="padding:12px 6px"><div class="stat-tile-num" style="font-size:19px">${hBest}</div><div class="stat-tile-lbl">Best</div></div>
+        <div class="stat-tile" style="padding:12px 6px"><div class="stat-tile-num" style="font-size:19px;color:${clr(allAvg)}">${allAvg}%</div><div class="stat-tile-lbl">Avg</div></div>
+        <div class="stat-tile" style="padding:12px 6px"><div class="stat-tile-num" style="font-size:19px;color:${clr(logRate)}">${logRate}%</div><div class="stat-tile-lbl">Log rate</div></div>
       </div>
 
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div style="font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase">Activity ${heatYear}</div>
+        <div class="settings-section-title" style="margin-bottom:0">Activity ${heatYear}</div>
         <div style="display:flex;align-items:center;gap:6px">
-          <button id="heat-year-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text3);padding:3px 12px;border-radius:4px;cursor:pointer;font-size:13px">‹</button>
-          <button id="heat-year-next" style="background:none;border:1px solid var(--glass-border);color:${isCurrentYear?'var(--glass-border)':'var(--text3)'};padding:3px 12px;border-radius:4px;cursor:pointer;font-size:13px;pointer-events:${isCurrentYear?'none':'auto'}">›</button>
+          <button id="heat-year-prev" class="nav-arrow" style="padding:5px 12px">‹</button>
+          <button id="heat-year-next" class="nav-arrow" style="padding:5px 12px;${isCurrentYear?'opacity:0.3;pointer-events:none':''}">›</button>
         </div>
       </div>
 
-      <div id="heat-grid" style="overflow-x:auto;overflow-y:hidden">
+      <div class="card" style="padding:12px 10px">
+      <div id="heat-grid">
         ${dayHeader}
         ${monthRows}
       </div>
-
-      <div style="display:flex;gap:6px;align-items:center;margin-top:10px;justify-content:flex-end">
-        <span style="font-size:8px;color:var(--text3)">None</span>
-        <div style="width:10px;height:10px;border-radius:2px;background:var(--bg2);border:1px solid var(--glass-border)"></div>
-        <div style="width:10px;height:10px;border-radius:2px;background:#f87171"></div>
-        <div style="width:10px;height:10px;border-radius:2px;background:#facc15"></div>
-        <div style="width:10px;height:10px;border-radius:2px;background:#4ade80"></div>
-        <span style="font-size:8px;color:var(--text3)">100%</span>
       </div>
 
-      <div style="margin-top:20px">
-        <div style="font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">Day of Week Strength</div>
+      <div style="display:flex;gap:6px;align-items:center;margin-top:10px;justify-content:flex-end">
+        <span style="font-size:9px;color:var(--text3)">None</span>
+        <div style="width:10px;height:10px;border-radius:3px;background:var(--bg2);border:1px solid var(--glass-border)"></div>
+        <div style="width:10px;height:10px;border-radius:3px;background:#ff3b30"></div>
+        <div style="width:10px;height:10px;border-radius:3px;background:#ff9f0a"></div>
+        <div style="width:10px;height:10px;border-radius:3px;background:#30d158"></div>
+        <span style="font-size:9px;color:var(--text3)">100%</span>
+      </div>
+
+      <div class="chart-wrap" style="margin-top:20px">
+        <div class="chart-title">Day of Week Strength</div>
         <canvas id="heat-dow-chart" height="140"></canvas>
       </div>
 
-      <div style="margin-top:20px">
-        <div style="font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">Monthly Momentum</div>
+      <div class="chart-wrap" style="margin-top:12px">
+        <div class="chart-title">Monthly Momentum</div>
         <canvas id="heat-momentum-chart" height="140"></canvas>
       </div>
 
-      <div style="margin-top:20px">
-        <div style="font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Score Distribution</div>
+      <div class="chart-wrap" style="margin-top:12px">
+        <div class="chart-title">Score Distribution</div>
         <canvas id="heat-hist-chart" height="120"></canvas>
       </div>
     `;
@@ -1610,7 +1612,7 @@ function renderAnalytics(){
     chartInstances["hhist"]=new Chart(document.getElementById("heat-hist-chart").getContext("2d"),{
       type:"bar",
       data:{labels:["0","10","20","30","40","50","60","70","80","90+"],
-        datasets:[{data:buckets,backgroundColor:["#f87171","#f87171","#f87171","#f87171","#f87171","#facc15","#facc15","#facc15","#4ade80","#4ade80"].map(c=>c+"77"),borderColor:["#f87171","#f87171","#f87171","#f87171","#f87171","#facc15","#facc15","#facc15","#4ade80","#4ade80"],borderWidth:1,borderRadius:3}]},
+        datasets:[{data:buckets,backgroundColor:["#ff3b30","#ff3b30","#ff3b30","#ff3b30","#ff3b30","#ff9f0a","#ff9f0a","#ff9f0a","#30d158","#30d158"].map(c=>c+"77"),borderColor:["#ff3b30","#ff3b30","#ff3b30","#ff3b30","#ff3b30","#ff9f0a","#ff9f0a","#ff9f0a","#30d158","#30d158"],borderWidth:1,borderRadius:3}]},
       options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+" days"}}},
         scales:{y:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:8}},grid:{display:false}}}}
     });
@@ -1626,11 +1628,11 @@ function renderAnalytics(){
     const todayK=getTodayKey();
 
     let navHtml=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <button id="tasks-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
-      <div style="display:flex;gap:5px">${["all","month","year"].map(p=>`<button class="tasks-period-btn" data-p="${p}" style="background:${tasksSubPeriod===p?"var(--text)":"none"};border:1px solid var(--glass-border);color:${tasksSubPeriod===p?"var(--bg)":"var(--text2)"};padding:3px 8px;font-size:9px;letter-spacing:1px;border-radius:4px;cursor:pointer;text-transform:uppercase">${p}</button>`).join('')}</div>
-      <button id="tasks-next" style="background:none;border:1px solid var(--glass-border);color:${twCanNext?"var(--text2)":"var(--glass-border)"};padding:4px 11px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${twCanNext?"auto":"none"}">&#8250;</button>
+      <button id="tasks-prev" class="nav-arrow" style="padding:5px 11px">&#8249;</button>
+      <div class="report-tabs" style="margin-bottom:0;padding:3px">${["all","month","year"].map(p=>`<button class="tasks-period-btn rtab ${tasksSubPeriod===p?'active':''}" data-p="${p}" style="padding:5px 12px">${p.charAt(0).toUpperCase()+p.slice(1)}</button>`).join('')}</div>
+      <button id="tasks-next" class="nav-arrow" style="padding:5px 11px;${twCanNext?'':'opacity:0.3;pointer-events:none'}">&#8250;</button>
     </div>
-    <div style="font-size:10px;color:var(--text2);letter-spacing:2px;margin-bottom:12px">${twLabel.toUpperCase()}</div>`;
+    <div style="font-size:11px;color:var(--text3);font-weight:600;margin-bottom:12px;text-align:center">${twLabel.toUpperCase()}</div>`;
     tw.innerHTML=navHtml;
 
     if(tdata.length===0){
@@ -1700,23 +1702,23 @@ function renderAnalytics(){
         type:"bar",
         data:{
           labels:tdata.map(t=>t.name.replace(/^[◉●] /,"").slice(0,16)),
-          datasets:[{data:tdata.map(t=>t.rate),backgroundColor:tdata.map(t=>t.deleted?"rgba(255,255,255,0.1)":clr(t.rate)+"bb"),borderColor:tdata.map(t=>t.deleted?"var(--glass-border)":clr(t.rate)),borderWidth:1,borderRadius:3}]
+          datasets:[{data:tdata.map(t=>t.rate),backgroundColor:tdata.map(t=>t.deleted?cssVar("--glass-border"):clr(t.rate)+"bb"),borderColor:tdata.map(t=>t.deleted?cssVar("--glass-border"):clr(t.rate)),borderWidth:1,borderRadius:3}]
         },
         options:{indexAxis:"y",responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const t=tdata[ctx.dataIndex];return ctx.raw+"% ("+t.done+"/"+t.active+" days)";} }}},
           scales:{x:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},y:{ticks:{color:cssVar("--text2"),font:{size:9}},grid:{display:false}}}}
       });
 
       // Task rows
-      let rowsHtml='<div style="margin-top:14px"><div style="font-size:9px;color:var(--text2);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">Tap for full history</div>';
+      let rowsHtml='<div style="margin-top:16px"><div class="settings-section-title">Tap for full history</div><div class="list-card">';
       tdata.forEach(t=>{
-        rowsHtml+=`<div data-task-detail-id="${t.id}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;margin-bottom:6px;cursor:pointer">
-          <div style="flex:1;min-width:0;font-size:13px;color:${t.deleted?"var(--text3)":"var(--text)"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.name.replace(/^[◉●] /,"")}</div>
+        rowsHtml+=`<div data-task-detail-id="${t.id}" class="task-row-tappable" style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--glass-border);cursor:pointer">
+          <div style="flex:1;min-width:0;font-size:14px;font-weight:500;color:${t.deleted?"var(--text3)":"var(--text)"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.name.replace(/^[◉●] /,"")}</div>
           <div style="font-size:13px;font-weight:600;color:${clr(t.rate)};flex-shrink:0">${t.rate}%</div>
-          <div style="font-size:11px;color:var(--text2);flex-shrink:0">${t.done}/${t.active}d</div>
-          <div style="font-size:14px;color:var(--text2);flex-shrink:0">›</div>
+          <div style="font-size:11px;color:var(--text3);flex-shrink:0">${t.done}/${t.active}d</div>
+          <div style="font-size:14px;color:var(--text3);flex-shrink:0">›</div>
         </div>`;
       });
-      rowsHtml+='</div>';
+      rowsHtml+='</div></div>';
       tw.insertAdjacentHTML("beforeend",rowsHtml);
     }
     return;
@@ -1737,9 +1739,9 @@ function renderAnalytics(){
     {label:"Consistency",val:consistency+"%",color:clr(consistency)},
   ];
   document.getElementById("consistency-cards").innerHTML=cards.map(c=>`
-    <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;text-align:center">
-      <div style="font-size:18px;font-weight:600;color:${c.color}">${c.val}</div>
-      <div style="font-size:8px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px">${c.label}</div>
+    <div class="stat-tile">
+      <div class="stat-tile-num" style="color:${c.color}">${c.val}</div>
+      <div class="stat-tile-lbl">${c.label}</div>
     </div>`).join('');
 
   // Bar + Trend line overlay
@@ -1769,444 +1771,160 @@ function renderAnalytics(){
   chartInstances["pie"]=new Chart(pieCtx,{
     type:"doughnut",
     data:{labels:["Strong 80%+","Partial 50-79%","Weak 1-49%","Missed"],
-      datasets:[{data:[pieData.strong,pieData.partial,pieData.weak,pieData.zero],backgroundColor:["#4ade8088","#facc1588","#f8717188",cssVar("--glass-border")],borderColor:["#4ade80","#facc15","#f87171",cssVar("--glass-border")],borderWidth:1}]},
+      datasets:[{data:[pieData.strong,pieData.partial,pieData.weak,pieData.zero],backgroundColor:["#30d15888","#ff9f0a88","#ff3b3088",cssVar("--glass-border")],borderColor:["#30d158","#ff9f0a","#ff3b30",cssVar("--glass-border")],borderWidth:1}]},
     options:{responsive:true,plugins:{legend:{display:true,position:"bottom",labels:{color:cssVar("--text2"),font:{size:9},padding:8,boxWidth:10}},tooltip:{callbacks:{label:ctx=>ctx.label+": "+ctx.raw+" days"}}}}
   });
 
-  // ── PACE GAUGE ─────────────────────────────────────────────────────────────
-  (function(){
-    const pgEl=document.getElementById("pace-gauge-wrap");
-    if(!pgEl) return;
-    const allKg=Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)&&k<=getTodayKey());
-    const allSg=allKg.map(k=>scoreOf(logs[k],k)).filter(s=>s>0);
-    const pgPB=allSg.length?Math.max(...allSg):100;
-    const pgNeedle=Math.min(avg/100,1), pgPBpct=Math.min(pgPB/100,1);
-    const pgW=220,pgH=120,pgCx=pgW/2,pgCy=pgH-10,pgR=88,pgSW=11;
-    function pgArc(pct,r){const a=Math.PI+pct*Math.PI;return{x:pgCx+r*Math.cos(a),y:pgCy+r*Math.sin(a)};}
-    let pgSvg="";
-    [[0,0.5,"#f8717133"],[0.5,0.8,"#facc1533"],[0.8,1,"#4ade8033"]].forEach(([fr,to,cl])=>{
-      const s=pgArc(fr,pgR),e=pgArc(to,pgR);
-      pgSvg+=`<path d="M ${s.x} ${s.y} A ${pgR} ${pgR} 0 ${(to-fr)>0.5?1:0} 1 ${e.x} ${e.y}" fill="none" stroke="${cl}" stroke-width="${pgSW+6}" stroke-linecap="butt"/>`;
-    });
-    pgSvg+=`<path d="M ${pgCx-pgR} ${pgCy} A ${pgR} ${pgR} 0 0 1 ${pgCx+pgR} ${pgCy}" fill="none" stroke="${cssVar("--glass-border")}" stroke-width="${pgSW}" stroke-linecap="round"/>`;
-    if(pgNeedle>0){
-      const ep=pgArc(pgNeedle,pgR);
-      const pgC=avg>=80?"#4ade80":avg>=50?"#facc15":"#f87171";
-      pgSvg+=`<path d="M ${pgCx-pgR} ${pgCy} A ${pgR} ${pgR} 0 ${pgNeedle>0.5?1:0} 1 ${ep.x} ${ep.y}" fill="none" stroke="${pgC}" stroke-width="${pgSW}" stroke-linecap="round"/>`;
-    }
-    if(pgPBpct>0&&pgPBpct<=1){
-      const pm=pgArc(pgPBpct,pgR),pm2=pgArc(pgPBpct,pgR-pgSW-8);
-      pgSvg+=`<line x1="${pm.x.toFixed(1)}" y1="${pm.y.toFixed(1)}" x2="${pm2.x.toFixed(1)}" y2="${pm2.y.toFixed(1)}" stroke="${cssVar("--text2")}" stroke-width="2.5" stroke-linecap="round"/>`;
-      pgSvg+=`<text x="${pm2.x.toFixed(1)}" y="${(pm2.y-5).toFixed(1)}" text-anchor="middle" font-size="7" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">PB ${pgPB}%</text>`;
-    }
-    const pgNp=pgArc(pgNeedle,pgR-pgSW/2-3);
-    pgSvg+=`<line x1="${pgCx}" y1="${pgCy}" x2="${pgNp.x.toFixed(1)}" y2="${pgNp.y.toFixed(1)}" stroke="${cssVar("--text")}" stroke-width="2.5" stroke-linecap="round"/>`;
-    pgSvg+=`<circle cx="${pgCx}" cy="${pgCy}" r="5" fill="${cssVar("--text")}"/>`;
-    const pgCol2=avg>=80?"#4ade80":avg>=50?"#facc15":"#f87171";
-    pgSvg+=`<text x="${pgCx}" y="${pgCy-20}" text-anchor="middle" font-size="28" font-weight="700" fill="${pgCol2}" font-family="Inter,sans-serif">${avg}%</text>`;
-    pgSvg+=`<text x="${pgCx}" y="${pgCy-7}" text-anchor="middle" font-size="8" fill="${cssVar("--text3")}" letter-spacing="1.5" font-family="Inter,sans-serif">AVG SCORE</text>`;
-    pgSvg+=`<text x="${pgCx-pgR-2}" y="${pgCy+14}" text-anchor="end" font-size="8" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">0</text>`;
-    pgSvg+=`<text x="${pgCx+pgR+2}" y="${pgCy+14}" text-anchor="start" font-size="8" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">100</text>`;
-    pgEl.innerHTML=`<svg width="${pgW}" height="${pgH}" style="display:block;margin:0 auto;overflow:visible">${pgSvg}</svg>`;
-  })();
-
   if(reportPeriod!=="day"){
-    // ── CUMULATIVE PROGRESS CURVE ───────────────────────────────────────────
-    (function(){
-      const cumEl2=document.getElementById("cumulative-chart");
-      if(!cumEl2) return;
-      destroyChart("cumulative");
-      let cumS=0,cumT=0;
-      const cumStrongArr=[],cumTotalArr=[];
-      data.scores.forEach(s=>{
-        if(s!==null){cumT++;if(s>=80)cumS++;}
-        cumStrongArr.push(cumS); cumTotalArr.push(cumT);
-      });
-      const cumGrad=cumEl2.getContext("2d").createLinearGradient(0,0,0,110);
-      cumGrad.addColorStop(0,"#4ade8055"); cumGrad.addColorStop(1,"#4ade8000");
-      chartInstances["cumulative"]=new Chart(cumEl2.getContext("2d"),{
-        type:"line",
-        data:{labels:data.labels,datasets:[
-          {data:cumStrongArr,label:"Strong",borderColor:"#4ade80",backgroundColor:cumGrad,fill:true,tension:0.4,borderWidth:2,pointRadius:0,spanGaps:true},
-          {data:cumTotalArr,label:"Total",borderColor:cssVar("--text3"),backgroundColor:"transparent",fill:false,tension:0,borderWidth:1.5,pointRadius:0,borderDash:[4,3],spanGaps:true}
-        ]},
-        options:{responsive:true,plugins:{legend:{display:true,labels:{color:cssVar("--text2"),font:{size:9},boxWidth:8,padding:10}}},
-          scales:{y:{min:0,ticks:{color:cssVar("--text3"),font:{size:9}},grid:{color:cssVar("--glass-border")}},
-            x:{ticks:{color:cssVar("--text3"),font:{size:8},maxTicksLimit:reportPeriod==="month"?8:12,maxRotation:0},grid:{display:false}}}}
-      });
-    })();
+    // Score Distribution Histogram (10 buckets 0-9%, 10-19%...90-100%)
+    const buckets=Array(10).fill(0);
+    valid.forEach(s=>{ buckets[Math.min(9,Math.floor(s/10))]++; });
+    const histCtx=document.getElementById("hist-chart").getContext("2d");
+    destroyChart("hist");
+    chartInstances["hist"]=new Chart(histCtx,{
+      type:"bar",
+      data:{
+        labels:["0-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80-89","90-100"],
+        datasets:[{data:buckets,backgroundColor:["#ff3b30","#ff3b30","#ff3b30","#ff3b30","#ff3b30","#ff9f0a","#ff9f0a","#ff9f0a","#30d158","#30d158"].map(c=>c+"88"),borderColor:["#ff3b30","#ff3b30","#ff3b30","#ff3b30","#ff3b30","#ff9f0a","#ff9f0a","#ff9f0a","#30d158","#30d158"],borderWidth:1,borderRadius:3}]
+      },
+      options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+" days"}}},
+        scales:{y:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:8}},grid:{display:false}}}}
+    });
 
-    // ── SCORE DISTRIBUTION HISTOGRAM ────────────────────────────────────────
-    (function(){
-      const histEl=document.getElementById("hist-chart");
-      if(!histEl) return;
-      const histBuckets=Array(10).fill(0);
-      valid.forEach(s=>{ histBuckets[Math.min(9,Math.floor(s/10))]++; });
-      destroyChart("hist");
-      chartInstances["hist"]=new Chart(histEl.getContext("2d"),{
-        type:"bar",
-        data:{labels:["0-9","10-19","20-29","30-39","40-49","50-59","60-69","70-79","80-89","90-100"],
-          datasets:[{data:histBuckets,backgroundColor:["#f87171","#f87171","#f87171","#f87171","#f87171","#facc15","#facc15","#facc15","#4ade80","#4ade80"].map(c=>c+"88"),borderColor:["#f87171","#f87171","#f87171","#f87171","#f87171","#facc15","#facc15","#facc15","#4ade80","#4ade80"],borderWidth:1,borderRadius:3}]},
-        options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+" days"}}},
-          scales:{y:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:8}},grid:{display:false}}}}
-      });
-    })();
-
-    // ── DAY OF WEEK ─────────────────────────────────────────────────────────
-    (function(){
-      const dowEl=document.getElementById("dow-chart");
-      if(!dowEl) return;
-      const dowTotArr=Array(7).fill(0), dowCntArr=Array(7).fill(0);
-      const dowTodayK=getTodayKey();
-      Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)&&k<=dowTodayK).forEach(k=>{
-        const[dy,dm,dd]=k.split("-").map(Number);
-        const dowDay=new Date(dy,dm-1,dd).getDay();
-        const dowSc=scoreOf(logs[k],k);
-        if(dowSc>0){dowTotArr[dowDay]+=dowSc; dowCntArr[dowDay]++;}
-      });
-      const dowAvgArr=dowTotArr.map((t,i)=>dowCntArr[i]?Math.round(t/dowCntArr[i]):0);
-      const dowBest=dowAvgArr.indexOf(Math.max(...dowAvgArr));
-      destroyChart("dow");
-      chartInstances["dow"]=new Chart(dowEl.getContext("2d"),{
-        type:"bar",
-        data:{labels:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
-          datasets:[{data:dowAvgArr,backgroundColor:dowAvgArr.map((s,i)=>i===dowBest?clr(s)+"cc":clr(s)+"44"),borderColor:dowAvgArr.map(s=>clr(s)),borderWidth:1,borderRadius:4}]},
-        options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+"%"}}},
-          scales:{y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{display:false}}}}
-      });
-    })();
-
-    // ── PR TIMELINE ─────────────────────────────────────────────────────────
-    (function(){
-      const prEl=document.getElementById("pr-timeline-wrap");
-      if(!prEl) return;
-      const prScores=data.scores, prLabels=data.labels, prN=prScores.length;
-      const prW=Math.min(window.innerWidth-64,400), prH=96;
-      const prPT=24,prPB=18,prPH=6,priW=prW-prPH*2,priH=prH-prPT-prPB;
-      let prBestVal=0;
-      const prIsPR=prScores.map(s=>{if(s!==null&&s>prBestVal){prBestVal=s;return true;}return false;});
-      const prXof=i=>prPH+i/Math.max(prN-1,1)*priW;
-      const prYof=s=>s===null?null:prPT+priH-(s/100)*priH;
-      const prPts=prScores.map((s,i)=>s!==null?`${prXof(i).toFixed(1)},${prYof(s).toFixed(1)}`:null).filter(Boolean);
-      const prFv=prScores.findIndex(s=>s!==null);
-      const prLv=prN-1-[...prScores].reverse().findIndex(s=>s!==null);
-      const prAcH=cssVar("--accent")||"#4ade80";
-      const prGid="prg"+Math.random().toString(36).slice(2,7);
-      let prAreaPath="";
-      if(prFv>=0&&prLv>=0){
-        prAreaPath=`M ${prXof(prFv).toFixed(1)} ${prPT+priH} `+prScores.map((s,i)=>s!==null?`L ${prXof(i).toFixed(1)} ${prYof(s).toFixed(1)}`:"").filter(Boolean).join(" ")+` L ${prXof(prLv).toFixed(1)} ${prPT+priH} Z`;
-      }
-      let prFlagsSvg="";
-      prScores.forEach((s,i)=>{
-        if(!prIsPR[i]||s===null) return;
-        const prFx=prXof(i), prFy=prYof(s);
-        const prFc=s>=80?"#4ade80":s>=50?"#facc15":"#f87171";
-        prFlagsSvg+=`<line x1="${prFx.toFixed(1)}" y1="${prFy.toFixed(1)}" x2="${prFx.toFixed(1)}" y2="${(prFy-16).toFixed(1)}" stroke="${prFc}" stroke-width="1.5"/>`;
-        prFlagsSvg+=`<polygon points="${prFx.toFixed(1)},${(prFy-16).toFixed(1)} ${(prFx+9).toFixed(1)},${(prFy-13).toFixed(1)} ${prFx.toFixed(1)},${(prFy-9).toFixed(1)}" fill="${prFc}" opacity="0.9"/>`;
-        prFlagsSvg+=`<text x="${(prFx+11).toFixed(1)}" y="${(prFy-9).toFixed(1)}" font-size="7" fill="${prFc}" font-weight="700" font-family="Inter,sans-serif">${s}</text>`;
-      });
-      let prTicksSvg="";
-      const prStep=Math.max(1,Math.floor(prN/7));
-      for(let i=0;i<prN;i+=prStep) prTicksSvg+=`<text x="${prXof(i).toFixed(1)}" y="${prH-2}" text-anchor="middle" font-size="7" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">${prLabels[i]}</text>`;
-      prEl.innerHTML=`<svg width="${prW}" height="${prH}" style="display:block;max-width:100%;overflow:visible">
-        <defs><linearGradient id="${prGid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${prAcH}" stop-opacity="0.3"/><stop offset="100%" stop-color="${prAcH}" stop-opacity="0"/></linearGradient></defs>
-        ${prAreaPath?`<path d="${prAreaPath}" fill="url(#${prGid})"/>`:""}
-        ${prPts.length>1?`<polyline points="${prPts.join(" ")}" fill="none" stroke="${prAcH}" stroke-width="1.8" stroke-linejoin="round"/>`:""}
-        ${prFlagsSvg}${prTicksSvg}
-      </svg>`;
-    })();
-
-    // ── TASK LEADERBOARD ────────────────────────────────────────────────────
-    (function(){
-      const lbEl=document.getElementById("leaderboard-wrap");
-      if(!lbEl) return;
-      const lbTodayK=getTodayKey();
-      let lbKeys=[];
-      if(reportPeriod==="month"){
-        const lbBase=new Date(getToday().getFullYear(),getToday().getMonth()+reportOffset,1);
-        const lbDIM=new Date(lbBase.getFullYear(),lbBase.getMonth()+1,0).getDate();
-        for(let i=1;i<=lbDIM;i++) lbKeys.push(toKey(new Date(lbBase.getFullYear(),lbBase.getMonth(),i)));
-      } else if(reportPeriod==="week"){
-        const lbBase2=new Date(getToday());
-        lbBase2.setDate(lbBase2.getDate()+reportOffset*7);
-        for(let i=0;i<7;i++){const ld=new Date(lbBase2);ld.setDate(lbBase2.getDate()-lbBase2.getDay()+i);lbKeys.push(toKey(ld));}
-      } else if(reportPeriod==="year"){
-        const lbYr=getToday().getFullYear()+reportOffset;
-        lbKeys=Object.keys(logs).filter(k=>k.startsWith(lbYr+"")&&k<=lbTodayK);
-      }
-      lbKeys=lbKeys.filter(k=>k<=lbTodayK);
-      const lbRates=tasks.map(t=>{
-        let lbA=0,lbD=0;
-        lbKeys.forEach(k=>{
-          const lg=logs[k];if(!lg||!lg.__taskIds)return;
-          const lbH=lg.__hiddenIds||[];
-          if(!lg.__taskIds.includes(t.id)||lbH.includes(t.id))return;
-          if(t.deletedAt&&k>=t.deletedAt)return;
-          lbA++;if(lg[t.id])lbD++;
-        });
-        return{name:t.name,rate:lbA>0?Math.round(lbD/lbA*100):null,active:lbA};
-      }).filter(t=>t.active>0).sort((a,b)=>(b.rate||0)-(a.rate||0)).slice(0,8);
-      if(!lbRates.length){
-        lbEl.innerHTML=`<div style="color:var(--text3);font-size:11px;padding:10px 0;text-align:center">No task data this period</div>`;
-        return;
-      }
-      const lbMax=Math.max(...lbRates.map(t=>t.rate||0),1);
-      const medals=["🥇","🥈","🥉"];
-      lbEl.innerHTML=lbRates.map((t,i)=>{
-        const lbC=t.rate>=80?"#4ade80":t.rate>=50?"#facc15":"#f87171";
-        return `<div style="margin-bottom:9px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px"><div style="font-size:10px;color:var(--text);display:flex;align-items:center;gap:5px;min-width:0"><span style="flex-shrink:0">${medals[i]||i+1}</span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.name}</span></div><div style="font-size:10px;font-weight:700;color:${lbC};flex-shrink:0;margin-left:8px">${t.rate}%</div></div><div style="height:5px;background:var(--glass-border);border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.round((t.rate||0)/lbMax*100)}%;background:${lbC};border-radius:3px"></div></div></div>`;
-      }).join('');
-    })();
-  }
-
-  if(reportPeriod==="month"||reportPeriod==="year"){
-    // ── SCORE VOLATILITY ────────────────────────────────────────────────────
-    (function(){
-      const vEl=document.getElementById("volatility-wrap");
-      if(!vEl) return;
-      const vW=Math.min(window.innerWidth-64,400),vH=110,vPT=10,vPB=20,viH=vH-vPT-vPB;
-      const vChunkSz=reportPeriod==="month"?7:1;
-      const vChunks=[];
-      for(let i=0;i<data.scores.length;i+=vChunkSz){
-        const vc=data.scores.slice(i,i+vChunkSz).filter(s=>s!==null);
-        if(vc.length) vChunks.push({min:Math.min(...vc),max:Math.max(...vc),avg:Math.round(vc.reduce((a,b)=>a+b,0)/vc.length),label:data.labels[i]});
-      }
-      const vNC=vChunks.length;
-      const vCW=Math.max(8,Math.floor((vW-20)/Math.max(vNC,1)));
-      const vCGap=Math.max(2,Math.floor(vCW*0.35));
-      const vBW=Math.max(4,vCW-vCGap);
-      let vSvg="",vTx="";
-      [0,50,100].forEach(vv=>{
-        const vGy=(vPT+viH-(vv/100)*viH).toFixed(1);
-        vSvg+=`<line x1="8" y1="${vGy}" x2="${vW-4}" y2="${vGy}" stroke="${cssVar("--glass-border")}" stroke-width="0.5"/>`;
-        vSvg+=`<text x="6" y="${vGy}" dominant-baseline="middle" font-size="7" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">${vv}</text>`;
-      });
-      const vStep=Math.max(1,Math.floor(vNC/8));
-      vChunks.forEach((vc2,i)=>{
-        const vx=12+i*vCW+vCGap/2;
-        const vyH=(vPT+viH-(vc2.max/100)*viH).toFixed(1);
-        const vyL=(vPT+viH-(vc2.min/100)*viH).toFixed(1);
-        const vyA=(vPT+viH-(vc2.avg/100)*viH).toFixed(1);
-        const vCol=vc2.avg>=80?"#4ade80":vc2.avg>=50?"#facc15":"#f87171";
-        const vBH=Math.max(2,parseFloat(vyL)-parseFloat(vyH));
-        vSvg+=`<line x1="${(vx+vBW/2).toFixed(1)}" y1="${vyH}" x2="${(vx+vBW/2).toFixed(1)}" y2="${vyL}" stroke="${vCol}" stroke-width="1.5" opacity="0.4"/>`;
-        vSvg+=`<rect x="${vx.toFixed(1)}" y="${vyH}" width="${vBW}" height="${vBH.toFixed(1)}" rx="2" fill="${vCol}" opacity="0.18"/>`;
-        vSvg+=`<line x1="${vx.toFixed(1)}" y1="${vyA}" x2="${(vx+vBW).toFixed(1)}" y2="${vyA}" stroke="${vCol}" stroke-width="2.5" stroke-linecap="round"/>`;
-        if(i%vStep===0) vTx+=`<text x="${(vx+vBW/2).toFixed(1)}" y="${vH-4}" text-anchor="middle" font-size="7" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">${vc2.label}</text>`;
-      });
-      vEl.innerHTML=`<svg width="${vW}" height="${vH}" style="display:block;max-width:100%">${vSvg}${vTx}</svg>`;
-    })();
-
-    // ── MOMENTUM FLOW ────────────────────────────────────────────────────────
-    (function(){
-      const mfEl=document.getElementById("momentum-chart");
-      if(!mfEl) return;
-      destroyChart("momentum");
-      const mfCtx=mfEl.getContext("2d");
-      const mfAcH=cssVar("--accent")||"#4ade80";
-      const mfGrad=mfCtx.createLinearGradient(0,0,0,110);
-      mfGrad.addColorStop(0,mfAcH+"44"); mfGrad.addColorStop(1,mfAcH+"00");
-      const mfSmoothed=data.scores.map((s,i,arr)=>{
-        const mfw=arr.slice(Math.max(0,i-2),i+3).filter(x=>x!==null);
-        return mfw.length?Math.round(mfw.reduce((a,b)=>a+b,0)/mfw.length):null;
-      });
-      chartInstances["momentum"]=new Chart(mfCtx,{
-        type:"line",
-        data:{labels:data.labels,datasets:[
-          {type:"scatter",data:data.scores.map((s,i)=>s!==null?{x:i,y:s}:null).filter(Boolean),
-           pointRadius:2,pointBackgroundColor:data.scores.map(s=>s!==null?clr(s)+"bb":"transparent"),pointBorderWidth:0,showLine:false,order:2},
-          {data:mfSmoothed,borderColor:mfAcH,borderWidth:2,backgroundColor:mfGrad,fill:true,tension:0.45,pointRadius:0,spanGaps:true,order:1}
-        ]},
-        options:{responsive:true,plugins:{legend:{display:false}},
-          scales:{y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%",stepSize:25},grid:{color:cssVar("--glass-border")}},
-            x:{ticks:{color:cssVar("--text3"),font:{size:8},maxTicksLimit:reportPeriod==="month"?8:12,maxRotation:0},grid:{display:false}}}}
-      });
-    })();
-
-    // ── CONSISTENCY RINGS ────────────────────────────────────────────────────
-    (function(){
-      const crEl=document.getElementById("rings-canvas-wrap");
-      if(!crEl) return;
-      let crSegs=[];
-      if(reportPeriod==="month"){
-        for(let i=0;i<data.scores.length;i+=7){
-          const crCh=data.scores.slice(i,i+7).filter(s=>s!==null);
-          crSegs.push({label:"W"+(Math.floor(i/7)+1),avg:crCh.length?Math.round(crCh.reduce((a,b)=>a+b,0)/crCh.length):null});
-        }
-      } else {
-        data.labels.forEach((lbl,i)=>crSegs.push({label:lbl.slice(0,3),avg:data.scores[i]}));
-      }
-      const crR=34,crSW=8,crSZ=90,crGap=8;
-      const crTW=crSegs.length*(crSZ+crGap)-crGap+16;
-      const crGB=cssVar("--glass-border")||"rgba(255,255,255,0.08)";
-      const crT3=cssVar("--text3")||"rgba(255,255,255,0.2)";
-      function crCol(a){return a===null?"transparent":a>=80?"#4ade80":a>=50?"#facc15":"#f87171";}
-      function crArc(pct,r,sz){
-        const a=(pct/100)*2*Math.PI,x=sz/2+r*Math.sin(a),y=sz/2-r*Math.cos(a),lg=a>Math.PI?1:0;
-        if(pct>=100)return `M ${sz/2} ${sz/2-r} A ${r} ${r} 0 1 1 ${sz/2-0.001} ${sz/2-r} Z`;
-        return `M ${sz/2} ${sz/2-r} A ${r} ${r} 0 ${lg} 1 ${x} ${y}`;
-      }
-      let crSvg="";
-      crSegs.forEach((seg,i)=>{
-        const ox=8+i*(crSZ+crGap),pct=seg.avg!==null?seg.avg:0,c=crCol(seg.avg);
-        crSvg+=`<circle cx="${crSZ/2+ox}" cy="${crSZ/2+6}" r="${crR}" fill="none" stroke="${crGB}" stroke-width="${crSW}"/>`;
-        if(seg.avg!==null&&pct>0) crSvg+=`<path d="${crArc(Math.min(pct,99.9),crR,crSZ)}" fill="none" stroke="${c}" stroke-width="${crSW}" stroke-linecap="round" transform="translate(${ox},6)"/>`;
-        crSvg+=`<text x="${crSZ/2+ox}" y="${crSZ/2+10}" text-anchor="middle" font-size="12" font-weight="700" fill="${seg.avg!==null?c:crT3}" font-family="Inter,sans-serif">${seg.avg!==null?seg.avg+"%":"—"}</text>`;
-        crSvg+=`<text x="${crSZ/2+ox}" y="${crSZ+14}" text-anchor="middle" font-size="8" fill="${crT3}" font-family="Inter,sans-serif">${seg.label}</text>`;
-      });
-      crEl.innerHTML=`<div style="overflow-x:auto;padding:4px 0"><svg width="${Math.max(crTW,260)}" height="${crSZ+20}" style="display:block">${crSvg}</svg></div>`;
-    })();
-
-    // ── STREAK DENSITY ───────────────────────────────────────────────────────
-    (function(){
-      const sdEl2=document.getElementById("streak-density-wrap");
-      if(!sdEl2) return;
-      const sdS=data.scores,sdLb=data.labels,sdN=sdS.length;
-      if(!sdN) return;
-      const sdGap=2,sdCW=Math.min(window.innerWidth-64,400);
-      const sdBW=Math.max(3,Math.floor((sdCW-(sdN-1)*sdGap)/sdN));
-      const sdTW=(sdBW+sdGap)*sdN-sdGap,sdMH=56;
-      const sdRL=new Array(sdN).fill(1);
-      for(let i=1;i<sdN;i++){if(sdS[i]!==null&&sdS[i]>0&&sdS[i-1]!==null&&sdS[i-1]>0)sdRL[i]=sdRL[i-1]+1;}
-      const sdMaxR=Math.max(...sdRL,1);
-      let sdBars="",sdTicks="";
-      sdS.forEach((s,i)=>{
-        const sx=i*(sdBW+sdGap);
-        if(s===null){sdBars+=`<rect x="${sx}" y="${sdMH-3}" width="${sdBW}" height="3" rx="1" fill="${cssVar("--glass-border")}" opacity="0.3"/>`;return;}
-        if(s===0){sdBars+=`<rect x="${sx}" y="${sdMH-3}" width="${sdBW}" height="3" rx="1" fill="#f87171" opacity="0.18"/>`;return;}
-        const sdH=Math.max(5,Math.round((s/100)*sdMH));
-        const sdOp=(0.4+0.6*(sdRL[i]/sdMaxR)).toFixed(2);
-        const sdC=s>=80?"#4ade80":s>=50?"#facc15":"#f87171";
-        sdBars+=`<rect x="${sx}" y="${sdMH-sdH}" width="${sdBW}" height="${sdH}" rx="${Math.min(2,Math.floor(sdBW/2))}" fill="${sdC}" opacity="${sdOp}"/>`;
-      });
-      const sdStep=Math.max(1,Math.floor(sdN/8));
-      for(let i=0;i<sdN;i+=sdStep) sdTicks+=`<text x="${i*(sdBW+sdGap)+sdBW/2}" y="${sdMH+13}" text-anchor="middle" font-size="7" fill="${cssVar("--text3")}" font-family="Inter,sans-serif">${sdLb[i]}</text>`;
-      sdEl2.innerHTML=`<svg width="${sdTW}" height="${sdMH+16}" style="display:block;max-width:100%">${sdBars}${sdTicks}</svg>`;
-    })();
+    // Day-of-week analysis
+    const todayK=getTodayKey();
+    const dowTotals=Array(7).fill(0), dowCounts=Array(7).fill(0);
+    Object.keys(logs).filter(k=>k.match(/^\d{4}-\d{2}-\d{2}$/)&&k<=todayK).forEach(k=>{
+      const [y,m,d]=k.split("-").map(Number);
+      const dow=new Date(y,m-1,d).getDay();
+      const sc=scoreOf(logs[k],k);
+      if(sc>0){ dowTotals[dow]+=sc; dowCounts[dow]++; }
+    });
+    const dowAvg=dowTotals.map((t,i)=>dowCounts[i]?Math.round(t/dowCounts[i]):0);
+    const bestDow=dowAvg.indexOf(Math.max(...dowAvg));
+    const dowCtx=document.getElementById("dow-chart").getContext("2d");
+    destroyChart("dow");
+    chartInstances["dow"]=new Chart(dowCtx,{
+      type:"bar",
+      data:{
+        labels:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+        datasets:[{data:dowAvg,backgroundColor:dowAvg.map((s,i)=>i===bestDow?clr(s)+"cc":clr(s)+"55"),borderColor:dowAvg.map(s=>clr(s)),borderWidth:1,borderRadius:3}]
+      },
+      options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+"%"}}},
+        scales:{y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9},callback:v=>v+"%"},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:9}},grid:{display:false}}}}
+    });
   }
 
   // Summary text
   document.getElementById("summary-text").innerHTML=`
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <div><div style="font-size:11px;color:var(--text2)">Average</div><div style="font-size:16px;font-weight:600;color:${clr(avg)}">${avg}%</div></div>
-      <div><div style="font-size:11px;color:var(--text2)">Strong days</div><div style="font-size:16px;font-weight:600;color:#4ade80">${pieData.strong}</div></div>
-      <div><div style="font-size:11px;color:var(--text2)">Partial days</div><div style="font-size:16px;font-weight:600;color:#facc15">${pieData.partial}</div></div>
-      <div><div style="font-size:11px;color:var(--text2)">Missed days</div><div style="font-size:16px;font-weight:600;color:#f87171">${pieData.zero}</div></div>
+    <div class="stat-tile-grid">
+      <div class="stat-tile" style="text-align:left;padding:12px"><div class="settings-field-label" style="margin-bottom:4px">Average</div><div style="font-size:18px;font-weight:700;color:${clr(avg)}">${avg}%</div></div>
+      <div class="stat-tile" style="text-align:left;padding:12px"><div class="settings-field-label" style="margin-bottom:4px">Strong days</div><div style="font-size:18px;font-weight:700;color:#30d158">${pieData.strong}</div></div>
+      <div class="stat-tile" style="text-align:left;padding:12px"><div class="settings-field-label" style="margin-bottom:4px">Partial days</div><div style="font-size:18px;font-weight:700;color:#ff9f0a">${pieData.partial}</div></div>
+      <div class="stat-tile" style="text-align:left;padding:12px"><div class="settings-field-label" style="margin-bottom:4px">Missed days</div><div style="font-size:18px;font-weight:700;color:#ff3b30">${pieData.zero}</div></div>
     </div>
   `;
 }
+
 function renderSettings(){
   const el=document.getElementById("view-settings");
   el.innerHTML=`
-    <div class="lbl" style="margin-bottom:14px">Settings</div>
-    <div class="card" style="margin-bottom:16px;border:1px solid var(--glass-border)">
-      <div class="lbl" style="margin-bottom:12px;font-size:9px;letter-spacing:2px;">Personalise</div>
-      <div style="margin-bottom:10px">
-        <div style="font-size:10px;color:var(--text3);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase">Your Name</div>
+    <div class="page-title">Settings</div>
+
+    <div class="card settings-section">
+      <div class="settings-section-title">Profile</div>
+      <div class="settings-field">
+        <div class="settings-field-label">Your Name</div>
         <div style="display:flex;gap:8px;align-items:center">
           <input id="settings-name-inp" class="inp" style="margin-bottom:0;flex:1" placeholder="Your name" value="${userName}">
           <button id="settings-name-save" class="btn-ok" style="flex-shrink:0">Save</button>
         </div>
       </div>
-      <div>
-        <div style="font-size:10px;color:var(--text3);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase">App Mode Label</div>
+      <div class="settings-field">
+        <div class="settings-field-label">App Mode Label</div>
         <div style="display:flex;gap:8px;align-items:center">
           <input id="settings-mode-inp" class="inp" style="margin-bottom:0;flex:1" placeholder="e.g. Recovery Mode" value="${appName}">
           <button id="settings-mode-save" class="btn-ok" style="flex-shrink:0">Save</button>
         </div>
-        <div style="font-size:9px;color:var(--text3);margin-top:6px;opacity:0.5">Shows in the header above the date</div>
+        <div class="settings-field-hint">Shows in the header above the date</div>
+      </div>
+    </div>
+
+    <div class="card settings-section">
+      <div class="settings-section-title">Theme</div>
+      <div class="theme-grid">
+        ${Object.entries(THEMES).filter(([k])=>k!=='custom').map(([key,t])=>`
+          <div data-theme-key="${key}" class="theme-swatch ${currentTheme===key?'selected':''}">
+            <div class="theme-swatch-preview" style="background:linear-gradient(135deg,${t.preview[0]},${t.preview[1]})">
+              <div style="width:10px;height:10px;border-radius:50%;background:${t.preview[2]};opacity:0.95"></div>
+              <div style="width:18px;height:4px;border-radius:2px;background:${t.preview[2]};opacity:0.45"></div>
+            </div>
+            <div class="theme-swatch-label" style="background:${t.preview[1]};color:${t.text}">${t.name}</div>
+            ${currentTheme===key?'<div class="theme-check" style="background:'+t.accent+'">\u2713</div>':''}
+          </div>
+        `).join('')}
+        ${(function(){const ct=THEMES.custom;return`
+          <div data-theme-key="custom" class="theme-swatch ${currentTheme==='custom'?'selected':''}">
+            <div class="theme-swatch-preview" style="background:linear-gradient(135deg,${ct.preview[0]},${ct.preview[1]});align-items:center;justify-content:center">
+              <div style="font-size:17px;opacity:0.75">\ud83c\udfa8</div>
+            </div>
+            <div class="theme-swatch-label" style="background:${ct.preview[1]};color:${ct.text}">Custom</div>
+            ${currentTheme==='custom'?'<div class="theme-check" style="background:'+ct.accent+'">\u2713</div>':''}
+          </div>
+        `})()}
       </div>
 
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--glass-border)">
-        <div style="font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">Theme</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-          ${Object.entries(THEMES).filter(([k])=>k!=='custom').map(([key,t])=>`
-            <div data-theme-key="${key}" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid ${currentTheme===key?t.accent:'transparent'};transition:border-color 0.2s;position:relative">
-              <div style="height:44px;background:linear-gradient(135deg,${t.preview[0]},${t.preview[1]});display:flex;align-items:flex-end;padding:5px 6px;gap:3px">
-                <div style="width:10px;height:10px;border-radius:50%;background:${t.preview[2]};opacity:0.9"></div>
-                <div style="width:18px;height:4px;border-radius:2px;background:${t.preview[2]};opacity:0.4"></div>
+      <div id="custom-theme-editor" style="display:${currentTheme==='custom'?'block':'none'};margin-top:16px;padding:14px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-sm)">
+        <div class="settings-section-title" style="margin-bottom:12px">Customise Theme</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+          ${[
+            ['ct-bg','Background','#0f1117'],
+            ['ct-card','Card / Surface','#161b26'],
+            ['ct-accent','Accent Color','#6366f1'],
+            ['ct-text','Primary Text','#f0f0f4'],
+            ['ct-text2','Secondary Text','#a0a0c0'],
+            ['ct-text3','Muted Text','#707090']
+          ].map(([id,label,def])=>{
+            const ct=THEMES.custom;
+            const val=id==='ct-bg'?(ct._bg||def):id==='ct-accent'?(ct._accent||def):id==='ct-text'?(ct._text||def):id==='ct-text2'?(ct._text2||def):id==='ct-text3'?(ct._text3||def):(ct.bgCard||def);
+            return `<div>
+              <div style="font-size:10px;color:var(--text3);letter-spacing:0.4px;margin-bottom:6px;text-transform:uppercase;font-weight:600">${label}</div>
+              <div style="display:flex;align-items:center;gap:7px">
+                <input type="color" id="${id}" value="${val.startsWith('#')?val:'#888888'}" style="width:34px;height:34px;border:none;border-radius:9px;cursor:pointer;padding:2px;background:var(--bg2);flex-shrink:0">
+                <input type="text" id="${id}-hex" value="${val.startsWith('#')?val:'#888888'}" maxlength="7" style="width:100%;background:var(--bg2);border:1px solid var(--glass-border);color:var(--text);padding:7px 9px;font-size:12px;border-radius:9px;font-family:monospace">
               </div>
-              <div style="padding:5px 6px;background:${t.preview[1]}">
-                <div style="font-size:9px;font-weight:600;color:${t.text}">${t.name}</div>
-              </div>
-              ${currentTheme===key?'<div style="position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:'+t.accent+'"></div>':''}
-            </div>
-          `).join('')}
-          ${(function(){const ct=THEMES.custom;return`
-            <div data-theme-key="custom" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid ${currentTheme==='custom'?ct.accent:'rgba(255,255,255,0.1)'};transition:border-color 0.2s;position:relative">
-              <div style="height:44px;background:linear-gradient(135deg,${ct.preview[0]},${ct.preview[1]});display:flex;align-items:center;justify-content:center">
-                <div style="font-size:18px;opacity:0.7">🎨</div>
-              </div>
-              <div style="padding:5px 6px;background:${ct.preview[1]}">
-                <div style="font-size:9px;font-weight:600;color:${ct.text}">Custom</div>
-              </div>
-              ${currentTheme==='custom'?'<div style="position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:'+ct.accent+'"></div>':''}
-            </div>
-          `})()}
+            </div>`;
+          }).join('')}
         </div>
-
-        <div id="custom-theme-editor" style="display:${currentTheme==='custom'?'block':'none'};margin-top:14px;padding:14px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px">
-          <div style="font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px">Customise Theme</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-            ${[
-              ['ct-bg','Background','#0f1117'],
-              ['ct-card','Card / Surface','#161b26'],
-              ['ct-accent','Accent Color','#6366f1'],
-              ['ct-text','Primary Text','#f0f0f4'],
-              ['ct-text2','Secondary Text','#a0a0c0'],
-              ['ct-text3','Muted Text','#707090']
-            ].map(([id,label,def])=>{
-              const ct=THEMES.custom;
-              const val=id==='ct-bg'?(ct._bg||def):id==='ct-accent'?(ct._accent||def):id==='ct-text'?(ct._text||def):id==='ct-text2'?(ct._text2||def):id==='ct-text3'?(ct._text3||def):(ct.bgCard||def);
-              return `<div>
-                <div style="font-size:9px;color:var(--text3);letter-spacing:1px;margin-bottom:5px;text-transform:uppercase">${label}</div>
-                <div style="display:flex;align-items:center;gap:7px">
-                  <input type="color" id="${id}" value="${val.startsWith('#')?val:'#888888'}" style="width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;padding:2px;background:var(--bg2);flex-shrink:0">
-                  <input type="text" id="${id}-hex" value="${val.startsWith('#')?val:'#888888'}" maxlength="7" style="width:100%;background:var(--bg2);border:1px solid var(--glass-border);color:var(--text);padding:6px 8px;font-size:11px;border-radius:8px;font-family:monospace">
-                </div>
-              </div>`;
-            }).join('')}
-          </div>
-          <div id="ct-preview-strip" style="height:36px;border-radius:8px;margin-bottom:10px;display:flex;align-items:center;padding:0 12px;gap:10px;transition:background 0.2s">
-            <div id="ct-prev-dot" style="width:12px;height:12px;border-radius:50%;flex-shrink:0"></div>
-            <div id="ct-prev-bar" style="flex:1;height:4px;border-radius:2px;opacity:0.4"></div>
-            <div id="ct-prev-text" style="font-size:11px;font-weight:600">Preview</div>
-          </div>
-          <div style="display:flex;gap:8px">
-            <button id="ct-apply-btn" style="flex:1;padding:10px;border:none;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:0.5px">Apply Theme</button>
-            <button id="ct-reset-btn" style="padding:10px 14px;border-radius:10px;font-size:11px;cursor:pointer;font-family:inherit;background:var(--glass);border:1px solid var(--glass-border);color:var(--text2)">Reset</button>
-          </div>
+        <div id="ct-preview-strip" style="height:38px;border-radius:9px;margin-bottom:10px;display:flex;align-items:center;padding:0 12px;gap:10px;transition:background 0.2s">
+          <div id="ct-prev-dot" style="width:12px;height:12px;border-radius:50%;flex-shrink:0"></div>
+          <div id="ct-prev-bar" style="flex:1;height:4px;border-radius:2px;opacity:0.4"></div>
+          <div id="ct-prev-text" style="font-size:12px;font-weight:600">Preview</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button id="ct-apply-btn" style="flex:1;padding:11px;border:none;border-radius:var(--radius-pill);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Apply Theme</button>
+          <button id="ct-reset-btn" style="padding:11px 16px;border-radius:var(--radius-pill);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;background:var(--glass);border:1px solid var(--glass-border);color:var(--text2)">Reset</button>
         </div>
       </div>
     </div>
 
-    <div class="card" style="margin-bottom:16px;border:1px solid var(--glass-border)">
-      <div class="lbl" style="margin-bottom:14px;font-size:9px;letter-spacing:2px;">Preferences</div>
-
+    <div class="card settings-section">
+      <div class="settings-section-title">Preferences</div>
       ${(()=>{
-        // helper — toggle row
         function tog(id,label,desc,val){
-          return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--glass-border)">
-            <div><div style="font-size:11px;color:var(--text)">${label}</div><div style="font-size:9px;color:var(--text3);margin-top:2px">${desc}</div></div>
-            <button id="${id}" style="width:40px;height:24px;border-radius:12px;border:none;cursor:pointer;position:relative;flex-shrink:0;transition:background 0.2s;background:${val?'var(--accent)':'rgba(255,255,255,0.08)'}">
-              <span style="position:absolute;top:3px;left:${val?'19px':'3px'};width:18px;height:18px;border-radius:50%;background:white;transition:left 0.2s;display:block;box-shadow:0 1px 3px rgba(0,0,0,0.4)"></span>
-            </button>
+          return `<div class="settings-row">
+            <div><div class="settings-row-label">${label}</div><div class="settings-row-desc">${desc}</div></div>
+            <button id="${id}" class="toggle ${val?'on':''}"><span class="toggle-knob"></span></button>
           </div>`;
         }
         return `
         ${tog('pref-compact','Compact Mode','Smaller task rows, tighter spacing',compactMode)}
         ${tog('pref-auto-collapse','Auto-collapse Groups','Groups start collapsed when opening app',autoCollapseGroups)}`;
       })()}
-
-
-
-
-
-
     </div>
 
-    <div class="card" style="margin-bottom:16px;border:1px solid var(--glass-border)">
-      <div class="lbl" style="margin-bottom:12px;font-size:9px;letter-spacing:2px;">About</div>
+    <div class="card settings-section">
+      <div class="settings-section-title">About</div>
       ${(()=>{
         const since=trackingSince||getTodayKey();
         const [sy,sm,sd]=since.split('-').map(Number);
@@ -2216,44 +1934,34 @@ function renderSettings(){
         const activeTasks=tasks.filter(t=>!t.deletedAt).length;
         const loggedDays=Object.keys(logs).filter(k=>!k.startsWith('__')&&scoreOf(logs[k],k)>0).length;
         return `
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;text-align:center">
-            <div style="font-size:18px;font-weight:600;color:var(--accent)">${dayCount}</div>
-            <div style="font-size:9px;color:var(--text3);letter-spacing:1px;margin-top:2px;text-transform:uppercase">Days tracking</div>
-          </div>
-          <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;text-align:center">
-            <div style="font-size:18px;font-weight:600;color:var(--accent)">${loggedDays}</div>
-            <div style="font-size:9px;color:var(--text3);letter-spacing:1px;margin-top:2px;text-transform:uppercase">Days logged</div>
-          </div>
-          <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;text-align:center">
-            <div style="font-size:18px;font-weight:600;color:var(--accent)">${activeTasks}</div>
-            <div style="font-size:9px;color:var(--text3);letter-spacing:1px;margin-top:2px;text-transform:uppercase">Active tasks</div>
-          </div>
-          <div style="padding:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;text-align:center">
-            <div style="font-size:18px;font-weight:600;color:var(--accent)">${groups.length}</div>
-            <div style="font-size:9px;color:var(--text3);letter-spacing:1px;margin-top:2px;text-transform:uppercase">Groups</div>
-          </div>
+        <div class="stat-tile-grid">
+          <div class="stat-tile"><div class="stat-tile-num">${dayCount}</div><div class="stat-tile-lbl">Days tracking</div></div>
+          <div class="stat-tile"><div class="stat-tile-num">${loggedDays}</div><div class="stat-tile-lbl">Days logged</div></div>
+          <div class="stat-tile"><div class="stat-tile-num">${activeTasks}</div><div class="stat-tile-lbl">Active tasks</div></div>
+          <div class="stat-tile"><div class="stat-tile-num">${groups.length}</div><div class="stat-tile-lbl">Groups</div></div>
         </div>
-        <div style="margin-top:10px;font-size:9px;color:var(--text3);text-align:center">Tracking since ${sinceDate.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</div>`;
+        <div style="margin-top:12px;font-size:11px;color:var(--text3);text-align:center">Tracking since ${sinceDate.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</div>`;
       })()}
     </div>
 
-    <div class="card" style="border:1px solid var(--glass-border)">
-      <div class="lbl" style="margin-bottom:12px;font-size:9px;letter-spacing:2px;">Data</div>
-      <button class="export-btn" id="export-excel-btn" style="background:var(--glass);border-color:var(--green);color:var(--green)">&#8595; Export ALL Data to Excel</button>
-      <label for="import-excel-input" style="display:block;margin-top:6px;width:100%;background:var(--glass);border:1px solid #818cf8;color:#818cf8;padding:11px;font-size:11px;letter-spacing:2px;border-radius:6px;cursor:pointer;font-family:monospace;text-transform:uppercase;text-align:center;box-sizing:border-box">&#8593; Import Tasks from Excel</label>
-      <input type="file" id="import-excel-input" accept=".xlsx,.xls" style="position:absolute;opacity:0;width:0;height:0">
-      <div style="font-size:10px;color:var(--text2);margin-top:6px;text-align:center;line-height:1.6">Edit the clean row log in "Manual Import-Export Tracker" sheet and import back safely.</div>
-      <button class="export-btn" id="download-template-btn" style="margin-top:6px">Download Template</button>
-      <button class="export-btn" id="export-macros-btn" style="margin-top:6px;border-color:#a78bfa;color:#a78bfa">&#8595; Export Macro Tasks to Excel</button>
-      <label for="import-macros-input" style="display:block;margin-top:6px;width:100%;background:var(--glass);border:1px solid #a78bfa;color:#a78bfa;padding:11px;font-size:11px;letter-spacing:2px;border-radius:6px;cursor:pointer;font-family:monospace;text-transform:uppercase;text-align:center;box-sizing:border-box">&#8593; Import Macro Tasks from Excel</label>
-      <input type="file" id="import-macros-input" accept=".xlsx,.xls" style="position:absolute;opacity:0;width:0;height:0">
-      <div style="font-size:10px;color:var(--text2);margin-top:4px;text-align:center;line-height:1.6">Columns: <b style="color:var(--text);">date</b> &nbsp;|&nbsp; <b style="color:var(--text);">macro_name</b> &nbsp;|&nbsp; <b style="color:var(--text);">status</b> (Done / Undone).</div>
+    <div class="card settings-section">
+      <div class="settings-section-title">Data</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="data-btn accent" id="export-excel-btn">&#8595; Export All Data to Excel</button>
+        <label for="import-excel-input" class="data-btn violet">&#8593; Import Tasks from Excel</label>
+        <input type="file" id="import-excel-input" accept=".xlsx,.xls" style="position:absolute;opacity:0;width:0;height:0">
+        <div class="settings-field-hint" style="text-align:center;margin-top:-2px">Edit the clean row log in "Manual Import-Export Tracker" sheet and import back safely.</div>
+        <button class="data-btn" id="download-template-btn">Download Template</button>
+        <button class="data-btn violet" id="export-macros-btn">&#8595; Export Macro Tasks to Excel</button>
+        <label for="import-macros-input" class="data-btn violet">&#8593; Import Macro Tasks from Excel</label>
+        <input type="file" id="import-macros-input" accept=".xlsx,.xls" style="position:absolute;opacity:0;width:0;height:0">
+        <div class="settings-field-hint" style="text-align:center;margin-top:-2px">Columns: <b style="color:var(--text)">date</b> &nbsp;|&nbsp; <b style="color:var(--text)">macro_name</b> &nbsp;|&nbsp; <b style="color:var(--text)">status</b> (Done / Undone).</div>
+      </div>
 
-      <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--glass-border)">
-        <div style="font-size:9px;color:var(--text2);letter-spacing:2px;text-align:center;margin-bottom:8px;text-transform:uppercase">Danger Zone</div>
-        <button id="master-erase-btn" style="display:block;width:100%;background:#1a0a0a;border:1px solid #7f1d1d;color:#f87171;padding:11px;font-size:11px;letter-spacing:2px;border-radius:6px;cursor:pointer;font-family:monospace;text-transform:uppercase;text-align:center">&#9888; Erase All Data</button>
-        <div style="font-size:10px;color:var(--text2);margin-top:6px;text-align:center;line-height:1.6">Wipes all logs, tasks, and macros. Cannot be undone.</div>
+      <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--glass-border)">
+        <div class="settings-section-title" style="text-align:center">Danger Zone</div>
+        <button id="master-erase-btn" class="danger-btn">&#9888; Erase All Data</button>
+        <div class="settings-field-hint" style="text-align:center">Wipes all logs, tasks, and macros. Cannot be undone.</div>
       </div>
     </div>
   `;
@@ -2288,19 +1996,21 @@ function renderMacros(){
   if(!window.macroPreviewMode) window.macroPreviewMode="month";
   if(window.macroPreviewOffset===undefined) window.macroPreviewOffset=0;
 
-  let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--glass);border-radius:12px;padding:10px 14px;border:1px solid var(--glass-border)">
-    <button id="macro-day-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:4px 12px;font-size:14px;border-radius:8px;cursor:pointer;font-family:inherit">&#8249;</button>
+  let html=`<div class="page-title" style="margin-bottom:14px">Macros</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 14px;border:1px solid var(--glass-border);box-shadow:var(--shadow-xs)">
+    <button id="macro-day-prev" class="nav-arrow" style="padding:6px 13px">&#8249;</button>
     <div style="text-align:center">
-      <div style="font-size:12px;font-weight:600;color:${isToday?"var(--text)":"var(--text2)"}">${isToday?"Today":activeDate.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"})}</div>
-      ${!isToday?'<div style="font-size:9px;color:var(--text3);letter-spacing:2px;margin-top:2px">PAST DAY</div>':""}
+      <div style="font-size:13px;font-weight:700;color:${isToday?"var(--accent)":"var(--text)"}">${isToday?"TODAY":activeDate.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"})}</div>
+      ${!isToday?'<div style="font-size:10px;color:var(--text3);letter-spacing:0.5px;margin-top:2px;font-weight:600">PAST DAY</div>':""}
     </div>
-    <button id="macro-day-next" style="background:none;border:1px solid var(--glass-border);color:${canGoNext?"var(--text2)":"var(--text3)"};padding:4px 12px;font-size:14px;border-radius:8px;cursor:pointer;font-family:inherit;pointer-events:${canGoNext?"auto":"none"}">&#8250;</button>
+    <button id="macro-day-next" class="nav-arrow" style="padding:6px 13px;${canGoNext?'':'opacity:0.3;pointer-events:none'}">&#8250;</button>
   </div>
-  <div class="section-header" style="margin-bottom:6px"><div class="lbl">Macros — Today's List</div><button class="btn-edit ${macroEditMode?"active":""}" id="macro-edit-toggle">${macroEditMode?"Done":"Edit"}</button></div>
-  <div style="font-size:10px;color:var(--text3);margin:0 0 10px;letter-spacing:1px;">Resets fresh each day. Enter today's mini-tasks freely.</div>`;
+  <div class="section-header" style="margin-bottom:6px"><div class="lbl">Today's List</div><button class="btn-edit ${macroEditMode?"active":""}" id="macro-edit-toggle">${macroEditMode?"Done":"Edit"}</button></div>
+  <div style="font-size:11px;color:var(--text3);margin:0 0 4px;">Resets fresh each day. Enter today's mini-tasks freely.</div>`;
 
   // Per-day macros: stored in logs[activeKey].__macroTasks
   const dayMacroTasks=getDayMacros(activeKey);
+  if(dayMacroTasks.length>0) html+='<div class="list-card">';
   dayMacroTasks.forEach(function(m){
     if(macroEditMode){
       if(macroEditId===m.id){
@@ -2313,6 +2023,7 @@ function renderMacros(){
       html+=`<div class="task-row"><div class="check-circle ${done?"done":""}" data-macro-toggle="${m.id}"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><polyline points="1.5,5 5,8.5 11.5,1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="task-info"><div class="task-name ${done?"done":""}">${m.name}</div></div></div>`;
     }
   });
+  if(dayMacroTasks.length>0) html+='</div>';
 
   if(dayMacroTasks.length===0&&!macroEditMode)html+=`<div style="font-size:13px;color:var(--text3);text-align:center;padding:32px 0">No macros for this day.<br>${isToday?"Tap Edit to add.":"Past day — view only."}</div>`;
   if(macroEditMode)html+=`<div class="card"><div class="lbl" style="margin-bottom:10px">Add Macro for This Day</div><input class="inp" id="macro-new-inp" placeholder="Task name"><button class="btn-add" id="macro-add-btn">Add</button></div>`;
@@ -2331,23 +2042,23 @@ function renderMacros(){
 
     // Nav bar
     const macroMonthIsNow=pOffset===0;
-    html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;margin-bottom:14px">
-      <button id="macro-preview-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
+    html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:22px;margin-bottom:14px;background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 14px;border:1px solid var(--glass-border);box-shadow:var(--shadow-xs)">
+      <button id="macro-preview-prev" class="nav-arrow" style="padding:6px 13px">&#8249;</button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-        <div style="display:flex;gap:6px">
-          <button id="macro-preview-month" class="rtab active" style="padding:4px 12px;font-size:9px">Month</button>
-          <button id="macro-preview-year" class="rtab" style="padding:4px 12px;font-size:9px">Year</button>
+        <div class="report-tabs" style="margin-bottom:0;padding:3px">
+          <button id="macro-preview-month" class="rtab active" style="padding:5px 14px">Month</button>
+          <button id="macro-preview-year" class="rtab" style="padding:5px 14px">Year</button>
         </div>
-        <div style="font-size:13px;color:var(--text);font-weight:600;letter-spacing:0.5px">${MONTHS[pmo]} ${pyr}</div>
-        ${!macroMonthIsNow?`<button id="macro-jump-today" style="background:var(--accent);color:var(--bg);border:none;padding:5px 16px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:monospace;box-shadow:0 0 12px var(--accent-glow)">↩ Today</button>`:''}
+        <div style="font-size:13px;color:var(--text);font-weight:700">${MONTHS[pmo]} ${pyr}</div>
+        ${!macroMonthIsNow?`<button id="macro-jump-today" style="background:var(--accent);color:#fff;border:none;padding:6px 18px;border-radius:var(--radius-pill);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">↩ Today</button>`:''}
       </div>
-      <button id="macro-preview-next" style="background:none;border:1px solid var(--glass-border);color:${canNext?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNext?"auto":"none"}">&#8250;</button>
+      <button id="macro-preview-next" class="nav-arrow" style="padding:6px 13px;${canNext?'':'opacity:0.3;pointer-events:none'}">&#8250;</button>
     </div>`;
 
     // Month grid (calendar)
-    html+=`<div class="month-grid">`;
+    html+=`<div class="card" style="padding:16px 14px"><div class="month-grid">`;
     DAYS.forEach(d=>{html+=`<div class="month-day-header">${d}</div>`;});
-    html+=`</div><div class="month-grid">`;
+    html+=`</div><div class="month-grid" style="margin-top:6px">`;
     for(let i=0;i<firstDay;i++) html+=`<div></div>`;
     let mDone=0, mCnt=0, mStrong=0;
     monthDates.forEach(d=>{
@@ -2363,7 +2074,7 @@ function renderMacros(){
       </div>`;
     });
     const mavg=mCnt?Math.round(mDone/mCnt):0;
-    html+=`</div>`;
+    html+=`</div></div>`;
 
     // Stat card
     html+=`<div class="stat-card"><div class="lbl">Month Avg (Macros)</div><div class="stat-avg" style="color:${clr(mavg)}">${mavg}%</div><div class="stat-sub">${mStrong} strong days</div></div>`;
@@ -2376,20 +2087,21 @@ function renderMacros(){
     const pyr=getToday().getFullYear()+Math.floor(pOffset/12);
     const canNextY=Math.floor(pOffset/12)<0;
 
-    html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;margin-bottom:14px">
-      <button id="macro-preview-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
+    html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:22px;margin-bottom:14px;background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 14px;border:1px solid var(--glass-border);box-shadow:var(--shadow-xs)">
+      <button id="macro-preview-prev" class="nav-arrow" style="padding:6px 13px">&#8249;</button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-        <div style="display:flex;gap:6px">
-          <button id="macro-preview-month" class="rtab" style="padding:4px 12px;font-size:9px">Month</button>
-          <button id="macro-preview-year" class="rtab active" style="padding:4px 12px;font-size:9px">Year</button>
+        <div class="report-tabs" style="margin-bottom:0;padding:3px">
+          <button id="macro-preview-month" class="rtab" style="padding:5px 14px">Month</button>
+          <button id="macro-preview-year" class="rtab active" style="padding:5px 14px">Year</button>
         </div>
-        <div style="font-size:13px;color:var(--text);font-weight:600;letter-spacing:0.5px">${pyr}</div>
-        ${Math.floor(pOffset/12)<0?`<button id="macro-jump-today" style="background:var(--accent);color:var(--bg);border:none;padding:5px 16px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:monospace;box-shadow:0 0 12px var(--accent-glow)">↩ Today</button>`:''}
+        <div style="font-size:13px;color:var(--text);font-weight:700">${pyr}</div>
+        ${Math.floor(pOffset/12)<0?`<button id="macro-jump-today" style="background:var(--accent);color:#fff;border:none;padding:6px 18px;border-radius:var(--radius-pill);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit">↩ Today</button>`:''}
       </div>
-      <button id="macro-preview-next" style="background:none;border:1px solid var(--glass-border);color:${canNextY?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNextY?"auto":"none"}">&#8250;</button>
+      <button id="macro-preview-next" class="nav-arrow" style="padding:6px 13px;${canNextY?'':'opacity:0.3;pointer-events:none'}">&#8250;</button>
     </div>`;
 
     // Year rows (like renderYear)
+    html+='<div class="list-card">';
     let yStrong=0, yTracked=0;
     MONTHS.forEach((m,mi)=>{
       const mDays=new Date(pyr,mi+1,0).getDate();
@@ -2406,6 +2118,7 @@ function renderMacros(){
         <div class="score-text" style="color:${clr(avg||0)}">${avg===null?"—":avg+"%"}</div>
       </div>`;
     });
+    html+='</div>';
     html+=`<div class="stat-card"><div class="lbl">Year Summary (Macros)</div><div class="stat-sub" style="margin-top:8px">${yStrong} strong days in ${pyr}</div><div class="stat-sub">${yTracked} days with macros logged</div></div>`;
 
     // Bar chart
@@ -2457,14 +2170,14 @@ function renderMacros(){
         if(window.macroMonthChart) window.macroMonthChart.destroy();
         window.macroMonthChart=new Chart(ctx,{
           type:"line",
-          data:{labels,datasets:[{data:scores,borderColor:"#4ade80",backgroundColor:"rgba(74,222,128,0.08)",tension:0.25,fill:true,pointRadius:2}]},
+          data:{labels,datasets:[{data:scores,borderColor:"#30d158",backgroundColor:"rgba(48,209,88,0.08)",tension:0.25,fill:true,pointRadius:2}]},
           options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{color:cssVar("--text3"),font:{size:9}},grid:{color:cssVar("--glass-border")}},x:{ticks:{color:cssVar("--text3"),font:{size:8}},grid:{display:false}}}}
         });
       } else {
         const pyr3=getToday().getFullYear()+window.macroPreviewOffset;
         const yearEl=document.getElementById("macro-year-list");
         if(!yearEl) return;
-        let yhtml="";
+        let yhtml='<div class="list-card">';
         MONTHS.forEach(function(m,mi){
           const mdays=new Date(pyr3,mi+1,0).getDate();
           let total=0,count=0;
@@ -2477,12 +2190,13 @@ function renderMacros(){
           const isFuture=new Date(pyr3,mi,1)>getToday();
           const mk=pyr3+"-"+String(mi+1).padStart(2,"0");
           const macroRowAttr = isFuture ? "" : "data-macro-monthkey=\""+mk+"\"";
-          yhtml+=`<div class="year-row" style="opacity:${isFuture?0.25:1};cursor:${isFuture?"default":"pointer"};border-radius:6px;transition:background 0.15s;" ${macroRowAttr}>
+          yhtml+=`<div class="year-row" style="opacity:${isFuture?0.25:1};cursor:${isFuture?"default":"pointer"}" ${macroRowAttr}>
             <div class="year-month">${m}</div>
             <div class="bar-wrap"><div class="bar-fill" style="width:${avg}%;background:${clr(avg)}"></div></div>
             <div class="score-text" style="color:${clr(avg)}">${count?""+avg+"%":"—"}</div>
           </div>`;
         });
+        yhtml+='</div>';
         yearEl.innerHTML=yhtml;
       }
     }catch(err){console.error(err);}
@@ -2530,7 +2244,7 @@ function renderTaskDetail(){
     <div class="lbl">All-Time Performance</div>
     <div class="stat-avg" style="color:${clr(allRate)}">${allRate}%</div>
     <div class="stat-sub">${allDone} done out of ${allActive.length} active days</div>
-    ${deleted?'<div class="stat-sub" style="color:#f87171;margin-top:4px">Task removed on '+t.deletedAt+'</div>':''}
+    ${deleted?'<div class="stat-sub" style="color:#ff3b30;margin-top:4px">Task removed on '+t.deletedAt+'</div>':''}
     ${t.createdAt?'<div class="stat-sub" style="margin-top:4px">Created '+t.createdAt+'</div>':''}
   </div>`;
 
@@ -2545,22 +2259,22 @@ function renderTaskDetail(){
     const daysInMonth=new Date(pyr,pmo+1,0).getDate();
     const firstDay=new Date(pyr,pmo,1).getDay();
 
-    html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <button id="td-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
+    html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 14px;border:1px solid var(--glass-border);box-shadow:var(--shadow-xs)">
+      <button id="td-prev" class="nav-arrow" style="padding:6px 13px">&#8249;</button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-        <div style="display:flex;gap:6px">
-          <button id="td-tab-month" class="rtab ${isMonth?"active":""}" style="padding:4px 12px;font-size:9px">Month</button>
-          <button id="td-tab-year" class="rtab" style="padding:4px 12px;font-size:9px">Year</button>
+        <div class="report-tabs" style="margin-bottom:0;padding:3px">
+          <button id="td-tab-month" class="rtab ${isMonth?"active":""}" style="padding:5px 14px">Month</button>
+          <button id="td-tab-year" class="rtab" style="padding:5px 14px">Year</button>
         </div>
-        <div style="font-size:12px;font-weight:700;color:var(--text)">${MONTHS[pmo]} ${pyr}</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text)">${MONTHS[pmo]} ${pyr}</div>
       </div>
-      <button id="td-next" style="background:none;border:1px solid var(--glass-border);color:${canNextM?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNextM?"auto":"none"}">&#8250;</button>
+      <button id="td-next" class="nav-arrow" style="padding:6px 13px;${canNextM?'':'opacity:0.3;pointer-events:none'}">&#8250;</button>
     </div>`;
 
     // Calendar grid
-    html+=`<div class="month-grid">`;
+    html+=`<div class="card" style="padding:16px 14px"><div class="month-grid">`;
     DAYS.forEach(d=>{html+=`<div class="month-day-header">${d}</div>`;});
-    html+=`</div><div class="month-grid">`;
+    html+=`</div><div class="month-grid" style="margin-top:6px">`;
     for(let i=0;i<firstDay;i++) html+=`<div></div>`;
     let mDone=0, mActive=0;
     for(let i=1;i<=daysInMonth;i++){
@@ -2575,38 +2289,38 @@ function renderTaskDetail(){
         active=log.__taskIds.includes(t.id)&&!hidden.includes(t.id)&&(!t.deletedAt||k<t.deletedAt);
         if(active){ mActive++; done=!!log[t.id]; if(done) mDone++; }
       }
-      const bg=future?"var(--bg-card)":!active?"var(--bg)":done?"#4ade8025":"#f8717115";
-      const dotColor=done?"#4ade80":active?"#f87171":"transparent";
-      html+=`<div class="month-cell ${isT?"today":""} ${future?"future":""}" style="background:${bg};border-color:${isT?"rgba(255,255,255,0.25)":"transparent"}">
-        <div class="month-cell-num ${isT?"today":""}" style="color:${active?(done?"#4ade80":"#f87171"):"var(--text3)"}">${i}</div>
+      const bg=future?"var(--bg-cell)":!active?"var(--bg-cell)":done?"#30d15825":"#ff3b3015";
+      const dotColor=done?"#30d158":active?"#ff3b30":"transparent";
+      html+=`<div class="month-cell ${isT?"today":""} ${future?"future":""}" style="background:${bg};border-color:${isT?"var(--accent)":"transparent"}">
+        <div class="month-cell-num ${isT?"today":""}" style="color:${active?(done?"#30d158":"#ff3b30"):"var(--text3)"}">${i}</div>
         ${active?`<div style="width:5px;height:5px;border-radius:50%;background:${dotColor};margin-top:2px"></div>`:""}
       </div>`;
     }
     const mRate=mActive?Math.round((mDone/mActive)*100):0;
-    html+=`</div>`;
+    html+=`</div></div>`;
     html+=`<div class="stat-card"><div class="lbl">${MONTHS[pmo]} ${pyr}</div><div class="stat-avg" style="color:${clr(mRate)}">${mRate}%</div><div class="stat-sub">${mDone}/${mActive} days done</div></div>`;
 
     // Legend
-    html+=`<div style="display:flex;gap:16px;margin-top:12px;padding:10px 14px;background:var(--glass);border-radius:10px;border:1px solid var(--glass-border)">
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:#4ade8025;border:1px solid #4ade80"></div><div style="font-size:10px;color:var(--text3)">Done</div></div>
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:#f8717115;border:1px solid #f87171"></div><div style="font-size:10px;color:var(--text3)">Missed</div></div>
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:var(--bg);border:1px solid var(--glass-border)"></div><div style="font-size:10px;color:var(--text3)">Not active</div></div>
+    html+=`<div style="display:flex;gap:16px;margin-top:12px;padding:10px 14px;background:var(--bg-card);border-radius:var(--radius-sm);border:1px solid var(--glass-border);box-shadow:var(--shadow-xs)">
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:3px;background:#30d15825;border:1px solid #30d158"></div><div style="font-size:11px;color:var(--text3)">Done</div></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:3px;background:#ff3b3015;border:1px solid #ff3b30"></div><div style="font-size:11px;color:var(--text3)">Missed</div></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:3px;background:var(--bg-cell);border:1px solid var(--glass-border)"></div><div style="font-size:11px;color:var(--text3)">Not active</div></div>
     </div>`;
 
   } else {
     // YEAR VIEW
     const pyr=getToday().getFullYear()+taskDetailYearOffset;
-    html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <button id="td-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">&#8249;</button>
+    html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 14px;border:1px solid var(--glass-border);box-shadow:var(--shadow-xs)">
+      <button id="td-prev" class="nav-arrow" style="padding:6px 13px">&#8249;</button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-        <div style="display:flex;gap:6px">
-          <button id="td-tab-month" class="rtab" style="padding:4px 12px;font-size:9px">Month</button>
-          <button id="td-tab-year" class="rtab active" style="padding:4px 12px;font-size:9px">Year</button>
+        <div class="report-tabs" style="margin-bottom:0;padding:3px">
+          <button id="td-tab-month" class="rtab" style="padding:5px 14px">Month</button>
+          <button id="td-tab-year" class="rtab active" style="padding:5px 14px">Year</button>
         </div>
-        <div style="font-size:12px;font-weight:700;color:var(--text)">${pyr}</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text)">${pyr}</div>
       </div>
-      <button id="td-next" style="background:none;border:1px solid var(--glass-border);color:${canNextY?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNextY?"auto":"none"}">&#8250;</button>
-    </div>`;
+      <button id="td-next" class="nav-arrow" style="padding:6px 13px;${canNextY?'':'opacity:0.3;pointer-events:none'}">&#8250;</button>
+    </div><div class="list-card">`;
 
     let yDone=0, yActive=0;
     MONTHS.forEach((m,mi)=>{
@@ -2631,6 +2345,7 @@ function renderTaskDetail(){
         <div class="score-text" style="color:${clr(rate||0)}">${rate===null||(isFuture&&mA===0)?"—":rate+"%"}</div>
       </div>`;
     });
+    html+='</div>';
     const yRate=yActive?Math.round((yDone/yActive)*100):0;
     html+=`<div class="stat-card"><div class="lbl">${pyr} Summary</div><div class="stat-avg" style="color:${clr(yRate)}">${yRate}%</div><div class="stat-sub">${yDone}/${yActive} days done</div></div>`;
 
@@ -2723,12 +2438,12 @@ function renderStreak(){
   const todayK=getTodayKey();
 
   // ── helpers ──────────────────────────────────────────────────
-  function todayPill(show){ return show?`<button id="streak-jump-today" style="background:var(--accent);color:var(--bg);border:none;padding:5px 16px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:monospace;margin-top:4px;box-shadow:0 0 12px var(--accent-glow)">↩ Today</button>`:''; }
+  function todayPill(show){ return show?`<button id="streak-jump-today" style="background:var(--accent);color:#fff;border:none;padding:6px 18px;border-radius:var(--radius-pill);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:2px">↩ Today</button>`:''; }
 
-  const tabs=`<div style="display:flex;gap:6px">
-    <button id="streak-tab-week" class="rtab ${streakView==='week'?'active':''}" style="padding:4px 12px;font-size:9px">Week</button>
-    <button id="streak-tab-month" class="rtab ${streakView==='month'?'active':''}" style="padding:4px 12px;font-size:9px">Month</button>
-    <button id="streak-tab-year" class="rtab ${streakView==='year'?'active':''}" style="padding:4px 12px;font-size:9px">Year</button>
+  const tabs=`<div class="report-tabs" style="margin-bottom:0;padding:3px">
+    <button id="streak-tab-week" class="rtab ${streakView==='week'?'active':''}" style="padding:5px 14px">Week</button>
+    <button id="streak-tab-month" class="rtab ${streakView==='month'?'active':''}" style="padding:5px 14px">Month</button>
+    <button id="streak-tab-year" class="rtab ${streakView==='year'?'active':''}" style="padding:5px 14px">Year</button>
   </div>`;
 
   let calHtml="";
@@ -2741,15 +2456,15 @@ function renderStreak(){
     const label=weekStart.toLocaleDateString("en-IN",{day:"numeric",month:"short"})+" – "+weekEnd.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
     const isCurrentWeek=streakWeekOffset===0;
     const canNext=streakWeekOffset<0;
-    calHtml+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <button id="streak-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
+    calHtml+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 14px;border:1px solid var(--glass-border);box-shadow:var(--shadow-xs)">
+      <button id="streak-prev" class="nav-arrow" style="padding:6px 13px">‹</button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
         ${tabs}
-        <div style="font-size:12px;color:var(--text);font-weight:600">${isCurrentWeek?"This Week":label}</div>
+        <div style="font-size:13px;color:var(--text);font-weight:700">${isCurrentWeek?"This Week":label}</div>
         ${todayPill(!isCurrentWeek)}
       </div>
-      <button id="streak-next" style="background:none;border:1px solid var(--glass-border);color:${canNext?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canNext?"auto":"none"}">›</button>
-    </div>`;
+      <button id="streak-next" class="nav-arrow" style="padding:6px 13px;${canNext?'':'opacity:0.3;pointer-events:none'}">›</button>
+    </div><div class="list-card">`;
     let total=0,cnt=0;
     weekDates.forEach(d=>{
       const k=toKey(d); const sc=scoreOf(logs[k],k);
@@ -2764,6 +2479,7 @@ function renderStreak(){
         <div class="score-text" style="color:${clr(sc)}">${future?"—":sc+"%"}</div>
       </div>`;
     });
+    calHtml+='</div>';
     const avg=cnt?Math.round(total/cnt):0;
     calHtml+=`<div class="stat-card"><div class="lbl">Week Avg</div><div class="stat-avg" style="color:${clr(avg)}">${avg}%</div></div>`;
 
@@ -2774,23 +2490,23 @@ function renderStreak(){
     const monthDates=Array.from({length:daysInMonth},(_,i)=>new Date(yr,mo,i+1));
     const canGoNext=!(yr===getToday().getFullYear()&&mo===getToday().getMonth());
     const isCurrentMonth=!canGoNext;
-    calHtml+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <button id="streak-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
+    calHtml+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 14px;border:1px solid var(--glass-border);box-shadow:var(--shadow-xs)">
+      <button id="streak-prev" class="nav-arrow" style="padding:6px 13px">‹</button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
         ${tabs}
-        <div style="font-size:13px;color:var(--text);font-weight:600">${MONTHS[mo]} ${yr}</div>
+        <div style="font-size:13px;color:var(--text);font-weight:700">${MONTHS[mo]} ${yr}</div>
         ${todayPill(!isCurrentMonth)}
       </div>
-      <button id="streak-next" style="background:none;border:1px solid var(--glass-border);color:${canGoNext?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canGoNext?"auto":"none"}">›</button>
+      <button id="streak-next" class="nav-arrow" style="padding:6px 13px;${canGoNext?'':'opacity:0.3;pointer-events:none'}">›</button>
     </div>`;
-    calHtml+=`<div class="month-grid">`;
+    calHtml+=`<div class="card" style="padding:16px 14px"><div class="month-grid">`;
     DAYS.forEach(d=>{ calHtml+=`<div class="month-day-header">${d}</div>`; });
-    calHtml+=`</div><div class="month-grid">`;
+    calHtml+=`</div><div class="month-grid" style="margin-top:6px">`;
     for(let i=0;i<firstDay;i++) calHtml+=`<div></div>`;
     monthDates.forEach(d=>{
       const k=toKey(d); const sc=scoreOf(logs[k],k);
       const isToday=k===todayK; const future=k>todayK;
-      const bg=future?"var(--bg-card)":sc===0?"var(--bg-cell)":clr(sc)+"25";
+      const bg=future?"var(--bg-cell)":sc===0?"var(--bg-cell)":clr(sc)+"25";
       const slog=logs[k]||{}; const svt=visibleTasksForDay(slog,k);
       const sdone=svt.filter(t=>slog[t.id]).length; const stotal=svt.length;
       calHtml+=`<div ${future?"":'data-daykey="'+k+'"'} class="month-cell ${isToday?"today":""} ${future?"future":""}" style="background:${bg};cursor:${future?"default":"pointer"}">
@@ -2799,22 +2515,22 @@ function renderStreak(){
         ${!future&&sc>0?'<div class="month-cell-pct" style="color:'+clr(sc)+'">'+sc+'%</div>':''}
       </div>`;
     });
-    calHtml+=`</div>`;
+    calHtml+=`</div></div>`;
 
   } else {
     // ── Year view ──
     const streakYr=getToday().getFullYear()+streakYearOffset;
     const canGoNextY=streakYearOffset<0;
     const isCurrentYear=streakYearOffset===0;
-    calHtml+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <button id="streak-prev" style="background:none;border:1px solid var(--glass-border);color:var(--text2);padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer">‹</button>
+    calHtml+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 14px;border:1px solid var(--glass-border);box-shadow:var(--shadow-xs)">
+      <button id="streak-prev" class="nav-arrow" style="padding:6px 13px">‹</button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
         ${tabs}
-        <div style="font-size:13px;color:var(--text);font-weight:600">${streakYr}</div>
+        <div style="font-size:13px;color:var(--text);font-weight:700">${streakYr}</div>
         ${todayPill(!isCurrentYear)}
       </div>
-      <button id="streak-next" style="background:none;border:1px solid var(--glass-border);color:${canGoNextY?"var(--text2)":"var(--glass-border)"};padding:5px 13px;font-size:13px;border-radius:4px;cursor:pointer;pointer-events:${canGoNextY?"auto":"none"}">›</button>
-    </div>`;
+      <button id="streak-next" class="nav-arrow" style="padding:6px 13px;${canGoNextY?'':'opacity:0.3;pointer-events:none'}">›</button>
+    </div><div class="list-card">`;
     MONTHS.forEach((m,mi)=>{
       const mdays=new Date(streakYr,mi+1,0).getDate();
       const mDates=Array.from({length:mdays},(_,i)=>new Date(streakYr,mi,i+1));
@@ -2822,16 +2538,17 @@ function renderStreak(){
       const avg=past.length?Math.round(past.reduce((a,d)=>a+scoreOf(logs[toKey(d)],toKey(d)),0)/past.length):null;
       const isFuture=new Date(streakYr,mi,1)>getToday();
       const mk=streakYr+"-"+String(mi+1).padStart(2,"0");
-      calHtml+=`<div class="year-row" style="opacity:${isFuture?0.25:1};cursor:${isFuture?"default":"pointer"};border-radius:6px;" ${isFuture?"":'data-streak-monthkey="'+mk+'"'}>
+      calHtml+=`<div class="year-row" style="opacity:${isFuture?0.25:1};cursor:${isFuture?"default":"pointer"}" ${isFuture?"":'data-streak-monthkey="'+mk+'"'}>
         <div class="year-month">${m}</div>
         <div class="bar-wrap"><div class="bar-fill" style="width:${avg||0}%;background:${clr(avg||0)}"></div></div>
         <div class="score-text" style="color:${clr(avg||0)}">${avg===null?"—":avg+"%"}</div>
       </div>`;
     });
+    calHtml+='</div>';
   }
 
   el.innerHTML=`
-    <div class="lbl" style="margin-bottom:14px">Streak</div>
+    <div class="page-title" style="margin-bottom:14px">Streak</div>
     <div class="streak-wrap">
       <div class="streak-box">
         <div class="streak-icon">
@@ -2846,9 +2563,9 @@ function renderStreak(){
             <div class="s-spark s-spark1"></div>
             <div class="s-spark s-spark2"></div>
             <div class="s-spark s-spark3"></div>
-          </div>`:`<svg viewBox="0 0 32 36" width="32" height="36"><text y="26" x="16" text-anchor="middle" font-size="22" fill="rgba(255,255,255,0.12)">—</text></svg>`}
+          </div>`:`<svg viewBox="0 0 32 36" width="32" height="36"><text y="26" x="16" text-anchor="middle" font-size="22" fill="var(--glass-border)">—</text></svg>`}
         </div>
-        <div class="streak-num" style="color:${cur>=7?"#4ade80":cur>=3?"#facc15":"var(--text)"}">${cur}</div>
+        <div class="streak-num" style="color:${cur>=7?"#30d158":cur>=3?"#ff9f0a":"var(--text)"}">${cur}</div>
         <div class="streak-lbl">Current<br>Streak</div>
       </div>
       <div class="streak-box">
@@ -2867,23 +2584,23 @@ function renderStreak(){
             <div class="t-star t-star3">✦</div>
           </div>
         </div>
-        <div class="streak-num" style="color:#facc15">${best}</div>
+        <div class="streak-num" style="color:#ff9f0a">${best}</div>
         <div class="streak-lbl">Best<br>Streak</div>
       </div>
       <div class="streak-box">
         <div class="streak-icon">
           <div class="s-bolt-wrap" style="animation:bolt-float 2s ease-in-out infinite,${todayScore>=80?"bolt-glow-g":todayScore>0?"bolt-glow-y":"bolt-glow-r"} 2.2s ease-in-out infinite">
             <svg viewBox="0 0 32 44" width="32" height="44">
-              <polygon points="18,2 6,24 15,24 14,42 26,18 17,18" fill="${todayScore>=80?"#4ade80":todayScore>0?"#facc15":"#f87171"}" opacity="0.25"/>
-              <polygon points="18,2 6,24 15,24 14,42 26,18 17,18" fill="none" stroke="${todayScore>=80?"#4ade80":todayScore>0?"#facc15":"#f87171"}" stroke-width="1.2" stroke-linejoin="round"/>
-              <polygon points="17,6 8,23 15.5,23 14.5,38 24,19 16.5,19" fill="${todayScore>=80?"#4ade80":todayScore>0?"#facc15":"#f87171"}" opacity="0.7"/>
+              <polygon points="18,2 6,24 15,24 14,42 26,18 17,18" fill="${todayScore>=80?"#30d158":todayScore>0?"#ff9f0a":"#ff3b30"}" opacity="0.25"/>
+              <polygon points="18,2 6,24 15,24 14,42 26,18 17,18" fill="none" stroke="${todayScore>=80?"#30d158":todayScore>0?"#ff9f0a":"#ff3b30"}" stroke-width="1.2" stroke-linejoin="round"/>
+              <polygon points="17,6 8,23 15.5,23 14.5,38 24,19 16.5,19" fill="${todayScore>=80?"#30d158":todayScore>0?"#ff9f0a":"#ff3b30"}" opacity="0.7"/>
             </svg>
-            <div class="b-spark b-spark-a" style="background:${todayScore>=80?"#4ade80":todayScore>0?"#facc15":"#f87171"}"></div>
+            <div class="b-spark b-spark-a" style="background:${todayScore>=80?"#30d158":todayScore>0?"#ff9f0a":"#ff3b30"}"></div>
             <div class="b-spark b-spark-b" style="background:${todayScore>=80?"#86efac":todayScore>0?"#fde68a":"#fca5a5"}"></div>
-            <div class="b-spark b-spark-c" style="background:${todayScore>=80?"#4ade80":todayScore>0?"#facc15":"#f87171"}"></div>
+            <div class="b-spark b-spark-c" style="background:${todayScore>=80?"#30d158":todayScore>0?"#ff9f0a":"#ff3b30"}"></div>
           </div>
         </div>
-        <div class="streak-num" style="color:${todayScore>=80?"#4ade80":todayScore>0?"#facc15":"#f87171"}">${todayScore}%</div>
+        <div class="streak-num" style="color:${todayScore>=80?"#30d158":todayScore>0?"#ff9f0a":"#ff3b30"}">${todayScore}%</div>
         <div class="streak-lbl">Today's<br>Score</div>
       </div>
     </div>
@@ -2944,10 +2661,10 @@ function exportReportImage(){
     const avg = valid.length?Math.round(valid.reduce((a,b)=>a+b,0)/valid.length):0;
     ctx.fillStyle = fg; ctx.font = `${13*scale}px monospace`;
     ctx.fillText("Average: "+avg+"%", padding, sy);
-    ctx.fillStyle="#4ade80"; ctx.font=`${11*scale}px monospace`;
+    ctx.fillStyle="#30d158"; ctx.font=`${11*scale}px monospace`;
     ctx.fillText("Strong: "+pieData.strong, padding, sy+20*scale);
-    ctx.fillStyle="#facc15"; ctx.fillText("Partial: "+pieData.partial, padding, sy+36*scale);
-    ctx.fillStyle="#f87171"; ctx.fillText("Weak: "+pieData.weak, padding, sy+52*scale);
+    ctx.fillStyle="#ff9f0a"; ctx.fillText("Partial: "+pieData.partial, padding, sy+36*scale);
+    ctx.fillStyle="#ff3b30"; ctx.fillText("Weak: "+pieData.weak, padding, sy+52*scale);
     ctx.fillStyle=muted; ctx.fillText("Missed: "+pieData.zero, padding, sy+68*scale);
     const a = document.createElement("a");
     a.download="tracker-report.png"; a.href=out.toDataURL("image/png"); a.click();
@@ -2987,7 +2704,7 @@ function saveTasksImage(){
   setTimeout(function(){
     if(typeof html2canvas==="undefined"){
       // Fallback if html2canvas not loaded
-      showImportStatus("Screenshot library not ready","#f87171");
+      showImportStatus("Screenshot library not ready","#ff3b30");
       return;
     }
     var bgColor=getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()||"#0d0d0d";
@@ -3055,7 +2772,7 @@ function saveTasksImage(){
     }).catch(function(err){
       if(document.body.contains(snap)) document.body.removeChild(snap);
       if(wasCollapsed) header.classList.add("collapsed");
-      showImportStatus("Error: "+err.message,"#f87171");
+      showImportStatus("Error: "+err.message,"#ff3b30");
     });
   },60);
 }
@@ -3066,7 +2783,7 @@ function _downloadImg(dataUrl,ak){
 }
 
 function exportAllToExcel(){
-  if(typeof XLSX==="undefined"){ showImportStatus("SheetJS not loaded. Try again.","#f87171"); return; }
+  if(typeof XLSX==="undefined"){ showImportStatus("SheetJS not loaded. Try again.","#ff3b30"); return; }
   const wb = XLSX.utils.book_new();
   const todayK = getTodayKey();
   const allKeys = Object.keys(logs).filter(k=>k<=todayK).sort();
@@ -3259,7 +2976,7 @@ function exportAllToExcel(){
   }
 
   XLSX.writeFile(wb, "tracker-" + todayK + ".xlsx");
-  showImportStatus("Exported successfully!", "#4ade80");
+  showImportStatus("Exported successfully!", "#30d158");
 }
 
 function parseFlexDate(raw){
@@ -3277,7 +2994,7 @@ function parseFlexDate(raw){
   return null;
 }
 function downloadTemplate(){
-  if(typeof XLSX==="undefined"){showImportStatus("SheetJS not loaded.","#f87171");return;}
+  if(typeof XLSX==="undefined"){showImportStatus("SheetJS not loaded.","#ff3b30");return;}
   var wb=XLSX.utils.book_new();
   var today=getTodayKey();
   var d=new Date();d.setDate(d.getDate()-1);var yesterday=toKey(d);
@@ -3288,10 +3005,10 @@ function downloadTemplate(){
   XLSX.utils.book_append_sheet(wb,ws,"Manual Import-Export Tracker");
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["HOW TO USE"],[""],["Fill Manual Import-Export Tracker sheet"],["date: any format (23/05/2026, 2026-05-23 etc)"],["task_name: task name exactly"],["status: Done or Not Done"],["Same task name across days = same task"],["Delete example rows before importing"]]),"Instructions");
   XLSX.writeFile(wb,"tracker-import-template.xlsx");
-  showImportStatus("Template downloaded.","#4ade80");
+  showImportStatus("Template downloaded.","#30d158");
 }
 function importFromExcel(file){
-  if(typeof XLSX==="undefined"){ showImportStatus("SheetJS not loaded. Try again.","#f87171"); return; }
+  if(typeof XLSX==="undefined"){ showImportStatus("SheetJS not loaded. Try again.","#ff3b30"); return; }
   const reader=new FileReader();
   reader.onload=function(e){
     try{
@@ -3312,7 +3029,7 @@ function importFromExcel(file){
         }
       }
       if(!targetSheet){
-        showImportStatus("No valid data sheet found. Make sure your file has date, task_name, status columns.","#f87171");
+        showImportStatus("No valid data sheet found. Make sure your file has date, task_name, status columns.","#ff3b30");
         return;
       }
 
@@ -3378,7 +3095,7 @@ function importFromExcel(file){
       });
 
       if(validRows.length===0){
-        showImportStatus("No valid rows found. Columns needed: date, task_name, status.","#f87171");
+        showImportStatus("No valid rows found. Columns needed: date, task_name, status.","#ff3b30");
         return;
       }
 
@@ -3428,13 +3145,13 @@ function importFromExcel(file){
       else if(!logs[todayK].__taskIds) logs[todayK].__taskIds=snap;
 
       persist();
-      showImportStatus("Imported "+validRows.length+" records from "+Object.keys(newLogs).length+" days. Reloading...","#4ade80");
+      showImportStatus("Imported "+validRows.length+" records from "+Object.keys(newLogs).length+" days. Reloading...","#30d158");
       setTimeout(()=>navigateTo("today"),800);
     }catch(err){
-      showImportStatus("Import error: "+err.message,"#f87171");
+      showImportStatus("Import error: "+err.message,"#ff3b30");
     }
   };
-  reader.onerror=function(){ showImportStatus("Could not read file.","#f87171"); };
+  reader.onerror=function(){ showImportStatus("Could not read file.","#ff3b30"); };
   reader.readAsArrayBuffer(file);
 }
 
@@ -3526,7 +3243,7 @@ function importMacrosFromExcel(file){
   var reader=new FileReader();
   reader.onload=function(ev){
     try{
-      if(typeof XLSX==="undefined"){showImportStatus("XLSX library not loaded.","#f87171");return;}
+      if(typeof XLSX==="undefined"){showImportStatus("XLSX library not loaded.","#ff3b30");return;}
       var wb=XLSX.read(new Uint8Array(ev.target.result),{type:"array",cellDates:true,raw:false});
 
       // Pick best sheet: prefer "Macros Log", else scan for one with date+task data
@@ -3543,10 +3260,10 @@ function importMacrosFromExcel(file){
       var allRows=XLSX.utils.sheet_to_json(ws,{header:1,defval:"",raw:false});
       // Remove completely empty rows
       allRows=allRows.filter(function(r){return r.some(function(c){return String(c||"").trim()!=="";});});
-      if(!allRows.length){showImportStatus("Sheet is empty.","#f87171");return;}
+      if(!allRows.length){showImportStatus("Sheet is empty.","#ff3b30");return;}
 
       var cols=detectMacroColumns(allRows);
-      if(!cols||cols.nameCol<0){showImportStatus("Could not detect task name column.","#f87171");return;}
+      if(!cols||cols.nameCol<0){showImportStatus("Could not detect task name column.","#ff3b30");return;}
 
       // Determine data start row (skip header if detected)
       var startRow=cols.hasHeader?1:0;
@@ -3586,26 +3303,26 @@ function importMacrosFromExcel(file){
       persist();
       renderMacros();
       if(imported===0&&updated===0&&skipped===0){
-        showImportStatus("Nothing imported — check your file has date + task columns.","#f87171");
+        showImportStatus("Nothing imported — check your file has date + task columns.","#ff3b30");
       } else {
         var msg="Macros: "+imported+" added"+(updated?", "+updated+" updated":"")+(skipped?", "+skipped+" skipped":"");
         showImportStatus(msg,"#a78bfa");
       }
     }catch(err){
-      showImportStatus("Import failed: "+err.message,"#f87171");
+      showImportStatus("Import failed: "+err.message,"#ff3b30");
       console.error("Macro import error:",err);
     }
   };
-  reader.onerror=function(){showImportStatus("Could not read file.","#f87171");};
+  reader.onerror=function(){showImportStatus("Could not read file.","#ff3b30");};
   reader.readAsArrayBuffer(file);
 }
 
 function exportMacrosToExcel(){
-  if(typeof XLSX==="undefined"){showImportStatus("XLSX not loaded.","#f87171");return;}
+  if(typeof XLSX==="undefined"){showImportStatus("XLSX not loaded.","#ff3b30");return;}
   var allKeys=Object.keys(logs).filter(function(k){
     return logs[k]&&Array.isArray(logs[k].__macroTasks)&&logs[k].__macroTasks.length>0;
   }).sort();
-  if(allKeys.length===0){showImportStatus("No macro data to export.","#f87171");return;}
+  if(allKeys.length===0){showImportStatus("No macro data to export.","#ff3b30");return;}
   var rows=[["date","macro_name","status"]];
   allKeys.forEach(function(dk){
     var log=logs[dk]||{};
@@ -3635,7 +3352,7 @@ function masterEraseAllData(){
   localStorage.removeItem("rm_macros");
   persist();
   render();
-  showImportStatus("All data erased. Fresh start!","#f87171");
+  showImportStatus("All data erased. Fresh start!","#ff3b30");
 }
 
 function showImportStatus(msg,color){
@@ -3646,7 +3363,7 @@ function showImportStatus(msg,color){
   toast.style.borderColor=color;
   toast.style.display="block";
   clearTimeout(toast._timer);
-  if(color==="#4ade80"){
+  if(color==="#30d158"){
     toast._timer=setTimeout(()=>{ toast.style.display="none"; },4000);
   }
 }
@@ -3699,11 +3416,11 @@ function setupListeners(){
     if(themeCell){ const k=themeCell.dataset.themeKey; applyTheme(k); renderSettings(); return; }
     if(e.target.id==="settings-name-save"){
       var n=document.getElementById("settings-name-inp").value.trim();
-      if(n){userName=n;persist();document.getElementById("header-username").textContent=n;showImportStatus("Name updated!","#4ade80");}return;
+      if(n){userName=n;persist();document.getElementById("header-username").textContent=n;showImportStatus("Name updated!","#30d158");}return;
     }
     if(e.target.id==="settings-mode-save"){
       var m=document.getElementById("settings-mode-inp").value.trim();
-      if(m){appName=m;persist();var ml=document.getElementById("app-mode-label");if(ml)ml.textContent=m;showImportStatus("App label updated!","#4ade80");}return;
+      if(m){appName=m;persist();var ml=document.getElementById("app-mode-label");if(ml)ml.textContent=m;showImportStatus("App label updated!","#30d158");}return;
     }
     // Clock font
     const cfBtn=e.target.closest("[data-clock-font]");
@@ -3714,7 +3431,7 @@ function setupListeners(){
         setter(!getter());
         sv(key,getter());
         const btn=document.getElementById(id);
-        if(btn){btn.style.background=getter()?'var(--accent)':'rgba(255,255,255,0.08)';const k=btn.querySelector("span");if(k)k.style.left=getter()?"19px":"3px";}
+        if(btn){btn.style.background=getter()?'var(--accent)':'var(--glass-border)';const k=btn.querySelector("span");if(k)k.style.left=getter()?"19px":"3px";}
         renderSettings(); return true;
       }
     }
@@ -4147,18 +3864,7 @@ document.getElementById("view-macros").addEventListener("click",function(e){
 
   // Greeting, name, quote or intention
   document.getElementById("splash-greeting").textContent=getGreeting();
-  (function(){
-    var qEl=document.getElementById("splash-quote");
-    if(!qEl) return;
-    qEl.textContent="";
-    qEl.classList.add("typing");
-    var i=0, delay=38; // ms per character — slow enough to read, fast enough to feel snappy
-    function typeNext(){
-      if(i<q.length){ qEl.textContent+=q[i++]; setTimeout(typeNext,delay+(q[i-1]==="."||q[i-1]===","?120:0)); }
-      else { setTimeout(function(){ qEl.classList.remove("typing"); },800); } // cursor blinks then fades
-    }
-    setTimeout(typeNext, 320); // short pause after clock renders before typing starts
-  })();
+  document.getElementById("splash-quote").textContent=q;
   document.getElementById("splash-name").textContent=userName?userName:"Welcome";
   if(userName) document.getElementById("header-username").textContent=userName;
   const modeLabel=document.getElementById("app-mode-label");
@@ -4176,7 +3882,7 @@ document.getElementById("view-macros").addEventListener("click",function(e){
     var yk=toKey(yd);
     var ys=scoreOf(logs[yk]||{},yk);
     yestEl.textContent=ys+"%";
-    yestEl.style.color=ys>=80?"#4ade80":ys>=50?"#facc15":ys>0?"#f87171":"var(--text3)";
+    yestEl.style.color=ys>=80?"#30d158":ys>=50?"#ff9f0a":ys>0?"#ff3b30":"var(--text3)";
   }
 
   var dismissed=false;
@@ -4209,14 +3915,13 @@ document.getElementById("view-macros").addEventListener("click",function(e){
   // ── DYNAMIC HEADER OFFSET ────────────────────────────────────────────────────
 function applyHeaderOffset(){
   const header=document.getElementById("header");
-  const nav=document.getElementById("nav");
-  if(!header||!nav) return;
+  const navWrap=document.getElementById("nav-wrap");
+  if(!header||!navWrap) return;
   const hh=headerCollapsed?0:header.offsetHeight;
-  const nh=nav.offsetHeight;
-  const total=hh+nh;
-  nav.style.top=hh+"px";
+  navWrap.style.top=hh+"px";
+  const total=hh+navWrap.offsetHeight;
   document.querySelectorAll(".body").forEach(el=>{
-    el.style.paddingTop=(total+16)+"px";
+    el.style.paddingTop=(total+10)+"px";
   });
 }
 // Run on load and on any nav change
@@ -4315,7 +4020,7 @@ function renderClockInto(container, now, opts){
     d.style.fontFamily=family||cf.family;
     d.style.letterSpacing=ls||sc.letterSpacing;
     d.style.opacity=opacity||sc.opacity;
-    d.style.color=color||"var(--text)";
+    d.style.color=color||"rgba(255,255,255,0.92)";
     d.style.lineHeight="1";
     if(shadow) d.style.textShadow=shadow;
     return d;
@@ -4333,11 +4038,11 @@ function renderClockInto(container, now, opts){
 
   } else if(clockFace==="neon"){
     // Neon: glowing border box, text respects font/style settings
-    container.style.border="1px solid var(--glass-border)";
+    container.style.border="1px solid rgba(255,255,255,0.4)";
     container.style.padding=isPreview?"12px 28px":"16px 36px";
     container.style.borderRadius="10px";
-    container.style.boxShadow="0 0 18px var(--glass),0 0 50px var(--glass),inset 0 0 14px var(--glass)";
-    var d=textDiv(fs,cf.weight,cf.family,sc.letterSpacing,sc.opacity,"var(--text)");
+    container.style.boxShadow="0 0 18px rgba(255,255,255,0.1),0 0 50px rgba(255,255,255,0.04),inset 0 0 14px rgba(255,255,255,0.02)";
+    var d=textDiv(fs,cf.weight,cf.family,sc.letterSpacing,sc.opacity,"rgba(255,255,255,0.95)","0 0 12px rgba(255,255,255,0.55),0 0 36px rgba(255,255,255,0.18)");
     d.style.whiteSpace="nowrap"; d.textContent=timeStr; container.appendChild(d);
 
   } else if(clockFace==="outline"){
@@ -4366,7 +4071,7 @@ function renderClockInto(container, now, opts){
     container.style.justifyContent="center";
     container.style.minHeight=isPreview?"140px":"150px";
     container.style.width="100%";
-    var hDiv=textDiv(isPreview?"48px":"66px",cf.weight,cf.family,sc.letterSpacing,sc.opacity,"var(--text)");
+    var hDiv=textDiv(isPreview?"48px":"66px",cf.weight,cf.family,sc.letterSpacing,sc.opacity,"rgba(255,255,255,0.92)");
     hDiv.style.whiteSpace="nowrap";
     hDiv.textContent=h;
     var sep=document.createElement("div");
@@ -4394,7 +4099,7 @@ function buildAnalogSVG(now,style,size){
     var a=(i/60)*360*Math.PI/180;
     var isMaj=i%5===0;
     var r1=isMaj?r*0.82:r*0.89; var r2=r*0.96;
-    ticks+='<line x1="'+(cx+Math.cos(a)*r1)+'" y1="'+(cy+Math.sin(a)*r1)+'" x2="'+(cx+Math.cos(a)*r2)+'" y2="'+(cy+Math.sin(a)*r2)+'" stroke="currentColor" stroke-opacity="'+(isMaj?0.45:0.18)+'" stroke-width="'+(isMaj?1.5:0.6)+'" stroke-linecap="round"/>';
+    ticks+='<line x1="'+(cx+Math.cos(a)*r1)+'" y1="'+(cy+Math.sin(a)*r1)+'" x2="'+(cx+Math.cos(a)*r2)+'" y2="'+(cy+Math.sin(a)*r2)+'" stroke="rgba(255,255,255,'+(isMaj?0.45:0.12)+')" stroke-width="'+(isMaj?1.5:0.6)+'" stroke-linecap="round"/>';
   }
   var isWall=style==="wall";
   var pH=pt(hA,r*0.52),pM=pt(mA,r*0.72),pS=pt(sA,r*0.78);
@@ -4404,7 +4109,7 @@ function buildAnalogSVG(now,style,size){
     ticks+
     '<line x1="'+cx+'" y1="'+cy+'" x2="'+pH.x+'" y2="'+pH.y+'" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>'+
     '<line x1="'+cx+'" y1="'+cy+'" x2="'+pM.x+'" y2="'+pM.y+'" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/>'+
-    (clockSeconds?'<line x1="'+cx+'" y1="'+cy+'" x2="'+pS.x+'" y2="'+pS.y+'" stroke="#4ade80" stroke-width="1" stroke-linecap="round"/>':'')+
+    (clockSeconds?'<line x1="'+cx+'" y1="'+cy+'" x2="'+pS.x+'" y2="'+pS.y+'" stroke="#30d158" stroke-width="1" stroke-linecap="round"/>':'')+
     '<circle cx="'+cx+'" cy="'+cy+'" r="3" fill="var(--text)"/>'+
     '<circle cx="'+cx+'" cy="'+cy+'" r="1.5" fill="rgba(255,255,255,0.4)"/>'+
   '</svg>';
@@ -4862,7 +4567,7 @@ document.addEventListener("click",function(e){
   document.addEventListener('click',function(e){
     if(e.target.id!=='ct-apply-btn') return;
     const v=getCtValues();
-    if(!v.bg||!v.accent||!v.text){ showImportStatus('Fill all colour fields','#f87171'); return; }
+    if(!v.bg||!v.accent||!v.text){ showImportStatus('Fill all colour fields','#ff3b30'); return; }
     const built=buildCustomTheme(v.bg, v.accent, v.text, v.text2||v.text, v.text3||v.text);
     // override card bg if user set it explicitly
     if(v.card&&/^#[0-9a-fA-F]{6}$/.test(v.card)){
